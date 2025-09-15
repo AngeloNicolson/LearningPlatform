@@ -1,0 +1,381 @@
+.flippable-topic-browser {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background: transparent;
+}
+
+.browser-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.browser-header h2 {
+  color: #1e293b;
+  margin-bottom: 12px;
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.browser-header p {
+  color: #64748b;
+  font-size: 1.125rem;
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.search-controls {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  min-width: 280px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+.search-bar button {
+  padding: 12px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+.search-bar button:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.complexity-filter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.complexity-filter label, .category-filter label {
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.range-inputs input[type="range"] {
+  width: 80px;
+  accent-color: #3b82f6;
+}
+
+.range-inputs span {
+  color: #6b7280;
+  font-weight: 500;
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.category-filter select {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.category-filter select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Card Grid using your original system */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-gap: 2rem;
+  margin: 2rem 1rem;
+  justify-items: center;
+}
+
+.no-topics {
+  text-align: center;
+  padding: 60px 20px;
+  color: white;
+}
+
+.no-topics h3 {
+  color: white;
+  margin-bottom: 10px;
+  text-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+
+.no-topics p {
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+
+/* Belief Setup Styles */
+.belief-setup {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.back-btn {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background: #667eea;
+  color: white;
+  transform: translateX(-5px);
+}
+
+.selected-topic-info h2 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.selected-topic-info .topic-description {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.topic-meta {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.category-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.complexity-info {
+  color: #666;
+  font-weight: 600;
+}
+
+.belief-panel {
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.belief-panel h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.current-belief {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #e3f2fd;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.current-belief strong {
+  color: #1976d2;
+  text-transform: capitalize;
+}
+
+.belief-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.position-selector {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.position-selector label {
+  color: #333;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.position-selector select {
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+  cursor: pointer;
+}
+
+.conviction-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conviction-slider label {
+  color: #333;
+  font-weight: 600;
+}
+
+.conviction-slider input[type="range"] {
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.conviction-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.start-debate-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.start-debate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: white;
+  text-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-gap: 1.5rem;
+    margin: 1.5rem 0.5rem;
+  }
+  
+  .search-controls {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .search-bar input {
+    min-width: 200px;
+  }
+  
+  .belief-setup {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  .topic-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-gap: 1rem;
+    margin: 1rem 0.25rem;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .search-bar input {
+    min-width: 150px;
+    flex: 1;
+  }
+}

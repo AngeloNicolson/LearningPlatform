@@ -1,0 +1,304 @@
+/* Payment Form - Tofu Famicom Theme */
+.payment-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.payment-header {
+  margin-bottom: 32px;
+}
+
+.back-button {
+  background: rgba(102, 11, 5, 0.05);
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  color: #660B05;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.back-button:hover:not(:disabled) {
+  background: rgba(102, 11, 5, 0.08);
+  color: #440703;
+  border-color: #660B05;
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.1);
+}
+
+.back-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.payment-header h3 {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(102, 11, 5, 0.2);
+}
+
+.payment-summary {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(102, 11, 5, 0.15);
+  box-shadow: 0 2px 10px rgba(102, 11, 5, 0.05);
+}
+
+.session-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.session-name {
+  color: #2c2419;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.session-price {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(102, 11, 5, 0.2);
+}
+
+.payment-form {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 2px solid rgba(102, 11, 5, 0.1);
+  box-shadow: 0 4px 15px rgba(102, 11, 5, 0.05);
+}
+
+.card-section {
+  margin-bottom: 24px;
+}
+
+.card-section h4 {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-element-container {
+  background: #f8f6f0;
+  border: 2px solid rgba(102, 11, 5, 0.15);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-element-container:focus-within {
+  border-color: #660B05;
+  box-shadow: 0 0 0 3px rgba(102, 11, 5, 0.1);
+}
+
+.security-info {
+  background: rgba(102, 11, 5, 0.02);
+  border: 1px solid rgba(102, 11, 5, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.security-badges {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.security-badge {
+  background: rgba(102, 11, 5, 0.08);
+  color: #660B05;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.security-text {
+  color: #8b7355;
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.payment-total {
+  background: rgba(102, 11, 5, 0.03);
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.total-row span:first-child {
+  color: #2c2419;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.total-amount {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(102, 11, 5, 0.2);
+}
+
+.fees-info {
+  text-align: center;
+}
+
+.fees-info small {
+  color: #8b7355;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.pay-button {
+  width: 100%;
+  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
+  color: #f8f6f0;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Orbitron', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+}
+
+.pay-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(248, 246, 240, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.pay-button:hover:not(.disabled)::before {
+  left: 100%;
+}
+
+.pay-button:hover:not(.disabled) {
+  background: linear-gradient(135deg, #7d0e06 0%, #940f08 100%);
+  box-shadow: 0 6px 20px rgba(102, 11, 5, 0.3);
+  transform: translateY(-2px);
+}
+
+.pay-button.disabled {
+  background: rgba(102, 11, 5, 0.3);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pay-button.disabled::before {
+  display: none;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(248, 246, 240, 0.3);
+  border-top: 2px solid #f8f6f0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.payment-footer {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.refund-policy {
+  color: #8b7355;
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-form-container {
+    padding: 20px 16px;
+  }
+  
+  .payment-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .security-badges {
+    justify-content: center;
+  }
+  
+  .session-info {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .total-row {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+}

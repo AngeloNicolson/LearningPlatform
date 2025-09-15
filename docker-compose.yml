@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Client (React + Vite Frontend)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=https://localhost:3001/api
+      - NODE_TLS_REJECT_UNAUTHORIZED=0  # For development only
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - ./client/certs:/app/certs  # Mount certificates
+    depends_on:
+      - api
+    command: npm run dev
+    networks:
+      - app-network
+
+  # API (Express REST API)
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - CLIENT_URL=http://localhost:5173
+      - JWT_ACCESS_SECRET=dev-access-secret-change-in-production
+      - JWT_REFRESH_SECRET=dev-refresh-secret-change-in-production
+      - DATABASE_PATH=/data/database.db
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+      - ./data:/data
+    depends_on:
+      - server
+    command: npm run dev
+    networks:
+      - app-network
+
+  # Server (Backend Services & SQLite Database)
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DATABASE_PATH=/data/database.db
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - ./data:/data
+    command: npm run dev
+    networks:
+      - app-network
+
+  # Redis (Optional - for session management)
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  redis_data:

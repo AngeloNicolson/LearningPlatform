@@ -1,0 +1,370 @@
+/* Tutor Cards - Matching existing app styling */
+.tutor-cards-container {
+  padding: 32px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.tutor-cards-header {
+  margin-bottom: 32px;
+}
+
+.back-button {
+  background: rgba(102, 11, 5, 0.05);
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  color: #660B05;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.back-button:hover {
+  background: rgba(102, 11, 5, 0.08);
+  color: #440703;
+  border-color: #660B05;
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.1);
+}
+
+.tutor-cards-header h2 {
+  color: #660B05;
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(102, 11, 5, 0.3);
+  text-transform: uppercase;
+}
+
+.tutor-cards-header p {
+  color: #8b7355;
+  font-size: 0.9rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tutors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.tutor-card {
+  background: white;
+  border: 2px solid rgba(102, 11, 5, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.tutor-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.03), transparent);
+  transition: left 0.6s ease;
+}
+
+.tutor-card:hover::before {
+  left: 100%;
+}
+
+.tutor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(102, 11, 5, 0.1);
+  border-color: #660B05;
+}
+
+.tutor-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.tutor-photo {
+  font-size: 3.5rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(102, 11, 5, 0.03) 0%, rgba(102, 11, 5, 0.08) 100%);
+  border-radius: 50%;
+  border: 2px solid rgba(102, 11, 5, 0.15);
+}
+
+.availability-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.availability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.bg-green-500 {
+  background-color: #2d7d32;
+}
+
+.bg-yellow-500 {
+  background-color: #d4af37;
+}
+
+.bg-gray-400 {
+  background-color: #8b7355;
+}
+
+.availability-text {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.text-green-600 {
+  color: #2d7d32;
+}
+
+.text-yellow-600 {
+  color: #b8941f;
+}
+
+.text-gray-600 {
+  color: #8b7355;
+}
+
+.tutor-info {
+  margin-bottom: 20px;
+}
+
+.tutor-name {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tutor-education {
+  color: #8b7355;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tutor-experience {
+  color: #8b7355;
+  font-size: 0.7rem;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tutor-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 0.875rem;
+}
+
+.star.filled {
+  opacity: 1;
+}
+
+.star.empty {
+  opacity: 0.3;
+}
+
+.rating-text {
+  color: #8b7355;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tutor-specialties {
+  margin-bottom: 12px;
+}
+
+.specialties-label {
+  color: #8b7355;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.specialty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.specialty-tag {
+  background: rgba(102, 11, 5, 0.05);
+  color: #660B05;
+  padding: 4px 8px;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.specialty-tag.more {
+  background: rgba(139, 115, 85, 0.1);
+  color: #8b7355;
+  border: 1px solid rgba(139, 115, 85, 0.2);
+}
+
+.tutor-languages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.languages-label {
+  color: #8b7355;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.languages-text {
+  color: #2c2419;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tutor-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(102, 11, 5, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(102, 11, 5, 0.2);
+}
+
+.price-unit {
+  color: #8b7355;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.view-profile-btn {
+  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
+  color: #f8f6f0;
+  border: 1px solid #8b1009;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 8px rgba(102, 11, 5, 0.15);
+}
+
+.view-profile-btn:hover {
+  background: linear-gradient(135deg, #7d0e06 0%, #940f08 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+}
+
+.view-profile-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tutors-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .tutor-cards-container {
+    padding: 24px 16px;
+  }
+  
+  .tutor-photo {
+    width: 64px;
+    height: 64px;
+    font-size: 2.5rem;
+  }
+  
+  .tutor-card {
+    padding: 20px;
+  }
+  
+  .tutor-card-footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .view-profile-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

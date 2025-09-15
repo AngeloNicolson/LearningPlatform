@@ -1,0 +1,524 @@
+/* Home Page - Tofu Famicom Theme */
+.home {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  position: relative;
+  z-index: 1;
+  background: #faf8f3;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.home-header .welcome-section h1 {
+  color: #660B05;
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin: 0 0 12px 0;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(102, 11, 5, 0.3);
+  text-transform: uppercase;
+}
+
+.home-header .tagline {
+  color: #8b7355;
+  font-size: 1rem;
+  margin: 0 0 40px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.platform-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.platform-stats .stat-card {
+  background: #ffffff;
+  border: 1px solid rgba(102, 11, 5, 0.08);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.platform-stats .stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(250, 248, 243, 0.5) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.platform-stats .stat-card:hover {
+  border-color: rgba(102, 11, 5, 0.2);
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.06);
+  transform: translateY(-2px);
+  background: #faf8f3;
+}
+
+.platform-stats .stat-number {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(102, 11, 5, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.platform-stats .stat-label {
+  color: #8b7355;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 48px;
+}
+
+.section-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.section-header h2 {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(102, 11, 5, 0.2);
+}
+
+.section-header p {
+  color: #8b7355;
+  font-size: 0.8rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Featured Debates */
+.featured-debates {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.debate-card {
+  background: #ffffff;
+  border: 1px solid rgba(102, 11, 5, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.debate-card.featured {
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.05);
+  background: linear-gradient(135deg, #ffffff 0%, #faf8f3 100%);
+}
+
+.debate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.03), transparent);
+  transition: left 0.6s ease;
+}
+
+.debate-card:hover::before {
+  left: 100%;
+}
+
+.debate-card:hover {
+  border-color: rgba(102, 11, 5, 0.2);
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.06);
+  transform: translateY(-2px);
+  background: #faf8f3;
+}
+
+.debate-header {
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.debate-header h3 {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+.debate-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.debate-meta .complexity {
+  background: #faf8f3;
+  color: #660B05;
+  padding: 3px 8px;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  border-radius: 6px;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.debate-meta .viewers {
+  background: rgba(45, 125, 50, 0.08);
+  color: #2d7d32;
+  padding: 3px 8px;
+  border: 1px solid rgba(45, 125, 50, 0.2);
+  border-radius: 6px;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.debate-meta .status {
+  background: rgba(25, 118, 210, 0.08);
+  color: #1976d2;
+  padding: 3px 8px;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+  border-radius: 6px;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Face-off Style Debaters Display */
+.debaters-faceoff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+  position: relative;
+  z-index: 1;
+  gap: 20px;
+}
+
+.debater-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 180px;
+}
+
+.profile-image-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(102, 11, 5, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+
+.debater-profile.pro .profile-image-container {
+  border-color: rgba(45, 125, 50, 0.3);
+}
+
+.debater-profile.con .profile-image-container {
+  border-color: rgba(102, 11, 5, 0.3);
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Default Avatar when no image */
+.default-avatar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #faf8f3 0%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatar-initial {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(102, 11, 5, 0.1);
+}
+
+/* Winner Crown */
+.winner-crown {
+  position: absolute;
+  top: -15px;
+  right: -5px;
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Versus Divider with Slash */
+.versus-divider {
+  position: relative;
+  width: 60px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 -10px;
+}
+
+.slash {
+  position: absolute;
+  width: 3px;
+  height: 100px;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    #660B05 20%, 
+    #660B05 80%, 
+    transparent 100%);
+  transform: rotate(20deg);
+  box-shadow: 0 0 10px rgba(102, 11, 5, 0.2);
+}
+
+.vs-text {
+  position: absolute;
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-shadow: 
+    0 0 10px rgba(102, 11, 5, 0.3),
+    0 0 20px rgba(102, 11, 5, 0.1);
+  background: #faf8f3;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  z-index: 2;
+}
+
+/* Debater Info */
+.debater-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.debater-info .position {
+  background: rgba(102, 11, 5, 0.06);
+  color: #8b7355;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+}
+
+.debater-profile.pro .position {
+  background: rgba(45, 125, 50, 0.05);
+  color: #2d7d32;
+  border: 1px solid rgba(45, 125, 50, 0.2);
+}
+
+.debater-profile.con .position {
+  background: rgba(102, 11, 5, 0.05);
+  color: #660B05;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+}
+
+.debater-info .name {
+  color: #2c2419;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.debater-info .rating {
+  color: #8b7355;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.debater-info .winner-badge {
+  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
+  color: #f8f6f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid #8b1009;
+  margin-top: 4px;
+  box-shadow: 0 2px 6px rgba(102, 11, 5, 0.3);
+}
+
+.debate-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.btn {
+  background: #faf8f3;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  color: #660B05;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 80px;
+}
+
+.btn:hover {
+  background: #ffffff;
+  border-color: rgba(102, 11, 5, 0.3);
+  color: #660B05;
+  box-shadow: 0 2px 6px rgba(102, 11, 5, 0.06);
+  transform: translateY(-1px);
+}
+
+.btn.btn-primary {
+  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
+  border-color: #8b1009;
+  color: #f8f6f0;
+}
+
+.btn.btn-primary:hover {
+  background: linear-gradient(135deg, #7d0e06 0%, #940f08 100%);
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+}
+
+.btn.btn-secondary {
+  background: #ffffff;
+  border: 1px solid rgba(102, 11, 5, 0.1);
+  color: #660B05;
+}
+
+.btn.btn-secondary:hover {
+  background: #faf8f3;
+  border-color: rgba(102, 11, 5, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .home-main {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .platform-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .home {
+    padding: 20px 16px;
+  }
+  
+  .home-header .welcome-section h1 {
+    font-size: 2.2rem;
+  }
+  
+  .platform-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .debaters-faceoff {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .versus-divider {
+    width: 120px;
+    height: 60px;
+    margin: -10px 0;
+  }
+  
+  .slash {
+    width: 100px;
+    height: 3px;
+    transform: rotate(0deg);
+  }
+  
+  .profile-image-container {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .avatar-initial {
+    font-size: 1.5rem;
+  }
+  
+  .debate-actions {
+    flex-direction: column;
+  }
+}

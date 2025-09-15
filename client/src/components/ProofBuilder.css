@@ -1,0 +1,395 @@
+.proof-builder {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.proof-header {
+  margin-bottom: 24px;
+}
+
+.proof-header h3 {
+  margin: 0 0 12px 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.theorem-statement {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 16px;
+  color: #1e40af;
+  font-size: 1rem;
+}
+
+.proof-steps {
+  margin-bottom: 20px;
+}
+
+.empty-proof {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.proof-step {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.proof-step:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.proof-step.given {
+  border-left: 4px solid #3b82f6;
+}
+
+.proof-step.assumption {
+  border-left: 4px solid #8b5cf6;
+}
+
+.proof-step.deduction {
+  border-left: 4px solid #059669;
+}
+
+.proof-step.conclusion {
+  border-left: 4px solid #dc2626;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-index {
+  background: #374151;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.step-type-badge {
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.step-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.control-btn.small {
+  padding: 2px 6px;
+  font-size: 0.75rem;
+}
+
+.move-btn {
+  width: 28px;
+  height: 28px;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.edit-btn {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.edit-btn:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.delete-btn {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.add-step-btn {
+  background: #059669;
+  color: white;
+  border-color: #059669;
+  padding: 12px 24px;
+  font-weight: 500;
+}
+
+.add-step-btn:hover {
+  background: #047857;
+  border-color: #047857;
+}
+
+.add-equation-btn {
+  background: #8b5cf6;
+  color: white;
+  border-color: #8b5cf6;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+}
+
+.add-equation-btn:hover {
+  background: #7c3aed;
+  border-color: #7c3aed;
+}
+
+.step-content {
+  padding: 16px;
+}
+
+.step-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editor-field label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.editor-field select,
+.editor-field textarea {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+
+.editor-field select:focus,
+.editor-field textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.equations-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.equations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.equations-header label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.equation-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.equation-item .math-renderer {
+  flex: 1;
+}
+
+.equation-editor-inline {
+  margin-top: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.equation-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.step-display {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statement,
+.justification {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.statement strong,
+.justification strong {
+  color: #1f2937;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.equations {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.empty-step {
+  color: #9ca3af;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.proof-footer {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.proof-help {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.proof-help details summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #374151;
+  padding: 8px 0;
+}
+
+.proof-help details[open] summary {
+  margin-bottom: 12px;
+}
+
+.help-content {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.help-content h4 {
+  margin: 0 0 8px 0;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.help-content ul {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+}
+
+.help-content li {
+  margin-bottom: 4px;
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+.help-content strong {
+  color: #1f2937;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .proof-builder {
+    padding: 16px;
+  }
+  
+  .step-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .step-controls {
+    align-self: stretch;
+    justify-content: flex-end;
+  }
+  
+  .equations-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .equation-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

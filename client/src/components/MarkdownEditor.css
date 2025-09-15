@@ -1,0 +1,376 @@
+.markdown-editor {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.markdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.markdown-title {
+  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.markdown-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.control-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid;
+}
+
+.edit-btn {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.edit-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.save-btn {
+  background: #059669;
+  color: white;
+  border-color: #059669;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: #047857;
+  border-color: #047857;
+  transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancel-btn {
+  background: white;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  color: #374151;
+  border-color: #9ca3af;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Edit Mode Styles */
+.markdown-edit-mode {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+.markdown-textarea {
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  background: #ffffff;
+}
+
+.markdown-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.edit-help {
+  padding: 8px 20px;
+  background: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+}
+
+.edit-help small {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+/* View Mode Styles */
+.markdown-view-mode {
+  padding: 20px;
+  min-height: 400px;
+}
+
+.markdown-content {
+  max-width: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* Markdown Element Styles */
+.md-h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.md-h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 32px 0 16px 0;
+}
+
+.md-h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 24px 0 12px 0;
+}
+
+.md-p {
+  margin: 0 0 16px 0;
+  color: #374151;
+}
+
+.md-ul, .md-ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+.md-li {
+  margin: 4px 0;
+  color: #374151;
+}
+
+.md-blockquote {
+  margin: 16px 0;
+  padding: 16px 20px;
+  border-left: 4px solid #3b82f6;
+  background: #f0f9ff;
+  color: #1e40af;
+  font-style: italic;
+}
+
+.md-code-inline {
+  background: #f3f4f6;
+  color: #1f2937;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875em;
+}
+
+.md-pre {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.md-code-block {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.md-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.md-th {
+  background: #f9fafb;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.md-td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+
+.md-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.md-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .markdown-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  
+  .markdown-controls {
+    align-self: stretch;
+    justify-content: flex-end;
+  }
+  
+  .markdown-view-mode {
+    padding: 16px;
+  }
+  
+  .markdown-textarea {
+    padding: 16px;
+  }
+  
+  .md-h1 {
+    font-size: 1.75rem;
+  }
+  
+  .md-h2 {
+    font-size: 1.25rem;
+  }
+  
+  .md-h3 {
+    font-size: 1.125rem;
+  }
+}
+
+/* Syntax Highlighting (for code blocks) */
+.hljs {
+  background: #1f2937 !important;
+  color: #f9fafb !important;
+  padding: 16px !important;
+  border-radius: 8px !important;
+  overflow-x: auto !important;
+}
+
+/* Dark mode support for syntax highlighting */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in {
+  color: #60a5fa !important;
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-section {
+  color: #34d399 !important;
+}
+
+.hljs-comment {
+  color: #9ca3af !important;
+  font-style: italic !important;
+}
+
+.hljs-number,
+.hljs-literal {
+  color: #fbbf24 !important;
+}
+
+/* Math-specific styles */
+.equation-btn {
+  background: #8b5cf6;
+  color: white;
+  border-color: #8b5cf6;
+}
+
+.equation-btn:hover:not(:disabled) {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.equation-editor-panel {
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 16px;
+}
+
+.equation-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.math-display {
+  margin: 20px 0;
+  text-align: center;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.math-inline {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+/* MathJax styling */
+.MathJax {
+  outline: none;
+}
+
+.MathJax_Display {
+  text-align: center !important;
+  margin: 1em 0 !important;
+}
+
+.MathJax_SVG_Display {
+  text-align: center !important;
+  margin: 1em auto !important;
+}
+
+/* Math error styling */
+.math-error {
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.875em;
+}

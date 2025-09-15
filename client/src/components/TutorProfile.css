@@ -1,0 +1,420 @@
+/* Tutor Profile - Matching existing app styling */
+.tutor-profile-container {
+  padding: 32px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-button {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-button:hover {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.tutor-profile-header {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-bottom: 48px;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.tutor-photo-large {
+  font-size: 6rem;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 50%;
+  border: 3px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.tutor-main-info {
+  flex: 1;
+}
+
+.tutor-name {
+  color: #1f2937;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.025em;
+}
+
+.tutor-title {
+  color: #3b82f6;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+}
+
+.tutor-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 1rem;
+}
+
+.star.filled {
+  opacity: 1;
+}
+
+.star.empty {
+  opacity: 0.3;
+}
+
+.rating-text {
+  color: #4b5563;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #1f2937;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.availability-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #ecfdf5;
+  border-radius: 8px;
+  color: #065f46;
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.availability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.availability-dot.available {
+  background-color: #10b981;
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 48px;
+}
+
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.profile-left section {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.profile-left h3 {
+  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+}
+
+.bio-section p {
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.specialty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.specialty-tag {
+  background: #eff6ff;
+  color: #1e40af;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.education-section ul,
+.certifications-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.education-section li,
+.certifications-section li {
+  color: #4b5563;
+  font-size: 0.875rem;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.languages-section p {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.reviewer-name {
+  color: #1f2937;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.review-rating .star {
+  font-size: 0.75rem;
+}
+
+.review-comment {
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+  font-style: italic;
+}
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-subject {
+  color: #3b82f6;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.review-date {
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
+.booking-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  position: sticky;
+  top: 32px;
+  height: fit-content;
+}
+
+.booking-card h3 {
+  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.session-types {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.session-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.session-type:hover {
+  border-color: #3b82f6;
+  background: #f8fafc;
+}
+
+.session-type.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.session-info {
+  flex: 1;
+}
+
+.session-name {
+  color: #1f2937;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.session-duration {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+}
+
+.session-description {
+  color: #4b5563;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.session-price {
+  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.book-now-btn {
+  width: 100%;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 16px;
+}
+
+.book-now-btn:hover:not(.disabled) {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.book-now-btn.disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.booking-note {
+  color: #6b7280;
+  font-size: 0.75rem;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .booking-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .tutor-profile-container {
+    padding: 24px 16px;
+  }
+  
+  .tutor-profile-header {
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .tutor-photo-large {
+    width: 120px;
+    height: 120px;
+    font-size: 4rem;
+  }
+  
+  .tutor-name {
+    font-size: 2rem;
+  }
+  
+  .profile-left section {
+    padding: 20px;
+  }
+}

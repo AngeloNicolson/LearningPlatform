@@ -1,0 +1,275 @@
+/* Math Grade Selector - Matching existing app styling */
+.math-grade-selector {
+  padding: 32px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.grade-selector-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.grade-selector-header h2 {
+  color: #660B05;
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0 0 12px 0;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(102, 11, 5, 0.3);
+  text-transform: uppercase;
+}
+
+.grade-selector-header p {
+  color: #8b7355;
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.grade-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.grade-card {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(102, 11, 5, 0.05);
+  border: 2px solid rgba(102, 11, 5, 0.1);
+}
+
+.grade-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.03), transparent);
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.grade-card:hover::before {
+  left: 100%;
+}
+
+.grade-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(102, 11, 5, 0.12);
+  border-color: #660B05;
+}
+
+.grade-card-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  opacity: 0.95;
+}
+
+/* Gradient classes */
+.bg-gradient-to-r {
+  background: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.from-green-400 {
+  --tw-gradient-from: #8b7355;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(139, 115, 85, 0));
+}
+
+.to-blue-500 {
+  --tw-gradient-to: #660B05;
+}
+
+.from-purple-400 {
+  --tw-gradient-from: #940f08;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(148, 15, 8, 0));
+}
+
+.to-pink-500 {
+  --tw-gradient-to: #660B05;
+}
+
+.from-blue-500 {
+  --tw-gradient-from: #7d0e06;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(125, 14, 6, 0));
+}
+
+.to-indigo-600 {
+  --tw-gradient-to: #440703;
+}
+
+.from-red-400 {
+  --tw-gradient-from: #aa6c39;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(170, 108, 57, 0));
+}
+
+.to-orange-500 {
+  --tw-gradient-to: #8b4513;
+}
+
+.grade-card-content {
+  position: relative;
+  z-index: 2;
+  padding: 24px;
+  padding-top: 140px;
+}
+
+.grade-icon {
+  position: absolute;
+  top: -80px;
+  right: 24px;
+  font-size: 4rem;
+  opacity: 0.9;
+}
+
+.grade-info h3 {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.grade-range {
+  display: inline-block;
+  background: rgba(102, 11, 5, 0.08);
+  color: #660B05;
+  padding: 4px 12px;
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grade-description {
+  color: #8b7355;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.grade-subjects {
+  margin-bottom: 24px;
+}
+
+.subjects-label {
+  color: #8b7355;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.subjects-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.subjects-list li {
+  background: rgba(102, 11, 5, 0.05);
+  color: #660B05;
+  padding: 4px 8px;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.grade-card-footer {
+  padding: 0 24px 24px 24px;
+}
+
+.select-grade-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
+  color: #f8f6f0;
+  border: 1px solid #8b1009;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 8px rgba(102, 11, 5, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.select-grade-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(248, 246, 240, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.select-grade-btn:hover::before {
+  left: 100%;
+}
+
+.select-grade-btn:hover {
+  background: linear-gradient(135deg, #7d0e06 0%, #940f08 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 11, 5, 0.25);
+}
+
+.select-grade-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .grade-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .math-grade-selector {
+    padding: 24px 16px;
+  }
+  
+  .grade-selector-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .grade-selector-header {
+    margin-bottom: 32px;
+  }
+}

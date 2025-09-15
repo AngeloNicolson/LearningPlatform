@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug WASM Loading</title>
+</head>
+<body>
+    <h1>Debug WASM Loading</h1>
+    <div id="status">Loading...</div>
+    <div id="details"></div>
+    
+    <script>
+        document.getElementById('status').innerHTML = 'Step 1: Loading WASM script...';
+        
+        const script = document.createElement('script');
+        script.src = '/debate_platform.js';
+        script.onload = () => {
+            document.getElementById('details').innerHTML += '<p>✅ Script loaded</p>';
+            
+            let checkCount = 0;
+            const checkModule = () => {
+                checkCount++;
+                if (window.Module) {
+                    document.getElementById('details').innerHTML += '<p>✅ Module object found</p>';
+                    
+                    if (typeof window.Module.init_core === 'function') {
+                        try {
+                            window.Module.init_core();
+                            const topics = window.Module.get_topics_by_complexity(1, 10);
+                            document.getElementById('status').innerHTML = '✅ WASM working! Found ' + topics.length + ' topics';
+                            document.getElementById('details').innerHTML += '<p>✅ Core functions working</p>';
+                        } catch (e) {
+                            document.getElementById('status').innerHTML = '❌ WASM function error: ' + e.message;
+                        }
+                    } else {
+                        document.getElementById('status').innerHTML = '❌ Module functions not available';
+                        document.getElementById('details').innerHTML += '<p>Available: ' + Object.keys(window.Module).join(', ') + '</p>';
+                    }
+                } else if (checkCount < 100) {
+                    document.getElementById('details').innerHTML += '<p>⏳ Waiting for module... (attempt ' + checkCount + ')</p>';
+                    setTimeout(checkModule, 100);
+                } else {
+                    document.getElementById('status').innerHTML = '❌ Module never loaded';
+                }
+            };
+            
+            setTimeout(checkModule, 100);
+        };
+        
+        script.onerror = () => {
+            document.getElementById('status').innerHTML = '❌ Failed to load WASM script';
+        };
+        
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>
