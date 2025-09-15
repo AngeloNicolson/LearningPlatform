@@ -219,12 +219,37 @@ async function seedData() {
     VALUES (?, ?, ?, ?)
   `);
   
+  // Elementary - Arithmetic subtopics
   insertSubtopic.run('elem-counting', 'elem-arithmetic', 'Counting & Number Sense', 1);
   insertSubtopic.run('elem-addition', 'elem-arithmetic', 'Addition', 2);
   insertSubtopic.run('elem-subtraction', 'elem-arithmetic', 'Subtraction', 3);
   insertSubtopic.run('elem-multiplication', 'elem-arithmetic', 'Multiplication', 4);
   insertSubtopic.run('elem-division', 'elem-arithmetic', 'Division', 5);
   insertSubtopic.run('elem-word-problems', 'elem-arithmetic', 'Word Problems', 6);
+  
+  // Elementary - Fractions & Decimals subtopics
+  insertSubtopic.run('elem-frac-intro', 'elem-fractions', 'Introduction to Fractions', 1);
+  insertSubtopic.run('elem-frac-equiv', 'elem-fractions', 'Equivalent Fractions', 2);
+  insertSubtopic.run('elem-frac-add-sub', 'elem-fractions', 'Adding & Subtracting Fractions', 3);
+  insertSubtopic.run('elem-decimals', 'elem-fractions', 'Introduction to Decimals', 4);
+  insertSubtopic.run('elem-dec-ops', 'elem-fractions', 'Decimal Operations', 5);
+  insertSubtopic.run('elem-frac-dec-convert', 'elem-fractions', 'Converting Fractions & Decimals', 6);
+  
+  // Elementary - Basic Geometry subtopics
+  insertSubtopic.run('elem-shapes', 'elem-geometry', 'Shapes & Properties', 1);
+  insertSubtopic.run('elem-angles', 'elem-geometry', 'Introduction to Angles', 2);
+  insertSubtopic.run('elem-perimeter', 'elem-geometry', 'Perimeter', 3);
+  insertSubtopic.run('elem-area', 'elem-geometry', 'Area', 4);
+  insertSubtopic.run('elem-symmetry', 'elem-geometry', 'Symmetry', 5);
+  insertSubtopic.run('elem-3d-shapes', 'elem-geometry', '3D Shapes', 6);
+  
+  // Elementary - Measurement subtopics
+  insertSubtopic.run('elem-length', 'elem-measurement', 'Length & Distance', 1);
+  insertSubtopic.run('elem-weight', 'elem-measurement', 'Weight & Mass', 2);
+  insertSubtopic.run('elem-volume', 'elem-measurement', 'Volume & Capacity', 3);
+  insertSubtopic.run('elem-time', 'elem-measurement', 'Time', 4);
+  insertSubtopic.run('elem-money', 'elem-measurement', 'Money', 5);
+  insertSubtopic.run('elem-temperature', 'elem-measurement', 'Temperature', 6);
   
   // Insert sample resources for Addition
   const insertResource = db.prepare(`
@@ -289,6 +314,86 @@ async function seedData() {
   insertTopic.run('college-calculus', 'college', 'Calculus I-III', 1);
   insertTopic.run('college-linear', 'college', 'Linear Algebra', 2);
   insertTopic.run('college-diffeq', 'college', 'Differential Equations', 3);
+  
+  // Middle School - Pre-Algebra subtopics
+  insertSubtopic.run('middle-integers', 'middle-algebra', 'Integers & Rational Numbers', 1);
+  insertSubtopic.run('middle-expressions', 'middle-algebra', 'Algebraic Expressions', 2);
+  insertSubtopic.run('middle-equations', 'middle-algebra', 'Linear Equations', 3);
+  insertSubtopic.run('middle-inequalities', 'middle-algebra', 'Inequalities', 4);
+  insertSubtopic.run('middle-ratios', 'middle-algebra', 'Ratios & Proportions', 5);
+  insertSubtopic.run('middle-percent', 'middle-algebra', 'Percentages', 6);
+  
+  // Middle School - Geometry subtopics
+  insertSubtopic.run('middle-angles-lines', 'middle-geometry', 'Angles & Lines', 1);
+  insertSubtopic.run('middle-triangles', 'middle-geometry', 'Triangles', 2);
+  insertSubtopic.run('middle-quadrilaterals', 'middle-geometry', 'Quadrilaterals', 3);
+  insertSubtopic.run('middle-circles', 'middle-geometry', 'Circles', 4);
+  insertSubtopic.run('middle-volume-surface', 'middle-geometry', 'Volume & Surface Area', 5);
+  insertSubtopic.run('middle-transformations', 'middle-geometry', 'Transformations', 6);
+  
+  // Middle School - Statistics subtopics
+  insertSubtopic.run('middle-data-collection', 'middle-stats', 'Data Collection', 1);
+  insertSubtopic.run('middle-graphs', 'middle-stats', 'Graphs & Charts', 2);
+  insertSubtopic.run('middle-central-tendency', 'middle-stats', 'Mean, Median, Mode', 3);
+  insertSubtopic.run('middle-variability', 'middle-stats', 'Range & Variability', 4);
+  insertSubtopic.run('middle-probability', 'middle-stats', 'Basic Probability', 5);
+  insertSubtopic.run('middle-predictions', 'middle-stats', 'Making Predictions', 6);
+  
+  // High School - Algebra I subtopics
+  insertSubtopic.run('high-alg1-foundations', 'high-algebra1', 'Foundations', 1);
+  insertSubtopic.run('high-alg1-linear-eq', 'high-algebra1', 'Linear Equations & Graphs', 2);
+  insertSubtopic.run('high-alg1-systems', 'high-algebra1', 'Systems of Equations', 3);
+  insertSubtopic.run('high-alg1-polynomials', 'high-algebra1', 'Polynomials', 4);
+  insertSubtopic.run('high-alg1-factoring', 'high-algebra1', 'Factoring', 5);
+  insertSubtopic.run('high-alg1-quadratics', 'high-algebra1', 'Quadratic Equations', 6);
+  
+  // High School - Algebra II subtopics
+  insertSubtopic.run('high-alg2-functions', 'high-algebra2', 'Functions', 1);
+  insertSubtopic.run('high-alg2-polynomials', 'high-algebra2', 'Advanced Polynomials', 2);
+  insertSubtopic.run('high-alg2-rational', 'high-algebra2', 'Rational Expressions', 3);
+  insertSubtopic.run('high-alg2-exponential', 'high-algebra2', 'Exponential & Logarithmic', 4);
+  insertSubtopic.run('high-alg2-sequences', 'high-algebra2', 'Sequences & Series', 5);
+  insertSubtopic.run('high-alg2-matrices', 'high-algebra2', 'Matrices', 6);
+  
+  // High School - Geometry subtopics
+  insertSubtopic.run('high-geom-logic', 'high-geometry', 'Logic & Proofs', 1);
+  insertSubtopic.run('high-geom-congruence', 'high-geometry', 'Congruence', 2);
+  insertSubtopic.run('high-geom-similarity', 'high-geometry', 'Similarity', 3);
+  insertSubtopic.run('high-geom-right-triangles', 'high-geometry', 'Right Triangles & Trigonometry', 4);
+  insertSubtopic.run('high-geom-circles', 'high-geometry', 'Circles', 5);
+  insertSubtopic.run('high-geom-solids', 'high-geometry', 'Solid Geometry', 6);
+  
+  // High School - Calculus subtopics
+  insertSubtopic.run('high-calc-limits', 'high-calculus', 'Limits & Continuity', 1);
+  insertSubtopic.run('high-calc-derivatives', 'high-calculus', 'Derivatives', 2);
+  insertSubtopic.run('high-calc-applications', 'high-calculus', 'Applications of Derivatives', 3);
+  insertSubtopic.run('high-calc-integrals', 'high-calculus', 'Integrals', 4);
+  insertSubtopic.run('high-calc-fundamental', 'high-calculus', 'Fundamental Theorem', 5);
+  insertSubtopic.run('high-calc-integration-tech', 'high-calculus', 'Integration Techniques', 6);
+  
+  // College - Calculus I-III subtopics
+  insertSubtopic.run('college-calc1', 'college-calculus', 'Calculus I: Differential', 1);
+  insertSubtopic.run('college-calc2', 'college-calculus', 'Calculus II: Integral', 2);
+  insertSubtopic.run('college-calc3', 'college-calculus', 'Calculus III: Multivariable', 3);
+  insertSubtopic.run('college-vector-calc', 'college-calculus', 'Vector Calculus', 4);
+  insertSubtopic.run('college-diff-equations-intro', 'college-calculus', 'Intro to Differential Equations', 5);
+  insertSubtopic.run('college-series', 'college-calculus', 'Infinite Series', 6);
+  
+  // College - Linear Algebra subtopics
+  insertSubtopic.run('college-vectors', 'college-linear', 'Vectors & Vector Spaces', 1);
+  insertSubtopic.run('college-matrices-ops', 'college-linear', 'Matrix Operations', 2);
+  insertSubtopic.run('college-determinants', 'college-linear', 'Determinants', 3);
+  insertSubtopic.run('college-eigenvalues', 'college-linear', 'Eigenvalues & Eigenvectors', 4);
+  insertSubtopic.run('college-transformations', 'college-linear', 'Linear Transformations', 5);
+  insertSubtopic.run('college-orthogonality', 'college-linear', 'Orthogonality', 6);
+  
+  // College - Differential Equations subtopics
+  insertSubtopic.run('college-first-order', 'college-diffeq', 'First Order ODEs', 1);
+  insertSubtopic.run('college-second-order', 'college-diffeq', 'Second Order ODEs', 2);
+  insertSubtopic.run('college-laplace', 'college-diffeq', 'Laplace Transforms', 3);
+  insertSubtopic.run('college-systems-ode', 'college-diffeq', 'Systems of ODEs', 4);
+  insertSubtopic.run('college-partial', 'college-diffeq', 'Partial Differential Equations', 5);
+  insertSubtopic.run('college-numerical', 'college-diffeq', 'Numerical Methods', 6);
   
   console.log('Math resources seeded successfully');
   console.log('Seed data inserted successfully');
