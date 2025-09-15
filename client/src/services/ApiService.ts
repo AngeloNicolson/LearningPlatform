@@ -5,7 +5,7 @@ class ApiService {
   private currentUserId: string = 'default-user';
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+    this.baseUrl = import.meta.env.VITE_API_URL || 'https://localhost:3001/api';
   }
 
   private async request<T>(

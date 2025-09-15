@@ -114,7 +114,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   const fetchTeacherData = async () => {
     try {
       // Fetch bookings
-      const bookingsRes = await fetch('http://localhost:3001/api/bookings/teacher/bookings', {
+      const bookingsRes = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings`, {
         credentials: 'include',
       });
       if (bookingsRes.ok) {
@@ -129,7 +129,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
       }
       
       // Fetch profile
-      const profileRes = await fetch('http://localhost:3001/api/teachers/profile', {
+      const profileRes = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/teachers/profile`, {
         credentials: 'include',
       });
       if (profileRes.ok) {
@@ -143,7 +143,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   
   const handleBookingConfirm = async (bookingId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/bookings/teacher/bookings/${bookingId}/confirm`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/confirm`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -157,7 +157,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   
   const handleBookingDecline = async (bookingId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/bookings/teacher/bookings/${bookingId}/decline`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/decline`, {
         method: 'POST',
         credentials: 'include',
       });

@@ -23,6 +23,12 @@
     "start:api": "npm run start --workspace=api",
     "start:server": "npm run start --workspace=server",
     "db:init": "npm run db:init --workspace=server",
+    "setup:https": "bash scripts/setup-https.sh",
+    "run": "bash scripts/run.sh",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:reset": "docker-compose down -v && bash scripts/run.sh",
+    "docker:status": "bash scripts/status.sh",
     "install:all": "npm install",
     "clean": "rm -rf node_modules client/node_modules api/node_modules server/node_modules shared/node_modules"
   },

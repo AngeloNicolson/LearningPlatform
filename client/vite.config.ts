@@ -5,13 +5,21 @@ import path from 'path'
 
 // Check if HTTPS certificates exist
 const httpsConfig = (() => {
-  const keyPath = path.resolve(__dirname, 'certs/localhost-key.pem')
-  const certPath = path.resolve(__dirname, 'certs/localhost.pem')
+  // Try Docker mount path first, then local path
+  const dockerKeyPath = path.resolve(__dirname, 'certs/localhost-key.pem')
+  const dockerCertPath = path.resolve(__dirname, 'certs/localhost.pem')
+  const localKeyPath = path.resolve(__dirname, '../certs/localhost-key.pem')
+  const localCertPath = path.resolve(__dirname, '../certs/localhost.pem')
   
-  if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+  if (fs.existsSync(dockerKeyPath) && fs.existsSync(dockerCertPath)) {
     return {
-      key: fs.readFileSync(keyPath),
-      cert: fs.readFileSync(certPath)
+      key: fs.readFileSync(dockerKeyPath),
+      cert: fs.readFileSync(dockerCertPath)
+    }
+  } else if (fs.existsSync(localKeyPath) && fs.existsSync(localCertPath)) {
+    return {
+      key: fs.readFileSync(localKeyPath),
+      cert: fs.readFileSync(localCertPath)
     }
   }
   return false

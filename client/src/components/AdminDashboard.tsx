@@ -58,7 +58,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   const handleTeacherProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/teachers/profile', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/teachers/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const fetchTeacherBookings = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/bookings/teacher/bookings', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings`, {
         credentials: 'include',
       });
       
@@ -115,7 +115,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const fetchTeacherProfile = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/teachers/profile', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/teachers/profile`, {
         credentials: 'include',
       });
       
@@ -135,7 +135,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const handleBookingConfirm = async (bookingId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/bookings/teacher/bookings/${bookingId}/confirm`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/confirm`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -150,7 +150,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const handleBookingDecline = async (bookingId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/bookings/teacher/bookings/${bookingId}/decline`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/decline`, {
         method: 'POST',
         credentials: 'include',
       });

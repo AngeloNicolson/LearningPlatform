@@ -1,4 +1,7 @@
 import express from 'express';
+import https from 'https';
+import fs from 'fs';
+import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -14,6 +17,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const USE_HTTPS = process.env.USE_HTTPS === 'true';
 
 // Security middleware
 app.use(helmet({
@@ -82,6 +86,32 @@ app.use((_req, res) => {
   res.status(404).json({ message: 'Endpoint not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
-});
+// Start server with HTTPS support in production-like mode
+if (USE_HTTPS) {
+  // Check for certificates
+  const keyPath = path.resolve('/app/certs/localhost-key.pem');
+  const certPath = path.resolve('/app/certs/localhost.pem');
+  
+  if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+    const httpsOptions = {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath)
+    };
+    
+    https.createServer(httpsOptions, app).listen(PORT, () => {
+      console.log(`🔒 API server running on https://localhost:${PORT} (HTTPS)`);
+      console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  } else {
+    console.warn('⚠️  HTTPS certificates not found, falling back to HTTP');
+    app.listen(PORT, () => {
+      console.log(`API server running on http://localhost:${PORT} (HTTP)`);
+      console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  }
+} else {
+  app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT} (HTTP)`);
+    console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+}

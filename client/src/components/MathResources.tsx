@@ -1581,7 +1581,7 @@ export const MathResources: React.FC = () => {
 
   const fetchGrades = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/resources/grades');
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/grades`);
       const data = await response.json();
       
       // Transform API data to match our interface
@@ -1614,7 +1614,7 @@ export const MathResources: React.FC = () => {
 
   const fetchResources = async (subtopicId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/resources/subtopics/${subtopicId}/resources`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/subtopics/${subtopicId}/resources`);
       const data = await response.json();
       
       // Group resources by type

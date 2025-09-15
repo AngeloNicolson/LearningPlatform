@@ -13,7 +13,7 @@ if ! command -v mkcert &> /dev/null; then
     exit 1
 fi
 
-# Create certs directory
+# Create certs directory at root level
 mkdir -p certs
 
 # Install local CA
@@ -22,7 +22,7 @@ mkcert -install
 # Generate certificates for localhost and common local addresses
 mkcert -key-file certs/localhost-key.pem -cert-file certs/localhost.pem localhost 127.0.0.1 ::1
 
-echo "✅ HTTPS certificates created successfully in client/certs/"
+echo "✅ HTTPS certificates created successfully in certs/"
 echo "✅ Certificates are valid for: localhost, 127.0.0.1, ::1"
 echo ""
 echo "To use HTTPS, run: npm run dev:https"

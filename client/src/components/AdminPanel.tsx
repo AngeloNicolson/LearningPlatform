@@ -60,7 +60,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
 
   const fetchGrades = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/resources/grades');
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/grades`);
       const data = await response.json();
       setGrades(data);
     } catch (error) {
@@ -72,13 +72,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
     setLoadingResources(true);
     try {
       // For admin, we need to get all resources including hidden ones
-      const response = await fetch(`http://localhost:3001/api/resources/admin/subtopics/${subtopicId}/resources`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/admin/subtopics/${subtopicId}/resources`, {
         credentials: 'include'
       });
       
       if (response.status === 401) {
         // If unauthorized, fall back to public endpoint
-        const publicResponse = await fetch(`http://localhost:3001/api/resources/subtopics/${subtopicId}/resources`);
+        const publicResponse = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/subtopics/${subtopicId}/resources`);
         const data = await publicResponse.json();
         setResources(data.resources || []);
       } else {
@@ -95,7 +95,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
 
   const toggleResourceVisibility = async (resourceId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/resources/admin/resources/${resourceId}/visibility`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/admin/resources/${resourceId}/visibility`, {
         method: 'PATCH',
         credentials: 'include'
       });

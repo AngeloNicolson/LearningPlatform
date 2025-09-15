@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Client (React + Vite Frontend)
   client:
@@ -10,18 +8,19 @@ services:
       - "5173:5173"
     environment:
       - VITE_API_URL=https://localhost:3001/api
-      - NODE_TLS_REJECT_UNAUTHORIZED=0  # For development only
+      - NODE_ENV=production
+      - NODE_TLS_REJECT_UNAUTHORIZED=0  # Required for self-signed certs
     volumes:
       - ./client:/app
       - /app/node_modules
-      - ./client/certs:/app/certs  # Mount certificates
+      - ./certs:/app/certs  # Mount certificates from root
     depends_on:
       - api
     command: npm run dev
     networks:
       - app-network
 
-  # API (Express REST API)
+  # API (Express REST API with HTTPS)
   api:
     build:
       context: ./api
@@ -29,16 +28,20 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=3001
-      - CLIENT_URL=http://localhost:5173
-      - JWT_ACCESS_SECRET=dev-access-secret-change-in-production
-      - JWT_REFRESH_SECRET=dev-refresh-secret-change-in-production
+      - USE_HTTPS=true
+      - CLIENT_URL=https://localhost:5173
+      - JWT_ACCESS_SECRET=prod-access-secret-${JWT_ACCESS_SECRET:-change-in-production}
+      - JWT_REFRESH_SECRET=prod-refresh-secret-${JWT_REFRESH_SECRET:-change-in-production}
       - DATABASE_PATH=/data/database.db
+      - COOKIE_SECURE=true
+      - COOKIE_SAMESITE=strict
     volumes:
       - ./api:/app
       - /app/node_modules
       - ./data:/data
+      - ./certs:/app/certs:ro  # Mount certificates read-only
     depends_on:
       - server
     command: npm run dev

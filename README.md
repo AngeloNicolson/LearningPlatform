@@ -57,7 +57,10 @@ A modern platform for mathematical tutoring and debating with secure authenticat
 6. **Access the application**:
    - Frontend: https://localhost:5173 (HTTPS)
    - API: http://localhost:3001/api
-   - Demo login: demo@example.com / Demo123!
+   - Owner login: owner@example.com / Owner123!
+   - Admin login: admin@example.com / Admin123!
+   - Teacher login: teacher@example.com / Teacher123!
+   - Student login: student@example.com / Student123!
 
 ### Development
 
