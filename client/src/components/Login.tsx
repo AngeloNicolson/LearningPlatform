@@ -133,7 +133,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="demo@example.com"
+                placeholder="admin@tutorplatform.com"
                 required
                 autoComplete="email"
               />
@@ -146,7 +146,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Demo123!"
+                placeholder="password123"
                 required
                 autoComplete="current-password"
               />
@@ -164,23 +164,28 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
               <p>Demo Accounts:</p>
               <details>
                 <summary>Owner Account</summary>
-                <code>Email: owner@example.com</code>
-                <code>Password: Owner123!</code>
+                <code>Email: owner@tutorplatform.com</code>
+                <code>Password: password123</code>
               </details>
               <details>
-                <summary>Teacher Account</summary>
-                <code>Email: teacher@example.com</code>
-                <code>Password: Teacher123!</code>
+                <summary>Admin Account</summary>
+                <code>Email: admin@tutorplatform.com</code>
+                <code>Password: password123</code>
+              </details>
+              <details>
+                <summary>Tutor Account</summary>
+                <code>Email: sarah.chen@tutors.com</code>
+                <code>Password: password123</code>
               </details>
               <details>
                 <summary>Parent Account</summary>
-                <code>Email: parent@example.com</code>
-                <code>Password: Parent123!</code>
+                <code>Email: john.parent@email.com</code>
+                <code>Password: password123</code>
               </details>
               <details>
-                <summary>Personal Account</summary>
-                <code>Email: demo@example.com</code>
-                <code>Password: Demo123!</code>
+                <summary>Student Account</summary>
+                <code>Email: alex.student@email.com</code>
+                <code>Password: password123</code>
               </details>
             </div>
 

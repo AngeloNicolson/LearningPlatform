@@ -4,36 +4,36 @@
 
 -- Insert owner account
 INSERT INTO users (email, email_verified, password_hash, first_name, last_name, role, account_status)
-VALUES ('owner@tutorplatform.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Platform', 'Owner', 'owner', 'active');
+VALUES ('owner@tutorplatform.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Platform', 'Owner', 'owner', 'active');
 
 -- Insert admin account
 INSERT INTO users (email, email_verified, password_hash, first_name, last_name, role, account_status)
-VALUES ('admin@tutorplatform.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Admin', 'User', 'admin', 'active');
+VALUES ('admin@tutorplatform.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Admin', 'User', 'admin', 'active');
 
 -- Insert tutors
 INSERT INTO users (email, email_verified, password_hash, first_name, last_name, role, account_status) VALUES
-('sarah.chen@tutors.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Sarah', 'Chen', 'tutor', 'active'),
-('michael.rodriguez@tutors.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Michael', 'Rodriguez', 'tutor', 'active'),
-('emily.watson@tutors.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Emily', 'Watson', 'tutor', 'active'),
-('david.kim@tutors.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'David', 'Kim', 'tutor', 'pending');
+('sarah.chen@tutors.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Sarah', 'Chen', 'tutor', 'active'),
+('michael.rodriguez@tutors.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Michael', 'Rodriguez', 'tutor', 'active'),
+('emily.watson@tutors.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Emily', 'Watson', 'tutor', 'active'),
+('david.kim@tutors.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'David', 'Kim', 'tutor', 'pending');
 
 -- Insert parent accounts
 INSERT INTO users (email, email_verified, password_hash, first_name, last_name, role, account_status) VALUES
-('john.parent@email.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'John', 'Smith', 'parent', 'active'),
-('lisa.parent@email.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Lisa', 'Johnson', 'parent', 'active'),
-('robert.parent@email.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Robert', 'Williams', 'parent', 'active');
+('john.parent@email.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'John', 'Smith', 'parent', 'active'),
+('lisa.parent@email.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Lisa', 'Johnson', 'parent', 'active'),
+('robert.parent@email.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Robert', 'Williams', 'parent', 'active');
 
 -- Insert children linked to parents (get parent IDs first)
 INSERT INTO users (email, email_verified, password_hash, first_name, last_name, role, parent_id, account_status) VALUES
-('emma.smith@student.com', false, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Emma', 'Smith', 'personal', (SELECT id FROM users WHERE email = 'john.parent@email.com'), 'active'),
-('liam.smith@student.com', false, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Liam', 'Smith', 'personal', (SELECT id FROM users WHERE email = 'john.parent@email.com'), 'active'),
-('sophia.johnson@student.com', false, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Sophia', 'Johnson', 'personal', (SELECT id FROM users WHERE email = 'lisa.parent@email.com'), 'active'),
-('noah.williams@student.com', false, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Noah', 'Williams', 'personal', (SELECT id FROM users WHERE email = 'robert.parent@email.com'), 'active');
+('emma.smith@student.com', false, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Emma', 'Smith', 'personal', (SELECT id FROM users WHERE email = 'john.parent@email.com'), 'active'),
+('liam.smith@student.com', false, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Liam', 'Smith', 'personal', (SELECT id FROM users WHERE email = 'john.parent@email.com'), 'active'),
+('sophia.johnson@student.com', false, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Sophia', 'Johnson', 'personal', (SELECT id FROM users WHERE email = 'lisa.parent@email.com'), 'active'),
+('noah.williams@student.com', false, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Noah', 'Williams', 'personal', (SELECT id FROM users WHERE email = 'robert.parent@email.com'), 'active');
 
 -- Insert personal (non-parent) accounts
 INSERT INTO users (email, email_verified, password_hash, first_name, last_name, role, account_status) VALUES
-('alex.student@email.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Alex', 'Turner', 'personal', 'active'),
-('maria.student@email.com', true, '$2b$12$RHOrcNxLvwSOA2NFB4dy4uf7kCCJ3EXdOfG3/C4TVxAKkKSQf.lbO', 'Maria', 'Garcia', 'personal', 'active');
+('alex.student@email.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Alex', 'Turner', 'personal', 'active'),
+('maria.student@email.com', true, '$2b$12$iAxtbEsxp4AnZDjhKRshO./qE1JB6tX45/D4e0HezDprHjDYldksm', 'Maria', 'Garcia', 'personal', 'active');
 
 -- Create tutor profiles
 INSERT INTO tutors (user_id, display_name, bio, subjects, grades, hourly_rate, accepts_group_sessions, min_group_size, max_group_size, group_pricing, rating, total_sessions, approval_status) VALUES
