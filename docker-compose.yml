@@ -1,4 +1,25 @@
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: tutoring_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=tutoring_platform
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-development}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/src/database/migrations:/docker-entrypoint-initdb.d:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Client (React + Vite Frontend)
   client:
     build:
@@ -13,7 +34,7 @@ services:
     volumes:
       - ./client:/app
       - /app/node_modules
-      - ./certs:/app/certs  # Mount certificates from root
+      - ./certs:/app/certs:ro  # Mount certificates read-only
     depends_on:
       - api
     command: npm run dev
@@ -34,32 +55,42 @@ services:
       - CLIENT_URL=https://localhost:5173
       - JWT_ACCESS_SECRET=prod-access-secret-${JWT_ACCESS_SECRET:-change-in-production}
       - JWT_REFRESH_SECRET=prod-refresh-secret-${JWT_REFRESH_SECRET:-change-in-production}
-      - DATABASE_PATH=/data/database.db
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=tutoring_platform
+      - DB_USER=postgres
+      - DB_PASSWORD=${DB_PASSWORD:-development}
       - COOKIE_SECURE=true
       - COOKIE_SAMESITE=strict
     volumes:
       - ./api:/app
       - /app/node_modules
-      - ./data:/data
       - ./certs:/app/certs:ro  # Mount certificates read-only
     depends_on:
-      - server
+      postgres:
+        condition: service_healthy
     command: npm run dev
     networks:
       - app-network
 
-  # Server (Backend Services & SQLite Database)
+  # Server (Backend Services)
   server:
     build:
       context: ./server
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=development
-      - DATABASE_PATH=/data/database.db
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=tutoring_platform
+      - DB_USER=postgres
+      - DB_PASSWORD=${DB_PASSWORD:-development}
     volumes:
       - ./server:/app
       - /app/node_modules
-      - ./data:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
     command: npm run dev
     networks:
       - app-network
@@ -79,4 +110,5 @@ networks:
     driver: bridge
 
 volumes:
+  postgres_data:
   redis_data:

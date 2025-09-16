@@ -290,6 +290,156 @@
   margin-bottom: 20px;
 }
 
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(102, 11, 5, 0.03);
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.875rem;
+  color: #2c0100;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  outline: none;
+  background: white;
+  border-color: #660B05;
+  box-shadow: 0 0 0 3px rgba(102, 11, 5, 0.1);
+}
+
+.form-group select:disabled {
+  background: rgba(102, 11, 5, 0.05);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.no-children-message {
+  padding: 16px;
+  background: rgba(102, 11, 5, 0.05);
+  border: 1px dashed rgba(102, 11, 5, 0.3);
+  border-radius: 8px;
+  text-align: center;
+  color: #660B05;
+  font-size: 0.875rem;
+}
+
+.loading {
+  padding: 12px;
+  text-align: center;
+  color: #660B05;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* Time selection hint */
+.time-selection-hint {
+  margin: 8px 0;
+  font-size: 0.875rem;
+  color: #660B05;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Recurrence options */
+.session-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.session-type-section,
+.group-session-section {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.recurrence-options {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(102, 11, 5, 0.03);
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  border-radius: 8px;
+}
+
+.recurrence-options h4 {
+  margin: 0 0 16px 0;
+  color: #660B05;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #2c0100;
+}
+
+.radio-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #660B05;
+  cursor: pointer;
+}
+
+.radio-option span {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.recurring-weeks {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.recurring-weeks label {
+  color: #660B05;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.recurring-weeks select {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  border-radius: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.875rem;
+  color: #2c0100;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.recurring-weeks select:focus {
+  outline: none;
+  border-color: #660B05;
+  box-shadow: 0 0 0 3px rgba(102, 11, 5, 0.1);
+}
+
+/* Enhanced time slot styles for multi-selection */
+.time-slot.selected {
+  background: #660B05 !important;
+  color: #FFFBF5 !important;
+  border-color: #660B05 !important;
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.3);
+  transform: scale(1.05);
+}
+
 .form-group label {
   display: block;
   color: #660B05;
@@ -452,6 +602,45 @@
   .booking-form {
     position: static;
   }
+}
+
+/* Group Session Styles */
+.group-settings {
+  margin-top: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.participants-list {
+  margin-top: 15px;
+}
+
+.participants-list h5 {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.group-discount-note {
+  margin-top: 15px;
+  padding: 10px;
+  background: #e8f5e9;
+  border-radius: 6px;
+  color: #2e7d32;
+  font-size: 14px;
+  text-align: center;
+}
+
+.booking-summary .summary-item.discount {
+  justify-content: flex-end;
+}
+
+.discount-text {
+  color: #4CAF50;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {

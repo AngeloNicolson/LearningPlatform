@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TutorProfile.css';
 
 interface TutorProfileProps {
@@ -142,11 +142,97 @@ const mockReviews: Record<string, Review[]> = {
 
 export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTutors, onBookSession }) => {
   const [selectedSessionType, setSelectedSessionType] = useState<string>('');
-  const tutor = tutorProfiles[tutorId];
+  const [tutor, setTutor] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   const reviews = mockReviews[tutorId] || [];
-
-  if (!tutor) {
-    return <div>Tutor not found</div>;
+  
+  useEffect(() => {
+    fetchTutor();
+  }, [tutorId]);
+  
+  const fetchTutor = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/${tutorId}`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Tutor not found');
+      }
+      
+      const data = await response.json();
+      
+      // Use mock data as fallback for missing fields
+      const mockProfile = tutorProfiles[`tutor-${tutorId}`] || tutorProfiles['sarah-elementary'];
+      
+      setTutor({
+        ...data,
+        photo: data.avatar || '👨‍🏫',
+        title: `${data.grade} Math Specialist`,
+        reviewCount: data.reviews_count || 0,
+        totalHours: 850,
+        responseTime: '< 2 hours',
+        education: mockProfile?.education || [],
+        certifications: mockProfile?.certifications || [],
+        experience: `${data.experience_years || 1}+ years of teaching experience`,
+        bio: data.description || 'Experienced tutor dedicated to helping students excel in mathematics.',
+        specialties: data.subjects || [],
+        languages: ['English'],
+        availability: data.is_active ? 'available' : 'unavailable',
+        sessionTypes: [
+          {
+            id: '1',
+            name: 'Individual Session',
+            duration: '60 minutes',
+            price: data.price_per_hour,
+            description: 'One-on-one personalized tutoring'
+          },
+          {
+            id: '2',
+            name: 'Group Session',
+            duration: '90 minutes',
+            price: Math.round(data.price_per_hour * 0.7),
+            description: 'Small group session (2-4 students)'
+          }
+        ],
+        weeklySchedule: data.availability || mockProfile?.weeklySchedule || {}
+      });
+    } catch (err) {
+      console.error('Error fetching tutor:', err);
+      setError('Failed to load tutor profile');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  if (loading) {
+    return (
+      <div className="tutor-profile">
+        <div className="profile-container">
+          <div className="loading">Loading tutor profile...</div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (error || !tutor) {
+    return (
+      <div className="tutor-profile">
+        <div className="profile-container">
+          <div className="error">
+            <h2>Tutor Not Found</h2>
+            <p>{error || 'The requested tutor could not be found.'}</p>
+            <button onClick={onBackToTutors} className="btn btn-primary">
+              Back to Tutors
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const renderStars = (rating: number) => {

@@ -12,6 +12,8 @@ import authRoutes from './routes/auth';
 import tutorRoutes from './routes/tutors';
 import bookingRoutes from './routes/bookings';
 import teacherRoutes from './routes/teachers';
+import userRoutes from './routes/users';
+import resourcesRoutes from './routes/resources';
 
 dotenv.config();
 
@@ -39,7 +41,8 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.warn(`CORS blocked origin: ${origin}`);
+      callback(null, true); // For development, allow all origins
     }
   },
   credentials: true,
@@ -70,7 +73,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tutors', tutorRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/teachers', teacherRoutes);
-app.use('/api/resources', require('./routes/resources').default);
+app.use('/api/users', userRoutes);
+app.use('/api/resources', resourcesRoutes);
 
 // Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

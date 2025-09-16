@@ -1,0 +1,392 @@
+/* Tutor Onboarding Styles */
+.tutor-onboarding {
+  min-height: 100vh;
+  background: #faf8f3;
+  padding: 20px;
+}
+
+.onboarding-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(102, 11, 5, 0.08);
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.04);
+  overflow: hidden;
+}
+
+.onboarding-header {
+  text-align: center;
+  padding: 32px;
+  background: linear-gradient(135deg, #660B05 0%, #8b7355 100%);
+  color: white;
+}
+
+.onboarding-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.onboarding-header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.progress-bar {
+  height: 4px;
+  background: #e5d4b1;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #660B05;
+  transition: width 0.3s ease;
+}
+
+.steps-indicator {
+  display: flex;
+  padding: 24px;
+  border-bottom: 1px solid #e5d4b1;
+  overflow-x: auto;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 150px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.step.active,
+.step.completed {
+  opacity: 1;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e5d4b1;
+  color: #660B05;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.step.active .step-number {
+  background: #660B05;
+  color: white;
+}
+
+.step.completed .step-number {
+  background: #4ade80;
+  color: white;
+}
+
+.step-info {
+  flex: 1;
+}
+
+.step-title {
+  font-weight: 600;
+  color: #660B05;
+  font-size: 0.9rem;
+}
+
+.step-desc {
+  font-size: 0.75rem;
+  color: #8b7355;
+  margin-top: 2px;
+}
+
+.form-content {
+  padding: 32px;
+}
+
+.step-content h2 {
+  color: #660B05;
+  margin: 0 0 24px 0;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #660B05;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e5d4b1;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #660B05;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 4px;
+  color: #8b7355;
+  font-size: 0.85rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tag {
+  background: #e5d4b1;
+  color: #660B05;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  color: #660B05;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #e5d4b1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox-label:hover {
+  background: #faf8f3;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.checkbox-label input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: #660B05;
+}
+
+.availability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.day-column h4 {
+  font-size: 0.85rem;
+  color: #660B05;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.time-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.time-slot {
+  padding: 4px;
+  border: 1px solid #e5d4b1;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-slot:hover {
+  background: #faf8f3;
+}
+
+.time-slot.selected {
+  background: #660B05;
+  color: white;
+  border-color: #660B05;
+}
+
+.profile-preview {
+  margin-top: 24px;
+  padding: 20px;
+  background: #faf8f3;
+  border-radius: 12px;
+}
+
+.profile-preview h3 {
+  margin: 0 0 16px 0;
+  color: #660B05;
+  font-size: 1.1rem;
+}
+
+.preview-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5d4b1;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.preview-header .avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #660B05;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.preview-header h4 {
+  margin: 0;
+  color: #660B05;
+}
+
+.preview-header p {
+  margin: 4px 0 0 0;
+  color: #8b7355;
+  font-size: 0.9rem;
+}
+
+.preview-subjects {
+  margin: 12px 0;
+  color: #8b7355;
+  font-size: 0.9rem;
+}
+
+.preview-description {
+  color: #333;
+  line-height: 1.5;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-top: 1px solid #e5d4b1;
+  background: #faf8f3;
+}
+
+.form-actions .btn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #660B05;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #4a0803;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #e5d4b1;
+  color: #660B05;
+}
+
+.btn-secondary:hover {
+  background: #d4c3a0;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 0 32px 20px 32px;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .steps-indicator {
+    padding: 16px;
+  }
+  
+  .step-desc {
+    display: none;
+  }
+  
+  .availability-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-content {
+    padding: 20px;
+  }
+}

@@ -1562,9 +1562,14 @@ export const MathResources: React.FC = () => {
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
   const [selectedSubtopic, setSelectedSubtopic] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'worksheets' | 'videos' | 'practice' | 'quizzes' | 'history'>('worksheets');
-  const [gradeData, setGradeData] = useState<Grade[]>([]);
-  const [resources, setResources] = useState<any>({});
-  const [history, setHistory] = useState<any>(null);
+  const [gradeData, setGradeData] = useState<GradeLevel[]>([]); // Use correct type
+  const [resources, setResources] = useState<any>({
+    worksheets: [],
+    videos: [],
+    practice: [],
+    quizzes: []
+  });
+  const [history, setHistory] = useState<HistoryArticle | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Fetch grades data on mount
@@ -1581,7 +1586,14 @@ export const MathResources: React.FC = () => {
 
   const fetchGrades = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/grades`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/grades`, {
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch grades');
+      }
+      
       const data = await response.json();
       
       // Transform API data to match our interface
@@ -1608,33 +1620,35 @@ export const MathResources: React.FC = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching grades:', error);
+      // Fallback to static data if API fails
+      setGradeData(gradeData); // Use the hardcoded data as fallback
       setLoading(false);
     }
   };
 
   const fetchResources = async (subtopicId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/subtopics/${subtopicId}/resources`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/subtopics/${subtopicId}/resources`, {
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch resources');
+      }
+      
       const data = await response.json();
       
-      // Group resources by type
-      const grouped = {
+      // API already returns grouped resources
+      setResources(data.resources || {
         worksheets: [],
         videos: [],
         practice: [],
         quizzes: []
-      };
-      
-      data.resources.forEach((resource: any) => {
-        if (grouped[resource.resource_type]) {
-          grouped[resource.resource_type].push(resource);
-        }
       });
-      
-      setResources(grouped);
       setHistory(data.history);
     } catch (error) {
       console.error('Error fetching resources:', error);
+      // Keep existing resources on error
     }
   };
 

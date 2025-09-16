@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
 -- Tutors table
 CREATE TABLE IF NOT EXISTS tutors (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER,
+  user_id INTEGER UNIQUE NOT NULL,
   name TEXT NOT NULL,
   grade TEXT NOT NULL,
   subjects TEXT NOT NULL, -- JSON array
@@ -51,10 +51,18 @@ CREATE TABLE IF NOT EXISTS tutors (
   price_per_hour INTEGER NOT NULL,
   avatar TEXT,
   description TEXT,
-  is_active BOOLEAN DEFAULT 1,
+  experience_years INTEGER,
+  qualifications TEXT, -- JSON array
+  availability TEXT, -- JSON object
+  approval_status TEXT DEFAULT 'pending', -- pending, approved, rejected
+  approval_notes TEXT,
+  approved_at DATETIME,
+  approved_by INTEGER,
+  is_active BOOLEAN DEFAULT 0, -- Only active after approval
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- Bookings table

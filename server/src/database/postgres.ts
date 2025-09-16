@@ -10,18 +10,19 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'tutoring_platform',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'development',
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  max: 20, // Maximum number of clients in the pool
+  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+  connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection fails
 });
 
 // Test the connection
 pool.on('connect', () => {
-  console.log('API connected to PostgreSQL database');
+  console.log('Connected to PostgreSQL database');
 });
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle PostgreSQL client', err);
+  process.exit(-1);
 });
 
 // Helper function to execute queries
@@ -30,7 +31,7 @@ export const query = async (text: string, params?: any[]) => {
   try {
     const res = await pool.query(text, params);
     const duration = Date.now() - start;
-    console.log('Executed query', { text: text.substring(0, 50), duration, rows: res.rowCount });
+    console.log('Executed query', { text, duration, rows: res.rowCount });
     return res;
   } catch (error) {
     console.error('Query error', error);
@@ -43,5 +44,4 @@ export const getClient = () => {
   return pool.connect();
 };
 
-export const db = pool;
 export default pool;

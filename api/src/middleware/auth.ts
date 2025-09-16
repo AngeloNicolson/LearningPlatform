@@ -12,6 +12,9 @@ export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction)
     // Check for token in cookies (matching what auth.ts sets)
     const token = req.cookies?.['access-token'];
     
+    console.log('Auth check - Cookies:', req.cookies);
+    console.log('Auth check - Token present:', !!token);
+    
     if (!token) {
       res.status(401).json({ error: 'Authentication required' });
       return;

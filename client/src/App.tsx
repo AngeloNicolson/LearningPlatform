@@ -9,6 +9,7 @@ import { MathGradeSelector } from './components/MathGradeSelector';
 import { TutorCards } from './components/TutorCards';
 import { TutorProfile } from './components/TutorProfile';
 import { BookingCalendar } from './components/BookingCalendar';
+import { TutorOnboarding } from './components/TutorOnboarding';
 import { Topic } from './types/wasm';
 import { TopicMetadata } from './types/storage';
 import { MathTemplate } from './utils/mathTemplates';
@@ -17,10 +18,15 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<string>('student');
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
-  const [currentView, setCurrentView] = useState<'home' | 'dashboard' | 'resources' | 'tutor' | 'login' | 'admin'>('home');
-  const [workspaceTopicId, setWorkspaceTopicId] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string>('personal');
+  const [accountStatus, setAccountStatus] = useState<string>('active');
+  const [parentId, setParentId] = useState<number | null>(null);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false); // Used in onboarding check
+  const [userId, setUserId] = useState<number | null>(null);
+  const [userName, setUserName] = useState<string>('');
+  const [, setSelectedTopic] = useState<Topic | null>(null); // For future debates feature
+  const [currentView, setCurrentView] = useState<'home' | 'dashboard' | 'resources' | 'tutor' | 'login' | 'admin' | 'onboarding'>('home');
+  const [, setWorkspaceTopicId] = useState<string | null>(null); // For future workspace feature
   const { getTopic, createTopic } = useTopics();
   const [workspaceTopic, setWorkspaceTopic] = useState<TopicMetadata | null>(null);
   const [impersonatingAs, setImpersonatingAs] = useState<{ role: string; name: string; } | null>(null);
@@ -37,7 +43,9 @@ function App() {
     if (userStr) {
       const user = JSON.parse(userStr);
       setIsAuthenticated(true);
-      setUserRole(user.role || 'student');
+      setUserRole(user.role || 'personal');
+      setAccountStatus(user.accountStatus || 'active');
+      setParentId(user.parentId || null);
     }
   }, []);
 
@@ -45,7 +53,19 @@ function App() {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       const user = JSON.parse(userStr);
-      setUserRole(user.role || 'student');
+      setUserRole(user.role || 'personal');
+      setAccountStatus(user.accountStatus || 'active');
+      setParentId(user.parentId || null);
+      setUserId(user.id || null);
+      setUserName(`${user.firstName || ''} ${user.lastName || ''}`);
+      
+      // Check if tutor needs onboarding
+      if (user.role === 'tutor' && user.needsOnboarding) {
+        setNeedsOnboarding(true);
+        setIsAuthenticated(true);
+        setCurrentView('onboarding');
+        return;
+      }
     }
     setIsAuthenticated(true);
     setCurrentView('dashboard'); // Navigate to dashboard after login
@@ -62,7 +82,7 @@ function App() {
     }
     localStorage.removeItem('user');
     setIsAuthenticated(false);
-    setUserRole('student');
+    setUserRole('personal');
     setImpersonatingAs(null);
     setCurrentView('home');
   };
@@ -79,14 +99,15 @@ function App() {
 
   const handleTopicSelect = (topic: Topic) => {
     setSelectedTopic(topic);
-    setCurrentView('debates');
+    // TODO: Implement debates view
+    console.log('Topic selected:', topic);
   };
 
   const handleMathTopicSelect = async (template: MathTemplate) => {
     try {
       // Convert MathTemplate to Topic format
       const topic: Topic = {
-        id: template.id,
+        id: String(template.id),
         title: template.title,
         category: template.category,
         complexity_level: template.complexity_level,
@@ -100,7 +121,8 @@ function App() {
       if (storedTopic) {
         // Set the mathematical content
         setSelectedTopic(topic);
-        setCurrentView('debates');
+        // TODO: Implement debates view
+        console.log('Math topic created:', topic);
       }
     } catch (error) {
       console.error('Failed to create mathematical topic:', error);
@@ -198,16 +220,19 @@ function App() {
             <span className="nav-icon">📚</span>
             <span className="nav-label">RESOURCES</span>
           </button>
-          <button 
-            className={currentView === 'tutor' ? 'nav-item active' : 'nav-item'}
-            onClick={() => {
-              setCurrentView('tutor');
-              resetTutorFlow();
-            }}
-          >
-            <span className="nav-icon">🎓</span>
-            <span className="nav-label">FIND A TUTOR</span>
-          </button>
+          {/* Hide Find a Tutor for child accounts (personal accounts with parent_id) */}
+          {!(userRole === 'personal' && parentId) && (
+            <button 
+              className={currentView === 'tutor' ? 'nav-item active' : 'nav-item'}
+              onClick={() => {
+                setCurrentView('tutor');
+                resetTutorFlow();
+              }}
+            >
+              <span className="nav-icon">🎓</span>
+              <span className="nav-label">FIND A TUTOR</span>
+            </button>
+          )}
           
           {/* Admin menu for owner and admin roles only */}
           {isAuthenticated && (userRole === 'owner' || userRole === 'admin') && (
@@ -281,7 +306,13 @@ function App() {
               onTopicSelect={handleTopicSelect} 
               onOpenWorkspace={openWorkspace}
               userRole={userRole}
+              accountStatus={accountStatus}
+              parentId={parentId}
               impersonatingAs={impersonatingAs}
+              onNavigateToTutors={() => {
+                setCurrentView('tutor');
+                resetTutorFlow();
+              }}
             />
           ) : (
             <Login onSuccess={handleLoginSuccess} />
@@ -296,6 +327,24 @@ function App() {
           <AdminPanel 
             userRole={userRole}
             onImpersonate={handleImpersonate}
+          />
+        )}
+        
+        {currentView === 'onboarding' && isAuthenticated && userRole === 'tutor' && (
+          <TutorOnboarding
+            userId={userId || 0}
+            userName={userName}
+            onComplete={() => {
+              setNeedsOnboarding(false);
+              setCurrentView('dashboard');
+              // Update user in localStorage
+              const userStr = localStorage.getItem('user');
+              if (userStr) {
+                const user = JSON.parse(userStr);
+                user.needsOnboarding = false;
+                localStorage.setItem('user', JSON.stringify(user));
+              }
+            }}
           />
         )}
 
@@ -327,6 +376,8 @@ function App() {
                 sessionType={selectedSessionType}
                 onBackToProfile={() => setTutorView('profile')}
                 onBookingConfirm={handleBookingConfirm}
+                userRole={userRole}
+                parentId={parentId}
               />
             )}
           </>

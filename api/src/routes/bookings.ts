@@ -54,13 +54,15 @@ const bookings: any[] = [
 
 // Create a new booking
 router.post('/',
+  requireAuth,
   [
     body('tutorId').notEmpty(),
     body('date').isISO8601(),
     body('time').matches(/^\d{2}:\d{2}$/),
     body('duration').isInt({ min: 30, max: 120 }),
     body('studentName').trim().notEmpty(),
-    body('studentEmail').isEmail()
+    body('studentEmail').isEmail(),
+    body('studentId').optional().isInt() // For parents booking for children
   ],
   (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -68,9 +70,37 @@ router.post('/',
       return res.status(400).json({ errors: errors.array() });
     }
 
+    const user = (req as any).user;
+    
+    // Check booking permissions
+    // Child accounts (personal with parent_id) cannot book
+    if (user.role === 'personal') {
+      // Check if this is a child account
+      const userRecord = (req as any).db?.prepare('SELECT parent_id FROM users WHERE id = ?').get(user.userId);
+      if (userRecord?.parent_id) {
+        return res.status(403).json({ 
+          error: 'Child accounts cannot book tutoring sessions. Please ask your parent to book for you.' 
+        });
+      }
+    }
+    
+    // If parent is booking, they must specify which child (or themselves)
+    if (user.role === 'parent' && req.body.studentId) {
+      // Verify the student belongs to this parent
+      const child = (req as any).db?.prepare('SELECT id FROM users WHERE id = ? AND parent_id = ?')
+        .get(req.body.studentId, user.userId);
+      if (!child && req.body.studentId !== user.userId) {
+        return res.status(403).json({ 
+          error: 'You can only book sessions for yourself or your children.' 
+        });
+      }
+    }
+
     const booking = {
       id: Date.now().toString(),
       ...req.body,
+      bookedBy: user.userId, // Track who made the booking
+      studentId: req.body.studentId || user.userId, // Who the session is for
       status: 'pending',
       createdAt: new Date().toISOString()
     };

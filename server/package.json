@@ -10,23 +10,23 @@
     "db:init": "ts-node src/database/init.ts"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "sqlite3": "^5.1.7",
-    "better-sqlite3": "^9.2.2",
     "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "pg-pool": "^3.6.1",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.10.5",
-    "@types/express": "^4.17.21",
     "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/better-sqlite3": "^7.6.8",
-    "typescript": "^5.3.3",
+    "@types/node": "^20.10.5",
+    "@types/pg": "^8.15.5",
     "nodemon": "^3.0.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

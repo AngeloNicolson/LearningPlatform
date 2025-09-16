@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Leaderboard } from './Leaderboard';
-import { FlippableTopicBrowser } from './FlippableTopicBrowser';
-import { Topic } from '../types/wasm';
-import { TopicMetadata } from '../types/storage';
-import { useTopics } from '../hooks/useTopics';
+// import { Leaderboard } from './Leaderboard';
+// import { FlippableTopicBrowser } from './FlippableTopicBrowser';
+import { ParentDashboard } from './ParentDashboard';
+// import { Topic } from '../types/wasm';
+// import { TopicMetadata } from '../types/storage';
+// import { useTopics } from '../hooks/useTopics';
 import './Dashboard.css';
 
 interface DashboardProps {
-  onTopicSelect: (topic: Topic) => void;
-  onOpenWorkspace: (topicId: string) => void;
+  onTopicSelect?: (topic: any) => void;
+  onOpenWorkspace?: (topicId: string) => void;
   userRole?: string;
+  accountStatus?: string;
+  parentId?: number | null;
   impersonatingAs?: { role: string; name: string; } | null;
+  onNavigateToTutors?: () => void;
 }
 
 interface UpcomingSession {
@@ -27,7 +31,16 @@ interface UpcomingSession {
   complexity?: number;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorkspace, userRole = 'student', impersonatingAs }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorkspace, userRole = 'student', accountStatus = 'active', parentId, impersonatingAs, onNavigateToTutors }) => {
+  const [userId, setUserId] = useState<number | null>(null);
+  
+  useEffect(() => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      setUserId(user.id);
+    }
+  }, []);
   const [teacherBookings, setTeacherBookings] = useState<any[]>([]);
   const [bookingsStats, setBookingsStats] = useState({
     todayCount: 0,
@@ -342,146 +355,58 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   
   // Render parent dashboard
   if (effectiveRole === 'parent') {
-    return (
-      <div className="dashboard parent-dashboard">
-        <div className="dashboard-header">
-          <div className="welcome-section">
-            <h1>Parent Dashboard</h1>
-            <p className="tagline">Monitor your children's progress and manage payments</p>
-          </div>
-          
-          <div className="quick-stats">
-            <div className="stat-card">
-              <div className="stat-number">2</div>
-              <div className="stat-label">Children</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">8</div>
-              <div className="stat-label">Upcoming Sessions</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">$420</div>
-              <div className="stat-label">This Month</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">92%</div>
-              <div className="stat-label">Attendance Rate</div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="dashboard-main">
-          <div className="dashboard-left">
-            <div className="section">
-              <div className="section-header">
-                <h2>👨‍👩‍👧‍👦 Children's Sessions</h2>
-                <p>Upcoming tutoring sessions for your children</p>
-              </div>
-              
-              <div className="sessions-list">
-                <div className="session-card confirmed tutoring">
-                  <div className="session-header">
-                    <div className="session-info">
-                      <div className="session-type-badge">📚 JIMMY - TUTORING</div>
-                      <h3>Dr. Sarah Chen</h3>
-                      <p className="subtitle">Algebra - Quadratic Equations</p>
-                    </div>
-                    <span className="status-badge confirmed">✅ Confirmed</span>
-                  </div>
-                  <div className="session-details">
-                    <div className="detail-item">
-                      <span className="label">📅 Date:</span>
-                      <span className="value">Today</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="label">⏰ Time:</span>
-                      <span className="value">2:00 PM</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="label">💰 Cost:</span>
-                      <span className="value">$35</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="session-card confirmed tutoring">
-                  <div className="session-header">
-                    <div className="session-info">
-                      <div className="session-type-badge">📚 SARAH - TUTORING</div>
-                      <h3>Prof. Michael Rodriguez</h3>
-                      <p className="subtitle">Calculus - Derivatives</p>
-                    </div>
-                    <span className="status-badge confirmed">✅ Confirmed</span>
-                  </div>
-                  <div className="session-details">
-                    <div className="detail-item">
-                      <span className="label">📅 Date:</span>
-                      <span className="value">Tomorrow</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="label">⏰ Time:</span>
-                      <span className="value">4:00 PM</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="label">💰 Cost:</span>
-                      <span className="value">$45</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="dashboard-right">
-            <div className="section">
-              <div className="section-header">
-                <h2>📊 Progress Report</h2>
-                <p>Your children's performance</p>
-              </div>
-              
-              <div className="personal-stats">
-                <div className="stat-item">
-                  <div className="stat-icon">👦</div>
-                  <div className="stat-info">
-                    <div className="stat-value">Jimmy</div>
-                    <div className="stat-name">Grade 8 • 4.2 GPA</div>
-                  </div>
-                </div>
-                
-                <div className="stat-item">
-                  <div className="stat-icon">👧</div>
-                  <div className="stat-info">
-                    <div className="stat-value">Sarah</div>
-                    <div className="stat-name">Grade 11 • 4.5 GPA</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="recent-achievements">
-                <h3>💳 Recent Payments</h3>
-                <div className="achievement">
-                  <span className="achievement-icon">✓</span>
-                  <span className="achievement-text">$35 - Dr. Chen (Jan 10)</span>
-                </div>
-                <div className="achievement">
-                  <span className="achievement-icon">✓</span>
-                  <span className="achievement-text">$45 - Prof. Rodriguez (Jan 8)</span>
-                </div>
-                <div className="achievement">
-                  <span className="achievement-icon">✓</span>
-                  <span className="achievement-text">$35 - Dr. Chen (Jan 3)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <ParentDashboard userId={userId || 0} onNavigateToTutors={onNavigateToTutors} />;
   }
   
   // Default student dashboard
   return (
     <div className="dashboard">
+      {/* Show pending status banner for pending tutors */}
+      {userRole === 'tutor' && accountStatus === 'pending' && (
+        <div className="pending-banner" style={{
+          backgroundColor: '#fff3cd',
+          border: '1px solid #ffc107',
+          color: '#856404',
+          padding: '15px',
+          marginBottom: '20px',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <span style={{ fontSize: '24px' }}>⏳</span>
+          <div>
+            <strong>Your tutor application is pending approval</strong>
+            <p style={{ margin: '5px 0 0 0' }}>
+              You can browse resources while waiting for admin approval. Once approved, you'll have access to tutor features.
+            </p>
+          </div>
+        </div>
+      )}
+      
+      {/* Show parent-managed indicator for child accounts */}
+      {parentId && (
+        <div className="managed-banner" style={{
+          backgroundColor: '#e7f3ff',
+          border: '1px solid #0066cc',
+          color: '#004080',
+          padding: '12px',
+          marginBottom: '20px',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <span style={{ fontSize: '20px' }}>👨‍👩‍👧</span>
+          <div>
+            <strong>Account managed by parent</strong>
+            <p style={{ margin: '5px 0 0 0' }}>
+              Your parent manages bookings and account settings for you.
+            </p>
+          </div>
+        </div>
+      )}
+      
       <div className="dashboard-header">
         <div className="welcome-section">
           <h1>Your Personal Dashboard</h1>

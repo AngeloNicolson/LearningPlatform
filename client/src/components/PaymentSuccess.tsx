@@ -7,6 +7,9 @@ interface PaymentSuccessProps {
     sessionType: string;
     date: string;
     time: string;
+    timeSlots?: string[];
+    isRecurring?: boolean;
+    recurringWeeks?: number;
     studentName: string;
     studentEmail: string;
     amount: number;
@@ -24,6 +27,9 @@ export const PaymentSuccess: React.FC<PaymentSuccessProps> = ({
     sessionType,
     date,
     time,
+    timeSlots = [time],
+    isRecurring = false,
+    recurringWeeks = 1,
     studentName,
     studentEmail,
     amount,
@@ -76,8 +82,19 @@ export const PaymentSuccess: React.FC<PaymentSuccessProps> = ({
               </div>
               <div className="summary-item">
                 <span className="label">Time:</span>
-                <span className="value">{time}</span>
+                <span className="value">
+                  {timeSlots.length === 1 
+                    ? timeSlots[0]
+                    : `${timeSlots[0]} - ${timeSlots[timeSlots.length - 1]} (${timeSlots.length} hours)`
+                  }
+                </span>
               </div>
+              {isRecurring && (
+                <div className="summary-item">
+                  <span className="label">Recurrence:</span>
+                  <span className="value">Weekly for {recurringWeeks} weeks</span>
+                </div>
+              )}
               <div className="summary-item">
                 <span className="label">Student:</span>
                 <span className="value">{studentName}</span>

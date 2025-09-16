@@ -1,21 +1,13 @@
 import dotenv from 'dotenv';
-import { initDatabase } from './database/init';
-import DatabaseConnection from './database';
+import runMigrations from './database/init';
 
 dotenv.config();
 
 // Initialize database on server start
-initDatabase();
+runMigrations().catch(console.error);
 
 console.log('Backend server initialized');
-console.log('Database ready at:', process.env.DATABASE_PATH || './database.db');
-
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\nShutting down server...');
-  DatabaseConnection.close();
-  process.exit(0);
-});
+console.log('Database ready - PostgreSQL');
 
 // Export services for use by API
 export { AuthService } from './services/authService';

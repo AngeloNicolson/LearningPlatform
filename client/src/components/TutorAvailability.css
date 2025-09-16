@@ -1,0 +1,364 @@
+.tutor-availability {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.availability-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.availability-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+}
+
+.save-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.save-button:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.save-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Tabs */
+.availability-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: #333;
+  background: #f5f5f5;
+}
+
+.tab.active {
+  color: #2196F3;
+  border-bottom-color: #2196F3;
+}
+
+/* Weekly Schedule */
+.weekly-schedule {
+  margin-bottom: 30px;
+}
+
+.schedule-description {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.day-row {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.day-row.unavailable {
+  opacity: 0.6;
+  background: #f5f5f5;
+}
+
+.day-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 150px;
+}
+
+.day-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.day-toggle label {
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+}
+
+.time-selection {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  justify-content: center;
+}
+
+.time-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-input label {
+  color: #666;
+  font-size: 14px;
+}
+
+.time-input select {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.time-input select:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+/* Overrides Section */
+.overrides-section {
+  margin-bottom: 30px;
+}
+
+.overrides-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.overrides-description {
+  flex: 1;
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.add-override-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-override-btn:hover {
+  background: #1976D2;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.overrides-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.no-overrides {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+  background: #f9f9f9;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+.override-item {
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  position: relative;
+}
+
+.override-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  align-items: end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.form-group input[type="date"],
+.form-group input[type="text"],
+.form-group select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 14px;
+}
+
+.form-group input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+.remove-override-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-override-btn:hover {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+/* Tips Section */
+.availability-tips {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f0f7ff;
+  border: 1px solid #2196F3;
+  border-radius: 8px;
+}
+
+.availability-tips h3 {
+  margin: 0 0 15px 0;
+  color: #1976D2;
+  font-size: 16px;
+}
+
+.availability-tips ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #555;
+  font-size: 14px;
+}
+
+.availability-tips li {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+/* Loading State */
+.loading {
+  padding: 60px;
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tutor-availability {
+    padding: 15px;
+  }
+  
+  .availability-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .save-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .day-row {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .day-toggle {
+    width: 100%;
+  }
+  
+  .time-selection {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .overrides-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .add-override-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .override-controls {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,38 +1,55 @@
-import express, { Request, Response } from 'express';
-import { db } from '../database/connection';
-import { requireAuth, requireRole } from '../middleware/auth';
+import { Router, Request, Response } from 'express';
+import { query } from '../database/connection';
 
-interface AuthRequest extends Request {
-  user?: any;
-}
+const router = Router();
 
-const router = express.Router();
-
-// Get all grades with topics and subtopics
+// Get all grade levels with their topics and subtopics
 router.get('/grades', async (_req: Request, res: Response) => {
   try {
-    const grades = db.prepare(`
-      SELECT * FROM grades 
-      ORDER BY order_index
-    `).all() as any[];
+    // Fetch all grade levels
+    const gradesResult = await query(`
+      SELECT id, name, grade_range, display_order
+      FROM grade_levels
+      ORDER BY display_order, id
+    `);
 
-    for (const grade of grades) {
-      const topics = db.prepare(`
-        SELECT * FROM topics 
-        WHERE grade_id = ? 
-        ORDER BY order_index
-      `).all(grade.id) as any[];
+    // Fetch all topics
+    const topicsResult = await query(`
+      SELECT id, grade_level_id, name, display_order
+      FROM topics
+      ORDER BY display_order, id
+    `);
 
-      for (const topic of topics) {
-        const subtopics = db.prepare(`
-          SELECT * FROM subtopics 
-          WHERE topic_id = ? 
-          ORDER BY order_index
-        `).all(topic.id) as any[];
-        topic.subtopics = subtopics;
-      }
-      grade.topics = topics;
-    }
+    // Fetch all subtopics
+    const subtopicsResult = await query(`
+      SELECT s.id, s.topic_id, s.name, s.display_order
+      FROM subtopics s
+      JOIN topics t ON s.topic_id = t.id
+      ORDER BY s.display_order, s.id
+    `);
+
+    // Build the nested structure
+    const grades = gradesResult.rows.map(grade => {
+      const gradeTOpics = topicsResult.rows.filter(topic => topic.grade_level_id === grade.id);
+      
+      return {
+        id: grade.id,
+        name: grade.name,
+        grade_range: grade.grade_range,
+        topics: gradeTOpics.map(topic => {
+          const topicSubtopics = subtopicsResult.rows.filter(subtopic => subtopic.topic_id === topic.id);
+          
+          return {
+            id: topic.id,
+            name: topic.name,
+            subtopics: topicSubtopics.map(subtopic => ({
+              id: subtopic.id,
+              name: subtopic.name
+            }))
+          };
+        })
+      };
+    });
 
     res.json(grades);
   } catch (error) {
@@ -41,195 +58,256 @@ router.get('/grades', async (_req: Request, res: Response) => {
   }
 });
 
-// Get resources for a subtopic (public - only visible ones)
+// Get resources for a specific subtopic
 router.get('/subtopics/:subtopicId/resources', async (req: Request, res: Response) => {
   try {
     const { subtopicId } = req.params;
-    const { type } = req.query;
 
-    let query = `
-      SELECT * FROM resources 
-      WHERE subtopic_id = ? AND visible = 1
-    `;
-    const params = [subtopicId];
+    // Fetch resources
+    const resourcesResult = await query(`
+      SELECT id, resource_type, title, description, url, content, 
+             video_url, pdf_url, time_limit, visible, display_order
+      FROM resources
+      WHERE subtopic_id = $1 AND visible = true
+      ORDER BY display_order, id
+    `, [subtopicId]);
 
-    if (type) {
-      query += ` AND resource_type = ?`;
-      params.push(type as string);
+    // Fetch history article if exists
+    const historyResult = await query(`
+      SELECT id, title, content
+      FROM history_articles
+      WHERE subtopic_id = $1
+      LIMIT 1
+    `, [subtopicId]);
+
+    // For quizzes, fetch questions
+    const quizIds = resourcesResult.rows
+      .filter(r => r.resource_type === 'quiz')
+      .map(r => r.id);
+
+    let quizQuestions: Record<string, any[]> = {};
+    if (quizIds.length > 0) {
+      const questionsResult = await query(`
+        SELECT resource_id, id, question, options, answer, explanation, display_order
+        FROM quiz_questions
+        WHERE resource_id = ANY($1)
+        ORDER BY display_order, id
+      `, [quizIds]);
+
+      // Group questions by resource_id
+      questionsResult.rows.forEach(q => {
+        if (!quizQuestions[q.resource_id]) {
+          quizQuestions[q.resource_id] = [];
+        }
+        quizQuestions[q.resource_id].push({
+          id: q.id,
+          question: q.question,
+          options: q.options,
+          answer: q.answer,
+          explanation: q.explanation
+        });
+      });
     }
 
-    query += ` ORDER BY created_at DESC`;
+    // For practice problems, fetch problems
+    const practiceIds = resourcesResult.rows
+      .filter(r => r.resource_type === 'practice')
+      .map(r => r.id);
 
-    const resources = db.prepare(query).all(...params);
+    let practiceProblems: Record<string, any[]> = {};
+    if (practiceIds.length > 0) {
+      const problemsResult = await query(`
+        SELECT resource_id, id, problem, solution, hint, difficulty, display_order
+        FROM practice_problems
+        WHERE resource_id = ANY($1)
+        ORDER BY display_order, id
+      `, [practiceIds]);
 
-    // Get history article if exists
-    const history = db.prepare(`
-      SELECT * FROM history_articles 
-      WHERE subtopic_id = ?
-    `).get(subtopicId);
+      // Group problems by resource_id
+      problemsResult.rows.forEach(p => {
+        if (!practiceProblems[p.resource_id]) {
+          practiceProblems[p.resource_id] = [];
+        }
+        practiceProblems[p.resource_id].push({
+          id: p.id,
+          problem: p.problem,
+          solution: p.solution,
+          hint: p.hint,
+          difficulty: p.difficulty
+        });
+      });
+    }
 
-    res.json({ resources, history });
+    // Group resources by type
+    const grouped: Record<string, any[]> = {
+      worksheets: [],
+      videos: [],
+      practice: [],
+      quizzes: []
+    };
+
+    resourcesResult.rows.forEach(resource => {
+      const resourceData: any = {
+        id: resource.id,
+        title: resource.title,
+        description: resource.description,
+        url: resource.url || resource.video_url || resource.pdf_url,
+        content: resource.content,
+        visible: resource.visible,
+        timeLimit: resource.time_limit
+      };
+
+      // Add questions for quizzes
+      if (resource.resource_type === 'quiz' && quizQuestions[resource.id]) {
+        resourceData.questions = quizQuestions[resource.id];
+      }
+
+      // Add problems for practice
+      if (resource.resource_type === 'practice' && practiceProblems[resource.id]) {
+        resourceData.problems = practiceProblems[resource.id];
+      }
+
+      // Map resource_type to plural form for grouped object
+      const typeMap: Record<string, string> = {
+        'worksheet': 'worksheets',
+        'video': 'videos',
+        'practice': 'practice',
+        'quiz': 'quizzes'
+      };
+
+      const groupKey = typeMap[resource.resource_type];
+      if (grouped[groupKey]) {
+        grouped[groupKey].push(resourceData);
+      }
+    });
+
+    res.json({
+      resources: grouped,
+      history: historyResult.rows.length > 0 ? historyResult.rows[0] : null
+    });
   } catch (error) {
     console.error('Error fetching resources:', error);
     res.status(500).json({ error: 'Failed to fetch resources' });
   }
 });
 
-// Admin endpoints - require authentication
-router.use(requireAuth);
-router.use(requireRole('admin', 'owner'));
-
-// Get all resources for a subtopic (admin - including hidden)
-router.get('/admin/subtopics/:subtopicId/resources', async (req: Request, res: Response) => {
+// Get all resources (admin endpoint)
+router.get('/all', async (_req: Request, res: Response) => {
   try {
-    const { subtopicId } = req.params;
-    const { type } = req.query;
-
-    let query = `
-      SELECT r.*, u.first_name || ' ' || u.last_name as created_by_name
+    const result = await query(`
+      SELECT r.*, s.name as subtopic_name, t.name as topic_name, g.name as grade_name
       FROM resources r
-      LEFT JOIN users u ON r.created_by = u.id
-      WHERE r.subtopic_id = ?
-    `;
-    const params = [subtopicId];
+      JOIN subtopics s ON r.subtopic_id = s.id
+      JOIN topics t ON s.topic_id = t.id
+      JOIN grade_levels g ON t.grade_level_id = g.id
+      ORDER BY g.display_order, t.display_order, s.display_order, r.display_order
+    `);
 
-    if (type) {
-      query += ` AND r.resource_type = ?`;
-      params.push(type as string);
-    }
-
-    query += ` ORDER BY r.created_at DESC`;
-
-    const resources = db.prepare(query).all(...params);
-
-    // Get history article if exists
-    const history = db.prepare(`
-      SELECT h.*, u.first_name || ' ' || u.last_name as created_by_name
-      FROM history_articles h
-      LEFT JOIN users u ON h.created_by = u.id
-      WHERE h.subtopic_id = ?
-    `).get(subtopicId);
-
-    res.json({ resources, history });
+    res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching admin resources:', error);
+    console.error('Error fetching all resources:', error);
     res.status(500).json({ error: 'Failed to fetch resources' });
   }
 });
 
-// Create a new resource
-router.post('/admin/resources', async (req: AuthRequest, res: Response) => {
+// Create a new resource (admin)
+router.post('/', async (req: Request, res: Response) => {
   try {
-    const { 
-      subtopic_id, 
-      resource_type, 
-      title, 
-      description, 
-      url, 
-      content, 
-      time_limit, 
-      visible 
+    const {
+      subtopic_id,
+      resource_type,
+      title,
+      description,
+      url,
+      content,
+      video_url,
+      pdf_url,
+      time_limit,
+      visible = true,
+      display_order = 0
     } = req.body;
 
-    const id = `${resource_type.slice(0, 2)}-${Date.now()}`;
-    const userId = req.user?.id;
+    // Generate a unique ID
+    const id = `${resource_type}-${Date.now()}`;
 
-    const result = db.prepare(`
+    const result = await query(`
       INSERT INTO resources (
         id, subtopic_id, resource_type, title, description, 
-        url, content, time_limit, visible, created_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
+        url, content, video_url, pdf_url, time_limit, 
+        visible, display_order
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      RETURNING *
+    `, [
       id, subtopic_id, resource_type, title, description,
-      url, content, time_limit, visible ? 1 : 0, userId
-    );
+      url, content, video_url, pdf_url, time_limit,
+      visible, display_order
+    ]);
 
-    res.json({ 
-      id, 
-      message: 'Resource created successfully',
-      changes: result.changes 
-    });
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error creating resource:', error);
     res.status(500).json({ error: 'Failed to create resource' });
   }
 });
 
-// Update a resource
-router.put('/admin/resources/:id', async (req: Request, res: Response): Promise<Response> => {
+// Update a resource (admin)
+router.put('/:id', async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
-    const { 
-      title, 
-      description, 
-      url, 
-      content, 
-      time_limit, 
-      visible 
+    const {
+      title,
+      description,
+      url,
+      content,
+      video_url,
+      pdf_url,
+      time_limit,
+      visible,
+      display_order
     } = req.body;
 
-    const result = db.prepare(`
-      UPDATE resources SET 
-        title = ?, 
-        description = ?, 
-        url = ?, 
-        content = ?, 
-        time_limit = ?, 
-        visible = ?,
-        updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).run(
-      title, description, url, content, 
-      time_limit, visible ? 1 : 0, id
-    );
+    const result = await query(`
+      UPDATE resources
+      SET title = COALESCE($2, title),
+          description = COALESCE($3, description),
+          url = COALESCE($4, url),
+          content = COALESCE($5, content),
+          video_url = COALESCE($6, video_url),
+          pdf_url = COALESCE($7, pdf_url),
+          time_limit = COALESCE($8, time_limit),
+          visible = COALESCE($9, visible),
+          display_order = COALESCE($10, display_order),
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $1
+      RETURNING *
+    `, [
+      id, title, description, url, content,
+      video_url, pdf_url, time_limit, visible, display_order
+    ]);
 
-    if (result.changes === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Resource not found' });
     }
 
-    return res.json({ message: 'Resource updated successfully' });
+    return res.json(result.rows[0]);
   } catch (error) {
     console.error('Error updating resource:', error);
     return res.status(500).json({ error: 'Failed to update resource' });
   }
 });
 
-// Toggle resource visibility
-router.patch('/admin/resources/:id/visibility', async (req: Request, res: Response): Promise<Response> => {
+// Delete a resource (admin)
+router.delete('/:id', async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
-    
-    const current = db.prepare('SELECT visible FROM resources WHERE id = ?').get(id);
-    if (!current) {
-      return res.status(404).json({ error: 'Resource not found' });
-    }
 
-    const newVisibility = !(current as any).visible;
-    
-    db.prepare(`
-      UPDATE resources 
-      SET visible = ?, updated_at = CURRENT_TIMESTAMP 
-      WHERE id = ?
-    `).run(newVisibility ? 1 : 0, id);
+    const result = await query(`
+      DELETE FROM resources
+      WHERE id = $1
+      RETURNING id
+    `, [id]);
 
-    return res.json({ 
-      message: 'Visibility updated', 
-      visible: newVisibility 
-    });
-  } catch (error) {
-    console.error('Error toggling visibility:', error);
-    return res.status(500).json({ error: 'Failed to update visibility' });
-  }
-});
-
-// Delete a resource
-router.delete('/admin/resources/:id', async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { id } = req.params;
-    
-    const result = db.prepare('DELETE FROM resources WHERE id = ?').run(id);
-    
-    if (result.changes === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Resource not found' });
     }
 
@@ -237,159 +315,6 @@ router.delete('/admin/resources/:id', async (req: Request, res: Response): Promi
   } catch (error) {
     console.error('Error deleting resource:', error);
     return res.status(500).json({ error: 'Failed to delete resource' });
-  }
-});
-
-// Create or update history article
-router.post('/admin/history', async (req: AuthRequest, res: Response) => {
-  try {
-    const { subtopic_id, title, content } = req.body;
-    const userId = req.user?.id;
-    const id = `hist-${Date.now()}`;
-
-    // Check if history already exists for this subtopic
-    const existing = db.prepare(
-      'SELECT id FROM history_articles WHERE subtopic_id = ?'
-    ).get(subtopic_id);
-
-    if (existing) {
-      // Update existing
-      db.prepare(`
-        UPDATE history_articles 
-        SET title = ?, content = ?, updated_at = CURRENT_TIMESTAMP 
-        WHERE subtopic_id = ?
-      `).run(title, content, subtopic_id);
-      
-      res.json({ message: 'History article updated' });
-    } else {
-      // Create new
-      db.prepare(`
-        INSERT INTO history_articles (
-          id, subtopic_id, title, content, created_by
-        ) VALUES (?, ?, ?, ?, ?)
-      `).run(id, subtopic_id, title, content, userId);
-      
-      res.json({ id, message: 'History article created' });
-    }
-  } catch (error) {
-    console.error('Error saving history article:', error);
-    res.status(500).json({ error: 'Failed to save history article' });
-  }
-});
-
-// Seed initial data (only if tables are empty)
-router.post('/admin/seed', async (_req: Request, res: Response): Promise<Response> => {
-  try {
-    // Check if grades already exist
-    const gradeCount = db.prepare('SELECT COUNT(*) as count FROM grades').get();
-    if ((gradeCount as any).count > 0) {
-      return res.json({ message: 'Data already seeded' });
-    }
-
-    // Insert grades
-    const grades = [
-      { id: 'elementary', name: 'Elementary', grade_range: 'Grades K-5', order_index: 1 },
-      { id: 'middle', name: 'Middle School', grade_range: 'Grades 6-8', order_index: 2 },
-      { id: 'high', name: 'High School', grade_range: 'Grades 9-12', order_index: 3 },
-      { id: 'college', name: 'College/AP', grade_range: 'Undergraduate', order_index: 4 }
-    ];
-
-    for (const grade of grades) {
-      db.prepare(
-        'INSERT INTO grades (id, name, grade_range, order_index) VALUES (?, ?, ?, ?)'
-      ).run(grade.id, grade.name, grade.grade_range, grade.order_index);
-    }
-
-    // Insert topics for Elementary
-    const elemTopics = [
-      { id: 'elem-arithmetic', grade_id: 'elementary', name: 'Arithmetic', order_index: 1 },
-      { id: 'elem-fractions', grade_id: 'elementary', name: 'Fractions & Decimals', order_index: 2 },
-      { id: 'elem-geometry', grade_id: 'elementary', name: 'Basic Geometry', order_index: 3 },
-      { id: 'elem-measurement', grade_id: 'elementary', name: 'Measurement', order_index: 4 }
-    ];
-
-    for (const topic of elemTopics) {
-      db.prepare(
-        'INSERT INTO topics (id, grade_id, name, order_index) VALUES (?, ?, ?, ?)'
-      ).run(topic.id, topic.grade_id, topic.name, topic.order_index);
-    }
-
-    // Insert subtopics for Arithmetic
-    const arithmeticSubtopics = [
-      { id: 'elem-counting', topic_id: 'elem-arithmetic', name: 'Counting & Number Sense', order_index: 1 },
-      { id: 'elem-addition', topic_id: 'elem-arithmetic', name: 'Addition', order_index: 2 },
-      { id: 'elem-subtraction', topic_id: 'elem-arithmetic', name: 'Subtraction', order_index: 3 },
-      { id: 'elem-multiplication', topic_id: 'elem-arithmetic', name: 'Multiplication', order_index: 4 },
-      { id: 'elem-division', topic_id: 'elem-arithmetic', name: 'Division', order_index: 5 },
-      { id: 'elem-word-problems', topic_id: 'elem-arithmetic', name: 'Word Problems', order_index: 6 }
-    ];
-
-    for (const subtopic of arithmeticSubtopics) {
-      db.prepare(
-        'INSERT INTO subtopics (id, topic_id, name, order_index) VALUES (?, ?, ?, ?)'
-      ).run(subtopic.id, subtopic.topic_id, subtopic.name, subtopic.order_index);
-    }
-
-    // Insert sample resources for Addition
-    const additionResources = [
-      { 
-        id: 'ws-add-1', 
-        subtopic_id: 'elem-addition', 
-        resource_type: 'worksheets',
-        title: 'Basic Addition Worksheet',
-        description: 'Single-digit addition problems (PDF, 2 pages)',
-        url: '/worksheets/basic-addition.pdf',
-        visible: 1
-      },
-      {
-        id: 'vid-add-1',
-        subtopic_id: 'elem-addition',
-        resource_type: 'videos',
-        title: 'Introduction to Addition - Khan Academy',
-        description: 'Learn the basics of addition with visual examples',
-        url: 'https://www.khanacademy.org/math/arithmetic/add-subtract/intro-to-addition',
-        visible: 1
-      },
-      {
-        id: 'pr-add-1',
-        subtopic_id: 'elem-addition',
-        resource_type: 'practice',
-        title: 'Addition Facts 0-10',
-        description: '20 problems • Auto-graded • Basic level',
-        visible: 1
-      },
-      {
-        id: 'qz-add-1',
-        subtopic_id: 'elem-addition',
-        resource_type: 'quizzes',
-        title: 'Addition Quick Check',
-        description: '10 questions • Multiple choice',
-        time_limit: 15,
-        visible: 1
-      }
-    ];
-
-    for (const resource of additionResources) {
-      db.prepare(`
-        INSERT INTO resources (
-          id, subtopic_id, resource_type, title, description, url, time_limit, visible
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(
-        resource.id,
-        resource.subtopic_id,
-        resource.resource_type,
-        resource.title,
-        resource.description,
-        resource.url || null,
-        (resource as any).time_limit || null,
-        resource.visible
-      );
-    }
-
-    return res.json({ message: 'Initial data seeded successfully' });
-  } catch (error) {
-    console.error('Error seeding data:', error);
-    return res.status(500).json({ error: 'Failed to seed data' });
   }
 });
 

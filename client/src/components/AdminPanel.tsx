@@ -25,6 +25,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
   const [grades, setGrades] = useState<any[]>([]);
   const [resources, setResources] = useState<any[]>([]);
   const [loadingResources, setLoadingResources] = useState(false);
+  const [tutors, setTutors] = useState<any[]>([]);
+  const [loadingTutors, setLoadingTutors] = useState(false);
+  const [pendingTutors, setPendingTutors] = useState<any[]>([]);
+  const [selectedTutor, setSelectedTutor] = useState<any>(null);
+  const [editingTutor, setEditingTutor] = useState<string | null>(null);
+  const [tutorForm, setTutorForm] = useState({
+    name: '',
+    grade: 'Elementary',
+    subjects: [] as string[],
+    price_per_hour: 30,
+    description: '',
+    avatar: ''
+  });
 
   const isOwner = userRole === 'owner';
   const isAdmin = userRole === 'admin' || isOwner;
@@ -49,6 +62,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
   // Fetch grades on component mount
   useEffect(() => {
     fetchGrades();
+    fetchTutors();
   }, []);
 
   // Fetch resources when subtopic changes
@@ -65,6 +79,41 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
       setGrades(data);
     } catch (error) {
       console.error('Error fetching grades:', error);
+    }
+  };
+
+  const fetchTutors = async () => {
+    setLoadingTutors(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/all`, {
+        credentials: 'include'
+      });
+      
+      if (response.status === 401) {
+        // Fall back to public endpoint if not authorized
+        const publicResponse = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors`);
+        const data = await publicResponse.json();
+        setTutors(data);
+        setPendingTutors([]);
+      } else if (response.ok) {
+        const data = await response.json();
+        console.log('Fetched tutors data:', data);
+        // Separate tutors by status
+        const pending = data.filter((t: any) => t.status === 'pending');
+        const active = data.filter((t: any) => t.status === 'active');
+        const suspended = data.filter((t: any) => t.status === 'suspended');
+        console.log('Pending tutors:', pending);
+        console.log('Active tutors:', active);
+        console.log('Suspended tutors:', suspended);
+        setPendingTutors(pending);
+        setTutors([...active, ...suspended]); // Show both active and suspended in main list
+      }
+    } catch (error) {
+      console.error('Error fetching tutors:', error);
+      setTutors([]);
+      setPendingTutors([]);
+    } finally {
+      setLoadingTutors(false);
     }
   };
 
@@ -117,6 +166,154 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
       }
     } catch (error) {
       console.error('Error toggling visibility:', error);
+      alert('Error connecting to server. Please try again.');
+    }
+  };
+
+  const handleApproveTutor = async (tutorId: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}/approve`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        alert('Tutor approved successfully!');
+        fetchTutors();
+        setSelectedTutor(null);
+      } else {
+        const error = await response.json();
+        alert(`Failed to approve tutor: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error approving tutor:', error);
+      alert('Error connecting to server. Please try again.');
+    }
+  };
+
+  const handleRejectTutor = async (tutorId: string, reason: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}/reject`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ reason })
+      });
+
+      if (response.ok) {
+        alert('Tutor application rejected.');
+        fetchTutors();
+        setSelectedTutor(null);
+      } else {
+        const error = await response.json();
+        alert(`Failed to reject tutor: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error rejecting tutor:', error);
+      alert('Error connecting to server. Please try again.');
+    }
+  };
+
+  // Currently unused - will implement when edit UI is added
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleUpdateTutor = async (tutorId: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(tutorForm)
+      });
+
+      if (response.ok) {
+        alert('Tutor updated successfully!');
+        setEditingTutor(null);
+        setTutorForm({
+          name: '',
+          grade: 'Elementary',
+          subjects: [],
+          price_per_hour: 30,
+          description: '',
+          avatar: ''
+        });
+        fetchTutors();
+      } else {
+        const error = await response.json();
+        alert(`Failed to update tutor: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error updating tutor:', error);
+      alert('Error connecting to server. Please try again.');
+    }
+  };
+
+  // Currently unused - will implement when delete UI is added
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleDeleteTutor = async (tutorId: string) => {
+    if (!confirm('Are you sure you want to delete this tutor?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        alert('Tutor deleted successfully!');
+        fetchTutors();
+      } else {
+        let errorMessage = 'Failed to delete tutor';
+        try {
+          const error = await response.json();
+          errorMessage = `Failed to delete tutor: ${error.message || error.error || 'Unknown error'}`;
+        } catch (e) {
+          if (response.status === 401) {
+            errorMessage = 'Authentication required. Please login again.';
+          } else if (response.status === 403) {
+            errorMessage = 'You do not have permission to perform this action.';
+          }
+        }
+        alert(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error deleting tutor:', error);
+      alert('Error connecting to server. Please try again.');
+    }
+  };
+
+  const handleToggleTutorStatus = async (tutorId: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}/toggle`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);
+        fetchTutors();
+      } else {
+        let errorMessage = 'Failed to toggle tutor status';
+        try {
+          const error = await response.json();
+          errorMessage = `Failed to toggle tutor status: ${error.message || error.error || 'Unknown error'}`;
+        } catch (e) {
+          if (response.status === 401) {
+            errorMessage = 'Authentication required. Please login again.';
+          } else if (response.status === 403) {
+            errorMessage = 'You do not have permission to perform this action.';
+          }
+        }
+        alert(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error toggling tutor status:', error);
       alert('Error connecting to server. Please try again.');
     }
   };
@@ -223,35 +420,171 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
         {activeTab === 'tutors' && (
           <div className="tutors-section">
             <div className="section-header">
-              <h2>Manage Tutors</h2>
-              <button className="btn btn-primary">Add New Tutor</button>
+              <h2>Tutor Management</h2>
+              <div className="stats-badges">
+                <span className="badge badge-warning">
+                  {pendingTutors.length} Pending Approval
+                </span>
+                <span className="badge badge-success">
+                  {tutors.filter((t: any) => t.status === 'active').length} Active
+                </span>
+                <span className="badge badge-danger">
+                  {tutors.filter((t: any) => t.status === 'suspended').length} Suspended
+                </span>
+              </div>
             </div>
             
-            <div className="tutors-list">
-              <div className="tutor-item">
-                <div className="tutor-info">
-                  <h3>Dr. Sarah Johnson</h3>
-                  <p>High School Math • $35/hour</p>
-                  <p>Rating: 4.8 ⭐ (127 reviews)</p>
-                </div>
-                <div className="tutor-actions">
-                  <button className="btn btn-small">Edit</button>
-                  <button className="btn btn-small btn-danger">Remove</button>
+            {/* Tutor Detail Modal */}
+            {selectedTutor && (
+              <div className="tutor-detail-modal">
+                <div className="modal-overlay" onClick={() => setSelectedTutor(null)} />
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h3>Tutor Details</h3>
+                    <button className="close-btn" onClick={() => setSelectedTutor(null)}>×</button>
+                  </div>
+                  <div className="modal-body">
+                    <h4>{selectedTutor.name}</h4>
+                    <p><strong>Grade:</strong> {selectedTutor.grade}</p>
+                    <p><strong>Rate:</strong> ${selectedTutor.price_per_hour}/hour</p>
+                    <p><strong>Subjects:</strong> {Array.isArray(selectedTutor.subjects) ? selectedTutor.subjects.join(', ') : JSON.parse(selectedTutor.subjects || '[]').join(', ')}</p>
+                    <p><strong>Status:</strong> <span className={`badge badge-${selectedTutor.status === 'active' ? 'success' : selectedTutor.status === 'pending' ? 'warning' : 'danger'}`}>{selectedTutor.status}</span></p>
+                    {selectedTutor.description && (
+                      <>
+                        <p><strong>Description:</strong></p>
+                        <p>{selectedTutor.description}</p>
+                      </>
+                    )}
+                    {selectedTutor.experience_years && (
+                      <p><strong>Experience:</strong> {selectedTutor.experience_years} years</p>
+                    )}
+                    {selectedTutor.qualifications && (
+                      <p><strong>Qualifications:</strong> {JSON.parse(selectedTutor.qualifications || '[]').join(', ')}</p>
+                    )}
+                    <p><strong>Rating:</strong> {selectedTutor.rating ? `${selectedTutor.rating.toFixed(1)} ⭐` : 'No ratings yet'}</p>
+                    <p><strong>Reviews:</strong> {selectedTutor.reviews_count || 0}</p>
+                    <p><strong>Active:</strong> {selectedTutor.is_active ? 'Yes' : 'No'}</p>
+                  </div>
+                  <div className="modal-footer">
+                    <button className="btn btn-secondary" onClick={() => setSelectedTutor(null)}>Close</button>
+                  </div>
                 </div>
               </div>
-              
-              <div className="tutor-item">
-                <div className="tutor-info">
-                  <h3>Prof. Michael Chen</h3>
-                  <p>College Math • $45/hour</p>
-                  <p>Rating: 4.9 ⭐ (89 reviews)</p>
-                </div>
-                <div className="tutor-actions">
-                  <button className="btn btn-small">Edit</button>
-                  <button className="btn btn-small btn-danger">Remove</button>
+            )}
+
+            {/* Pending Tutors */}
+            {pendingTutors.length > 0 && (
+              <div className="pending-tutors">
+                <h3>Pending Approval</h3>
+                <div className="tutors-list">
+                  {pendingTutors.map(tutor => (
+                    <div key={tutor.id} className="tutor-item pending">
+                      <div className="tutor-info">
+                        <h4>{tutor.name}</h4>
+                        <p>{tutor.grade} • ${tutor.price_per_hour}/hour</p>
+                        <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : JSON.parse(tutor.subjects || '[]').join(', ')}</p>
+                        {tutor.description && <p className="description">{tutor.description}</p>}
+                        {tutor.experience_years && <p>Experience: {tutor.experience_years} years</p>}
+                      </div>
+                      <div className="tutor-actions">
+                        <button 
+                          className="btn btn-small btn-success"
+                          onClick={() => handleApproveTutor(tutor.id)}
+                        >
+                          Approve
+                        </button>
+                        <button 
+                          className="btn btn-small btn-danger"
+                          onClick={() => {
+                            const reason = prompt('Rejection reason (optional):');
+                            if (reason !== null) {
+                              handleRejectTutor(tutor.id, reason);
+                            }
+                          }}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
+            
+            {/* All Tutors List */}
+            <h3>All Tutors</h3>
+            {loadingTutors ? (
+              <div className="loading">Loading tutors...</div>
+            ) : (
+              <div className="tutors-list">
+                {tutors.map(tutor => (
+                  <div key={tutor.id} className="tutor-item">
+                    <div className="tutor-info">
+                      <h3>{tutor.name}</h3>
+                      <p>{tutor.grade} • ${tutor.price_per_hour}/hour</p>
+                      <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : tutor.subjects}</p>
+                      <p>Rating: {tutor.rating ? `${tutor.rating.toFixed(1)} ⭐` : 'No ratings'} ({tutor.reviews_count || 0} reviews)</p>
+                      <p className="status">
+                        <span className={`badge badge-${tutor.status === 'active' ? 'success' : tutor.status === 'suspended' ? 'danger' : 'warning'}`}>
+                          {tutor.status === 'active' ? 'Active' : tutor.status === 'suspended' ? 'Suspended' : 'Pending'}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="tutor-actions">
+                      <button 
+                        className="btn btn-small"
+                        onClick={() => setSelectedTutor(tutor)}
+                      >
+                        View
+                      </button>
+                      {tutor.status === 'pending' && (
+                        <>
+                          <button 
+                            className="btn btn-small btn-success"
+                            onClick={() => handleApproveTutor(tutor.id)}
+                          >
+                            Approve
+                          </button>
+                          <button 
+                            className="btn btn-small btn-danger"
+                            onClick={() => {
+                              const reason = prompt('Rejection reason (optional):');
+                              if (reason !== null) {
+                                handleRejectTutor(tutor.id, reason);
+                              }
+                            }}
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
+                      {tutor.status === 'active' && (
+                        <button 
+                          className="btn btn-small btn-warning"
+                          onClick={() => handleToggleTutorStatus(tutor.id)}
+                        >
+                          Suspend
+                        </button>
+                      )}
+                      {tutor.status === 'suspended' && (
+                        <button 
+                          className="btn btn-small btn-success"
+                          onClick={() => handleToggleTutorStatus(tutor.id)}
+                        >
+                          Activate
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                
+                {tutors.length === 0 && !loadingTutors && (
+                  <div className="no-tutors">
+                    <p>No active tutors yet. Tutors will appear here after approval.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 

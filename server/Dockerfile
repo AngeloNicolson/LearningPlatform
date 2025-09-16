@@ -2,8 +2,8 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install SQLite
-RUN apk add --no-cache sqlite
+# Install PostgreSQL client for database connections
+RUN apk add --no-cache postgresql-client
 
 # Copy package files
 COPY package.json ./

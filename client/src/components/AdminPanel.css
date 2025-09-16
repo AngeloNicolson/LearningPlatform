@@ -1,4 +1,284 @@
 /* Admin Panel - Tofu Theme */
+
+/* Stats Badges */
+.stats-badges {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-warning {
+  background: #ffc107;
+  color: #000;
+}
+
+.badge-success {
+  background: #4ade80;
+  color: #000;
+}
+
+/* Tutor Items */
+.pending-tutors {
+  margin-bottom: 2rem;
+}
+
+.pending-tutors h3,
+.tutors-section h3 {
+  color: #660B05;
+  margin: 1.5rem 0 1rem 0;
+  font-size: 1.25rem;
+}
+
+.tutor-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid #e5d4b1;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: white;
+}
+
+.tutor-item.pending {
+  border-left: 4px solid #ffc107;
+  background: #fffcf5;
+}
+
+.tutor-info h4 {
+  color: #660B05;
+  margin: 0 0 8px 0;
+}
+
+.tutor-info p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.tutor-info .description {
+  color: #333;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.btn-success {
+  background: #4ade80;
+  color: #000;
+}
+
+.btn-success:hover {
+  background: #22c55e;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* Tutor Detail Modal */
+.tutor-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5d4b1;
+  background: #faf8f3;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #660B05;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #660B05;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: rgba(102, 11, 5, 0.1);
+  border-radius: 50%;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body h4 {
+  color: #660B05;
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+}
+
+.modal-body p {
+  margin: 12px 0;
+  color: #333;
+}
+
+.modal-body strong {
+  color: #660B05;
+}
+
+.modal-footer {
+  padding: 20px;
+  border-top: 1px solid #e5d4b1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Tutor Form Modal */
+.tutor-form-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.tutor-form-modal .form-container {
+  background: #faf8f3;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.tutor-form-modal h3 {
+  color: #660B05;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+}
+
+.tutor-form-modal .form-group {
+  margin-bottom: 20px;
+}
+
+.tutor-form-modal label {
+  display: block;
+  color: #660B05;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.tutor-form-modal input,
+.tutor-form-modal select,
+.tutor-form-modal textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(102, 11, 5, 0.2);
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+}
+
+.tutor-form-modal .form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.tutor-item .status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.tutor-item .status.active {
+  color: #22863a;
+}
+
+.tutor-item .status.inactive {
+  color: #cb2431;
+}
+
+.btn-warning {
+  background: #fbbf24;
+  color: #92400e;
+}
+
+.btn-warning:hover {
+  background: #f59e0b;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+.no-tutors {
+  text-align: center;
+  padding: 48px;
+  color: #8b7355;
+}
 .admin-panel {
   min-height: 100vh;
   padding: 32px;

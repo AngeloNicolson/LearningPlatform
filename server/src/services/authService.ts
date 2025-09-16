@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { db } from '../database';
+import { query } from '../database';
 import crypto from 'crypto';
 
 interface UserCredentials {
@@ -22,9 +22,9 @@ export class AuthService {
   
   static async register(credentials: UserCredentials & { firstName: string; lastName: string }) {
     // Check if user exists
-    const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(credentials.email);
+    const existingUser = await query('SELECT id FROM users WHERE email = $1', [credentials.email]);
     
-    if (existingUser) {
+    if (existingUser.rows.length > 0) {
       throw new Error('User already exists');
     }
     
@@ -32,231 +32,282 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(credentials.password, this.SALT_ROUNDS);
     
     // Insert user
-    const result = db.prepare(`
+    const result = await query(`
       INSERT INTO users (email, password_hash, first_name, last_name)
-      VALUES (?, ?, ?, ?)
-    `).run(
+      VALUES ($1, $2, $3, $4)
+      RETURNING id, email
+    `, [
       credentials.email.toLowerCase(),
       passwordHash,
       credentials.firstName,
       credentials.lastName
-    );
+    ]);
+    
+    const userId = result.rows[0].id;
     
     // Log security event
-    this.logSecurityEvent(result.lastInsertRowid as number, 'USER_REGISTERED');
+    this.logSecurityEvent(userId, 'USER_REGISTERED');
     
     return {
-      id: result.lastInsertRowid,
+      id: userId,
       email: credentials.email,
       firstName: credentials.firstName,
       lastName: credentials.lastName
     };
   }
   
-  static async login(credentials: UserCredentials, ipAddress?: string, userAgent?: string) {
-    const user = db.prepare(`
-      SELECT id, email, password_hash, first_name, last_name, 
+  static async login(credentials: UserCredentials) {
+    const { email, password } = credentials;
+    
+    // Get user with security check
+    const result = await query(`
+      SELECT id, email, password_hash, first_name, last_name, role, 
              failed_login_attempts, account_locked_until
       FROM users 
-      WHERE email = ?
-    `).get(credentials.email.toLowerCase()) as any;
+      WHERE email = $1
+    `, [email.toLowerCase()]);
+    
+    const user = result.rows[0];
     
     if (!user) {
       throw new Error('Invalid credentials');
     }
     
-    // Check if account is locked
+    // Check account lock
     if (user.account_locked_until && new Date(user.account_locked_until) > new Date()) {
-      throw new Error('Account is locked. Please try again later.');
+      throw new Error('Account is temporarily locked. Please try again later.');
     }
     
     // Verify password
-    const isValid = await bcrypt.compare(credentials.password, user.password_hash);
+    const isValid = await bcrypt.compare(password, user.password_hash);
     
     if (!isValid) {
-      // Increment failed attempts
-      this.handleFailedLogin(user.id);
+      await this.handleFailedLogin(user.id);
       throw new Error('Invalid credentials');
     }
     
     // Reset failed attempts on successful login
-    db.prepare(`
+    await query(`
       UPDATE users 
-      SET failed_login_attempts = 0,
-          last_login_at = CURRENT_TIMESTAMP,
-          last_login_ip = ?,
-          last_login_user_agent = ?
-      WHERE id = ?
-    `).run(ipAddress || null, userAgent || null, user.id);
+      SET failed_login_attempts = 0, 
+          account_locked_until = NULL,
+          last_login_at = CURRENT_TIMESTAMP
+      WHERE id = $1
+    `, [user.id]);
     
     // Generate tokens
     const tokens = this.generateTokens(user);
     
-    // Store refresh token
-    this.storeRefreshToken(user.id, tokens.refreshToken, ipAddress, userAgent);
-    
     // Log security event
-    this.logSecurityEvent(user.id, 'USER_LOGIN', ipAddress, userAgent);
+    this.logSecurityEvent(user.id, 'USER_LOGIN_SUCCESS');
     
     return {
       user: {
         id: user.id,
         email: user.email,
         firstName: user.first_name,
-        lastName: user.last_name
+        lastName: user.last_name,
+        role: user.role
       },
-      tokens
+      ...tokens
     };
   }
   
-  static async refreshTokens(refreshToken: string, ipAddress?: string, userAgent?: string) {
-    const tokenHash = this.hashToken(refreshToken);
-    
-    const storedToken = db.prepare(`
-      SELECT rt.*, u.id as user_id, u.email, u.first_name, u.last_name
-      FROM refresh_tokens rt
-      JOIN users u ON rt.user_id = u.id
-      WHERE rt.token_hash = ? AND rt.expires_at > datetime('now')
-    `).get(tokenHash) as any;
-    
-    if (!storedToken) {
+  static async refreshTokens(refreshToken: string) {
+    try {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET || 'refresh-secret-key'
+      ) as any;
+      
+      // Get user
+      const result = await query(`
+        SELECT id, email, first_name, last_name, role
+        FROM users 
+        WHERE id = $1
+      `, [decoded.userId]);
+      
+      const user = result.rows[0];
+      
+      if (!user) {
+        throw new Error('User not found');
+      }
+      
+      // Generate new tokens
+      const tokens = this.generateTokens(user);
+      
+      return {
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          role: user.role
+        },
+        ...tokens
+      };
+    } catch (error) {
       throw new Error('Invalid refresh token');
     }
-    
-    // Check for token reuse (possible theft)
-    const familyTokens = db.prepare(`
-      SELECT id FROM refresh_tokens 
-      WHERE family_id = ? AND id != ?
-    `).all(storedToken.family_id, storedToken.id);
-    
-    if (familyTokens.length > 0) {
-      // Token family has been reused - invalidate all tokens
-      db.prepare('DELETE FROM refresh_tokens WHERE family_id = ?').run(storedToken.family_id);
-      this.logSecurityEvent(storedToken.user_id, 'TOKEN_REUSE_DETECTED', ipAddress, userAgent);
-      throw new Error('Token reuse detected. Please login again.');
-    }
-    
-    // Delete old token
-    db.prepare('DELETE FROM refresh_tokens WHERE id = ?').run(storedToken.id);
-    
-    // Generate new tokens
-    const user = {
-      id: storedToken.user_id,
-      email: storedToken.email,
-      first_name: storedToken.first_name,
-      last_name: storedToken.last_name
-    };
-    
-    const tokens = this.generateTokens(user);
-    
-    // Store new refresh token with same family ID
-    this.storeRefreshToken(user.id, tokens.refreshToken, ipAddress, userAgent, storedToken.family_id);
-    
-    return tokens;
   }
   
-  static logout(userId: number) {
-    // Remove all refresh tokens for user
-    db.prepare('DELETE FROM refresh_tokens WHERE user_id = ?').run(userId);
+  static async changePassword(userId: number, currentPassword: string, newPassword: string) {
+    // Get user
+    const result = await query('SELECT password_hash FROM users WHERE id = $1', [userId]);
+    const user = result.rows[0];
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    // Verify current password
+    const isValid = await bcrypt.compare(currentPassword, user.password_hash);
+    
+    if (!isValid) {
+      throw new Error('Current password is incorrect');
+    }
+    
+    // Hash new password
+    const newPasswordHash = await bcrypt.hash(newPassword, this.SALT_ROUNDS);
+    
+    // Update password
+    await query(`
+      UPDATE users 
+      SET password_hash = $1, 
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2
+    `, [newPasswordHash, userId]);
     
     // Log security event
-    this.logSecurityEvent(userId, 'USER_LOGOUT');
+    this.logSecurityEvent(userId, 'PASSWORD_CHANGED');
+    
+    return { success: true };
+  }
+  
+  static async requestPasswordReset(email: string) {
+    // Check if user exists
+    const result = await query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+    const user = result.rows[0];
+    
+    if (!user) {
+      // Don't reveal if user exists or not
+      return { message: 'If the email exists, a reset link has been sent' };
+    }
+    
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpiry = new Date(Date.now() + 3600000); // 1 hour
+    
+    // Store reset token
+    await query(`
+      INSERT INTO password_resets (user_id, token, expires_at)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (user_id) DO UPDATE 
+      SET token = $2, expires_at = $3
+    `, [user.id, resetToken, resetExpiry]);
+    
+    // Log security event
+    this.logSecurityEvent(user.id, 'PASSWORD_RESET_REQUESTED');
+    
+    // In production, send email here
+    console.log(`Password reset token for ${email}: ${resetToken}`);
+    
+    return { 
+      message: 'If the email exists, a reset link has been sent',
+      // Only for development
+      resetToken: process.env.NODE_ENV === 'development' ? resetToken : undefined
+    };
+  }
+  
+  static async resetPassword(token: string, newPassword: string) {
+    // Get reset request
+    const result = await query(`
+      SELECT user_id 
+      FROM password_resets 
+      WHERE token = $1 AND expires_at > NOW()
+    `, [token]);
+    
+    const reset = result.rows[0];
+    
+    if (!reset) {
+      throw new Error('Invalid or expired reset token');
+    }
+    
+    // Hash new password
+    const passwordHash = await bcrypt.hash(newPassword, this.SALT_ROUNDS);
+    
+    // Update password
+    await query(`
+      UPDATE users 
+      SET password_hash = $1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2
+    `, [passwordHash, reset.user_id]);
+    
+    // Delete reset token
+    await query('DELETE FROM password_resets WHERE user_id = $1', [reset.user_id]);
+    
+    // Log security event
+    this.logSecurityEvent(reset.user_id, 'PASSWORD_RESET_COMPLETED');
+    
+    return { success: true };
   }
   
   private static generateTokens(user: any): TokenPair {
     const accessToken = jwt.sign(
       {
-        sub: user.id.toString(),
+        userId: user.id,
         email: user.email,
-        roles: ['user']
+        role: user.role
       },
-      process.env.JWT_ACCESS_SECRET || 'access-secret',
+      process.env.JWT_ACCESS_SECRET || 'access-secret-key',
       { expiresIn: this.ACCESS_TOKEN_EXPIRY }
     );
     
     const refreshToken = jwt.sign(
-      {
-        sub: user.id.toString(),
-        type: 'refresh'
-      },
-      process.env.JWT_REFRESH_SECRET || 'refresh-secret',
+      { userId: user.id },
+      process.env.JWT_REFRESH_SECRET || 'refresh-secret-key',
       { expiresIn: this.REFRESH_TOKEN_EXPIRY }
     );
     
     return { accessToken, refreshToken };
   }
   
-  private static storeRefreshToken(
-    userId: number, 
-    token: string, 
-    ipAddress?: string, 
-    userAgent?: string,
-    familyId?: string
-  ) {
-    const tokenHash = this.hashToken(token);
-    const newFamilyId = familyId || crypto.randomUUID();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
-    
-    db.prepare(`
-      INSERT INTO refresh_tokens (user_id, token_hash, family_id, expires_at, ip_address, user_agent)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(
-      userId,
-      tokenHash,
-      newFamilyId,
-      expiresAt.toISOString(),
-      ipAddress || null,
-      userAgent || null
-    );
-  }
-  
-  private static hashToken(token: string): string {
-    return crypto.createHash('sha256').update(token).digest('hex');
-  }
-  
-  private static handleFailedLogin(userId: number) {
-    const result = db.prepare(`
+  private static async handleFailedLogin(userId: number) {
+    // Increment failed attempts
+    const result = await query(`
       UPDATE users 
       SET failed_login_attempts = failed_login_attempts + 1,
           last_failed_attempt = CURRENT_TIMESTAMP
-      WHERE id = ?
+      WHERE id = $1
       RETURNING failed_login_attempts
-    `).get(userId) as any;
+    `, [userId]);
     
-    // Lock account after 5 failed attempts
-    if (result.failed_login_attempts >= 5) {
-      const lockUntil = new Date();
-      lockUntil.setMinutes(lockUntil.getMinutes() + 30); // Lock for 30 minutes
-      
-      db.prepare(`
+    const attempts = result.rows[0].failed_login_attempts;
+    
+    // Lock account after 5 attempts
+    if (attempts >= 5) {
+      const lockUntil = new Date(Date.now() + 1800000); // 30 minutes
+      await query(`
         UPDATE users 
-        SET account_locked_until = ?
-        WHERE id = ?
-      `).run(lockUntil.toISOString(), userId);
+        SET account_locked_until = $1 
+        WHERE id = $2
+      `, [lockUntil, userId]);
       
       this.logSecurityEvent(userId, 'ACCOUNT_LOCKED');
+    } else {
+      this.logSecurityEvent(userId, 'LOGIN_FAILED');
     }
   }
   
-  private static logSecurityEvent(
-    userId: number, 
-    eventType: string, 
-    ipAddress?: string, 
-    userAgent?: string,
-    metadata?: any
-  ) {
-    db.prepare(`
-      INSERT INTO security_audit_log (user_id, event_type, ip_address, user_agent, metadata)
-      VALUES (?, ?, ?, ?, ?)
-    `).run(
-      userId,
-      eventType,
-      ipAddress || null,
-      userAgent || null,
-      metadata ? JSON.stringify(metadata) : null
-    );
+  private static async logSecurityEvent(userId: number, eventType: string, details?: any) {
+    try {
+      await query(`
+        INSERT INTO security_logs (user_id, event_type, details)
+        VALUES ($1, $2, $3)
+      `, [userId, eventType, JSON.stringify(details || {})]);
+    } catch (error) {
+      console.error('Failed to log security event:', error);
+    }
   }
 }
-
-export default AuthService;
