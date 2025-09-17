@@ -1,0 +1,382 @@
+/* Unified Tutor Card Styles */
+.unified-tutor-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.unified-tutor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Subject Type Themes */
+.unified-tutor-card.math {
+  border-top: 3px solid #667eea;
+}
+
+.unified-tutor-card.science {
+  border-top: 3px solid #48bb78;
+}
+
+.unified-tutor-card.general {
+  border-top: 3px solid #ed8936;
+}
+
+/* Avatar Styles */
+.tutor-avatar {
+  flex-shrink: 0;
+}
+
+.tutor-avatar-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.tutor-avatar-initials {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* Rating Styles */
+.tutor-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+}
+
+.star {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.star.filled {
+  color: #fbbf24;
+}
+
+.star.empty {
+  color: #e5e7eb;
+}
+
+.star.half {
+  position: relative;
+  color: #e5e7eb;
+}
+
+.star.half::before {
+  content: '★';
+  position: absolute;
+  color: #fbbf24;
+  overflow: hidden;
+  width: 50%;
+}
+
+.rating-value {
+  margin-left: 0.25rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.sessions {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin-left: 0.25rem;
+}
+
+/* Full Variant */
+.unified-tutor-card.full {
+  padding: 1.5rem;
+}
+
+.unified-tutor-card.full .card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.unified-tutor-card.full .tutor-basic {
+  flex: 1;
+}
+
+.unified-tutor-card.full .tutor-basic h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.25rem;
+}
+
+.unified-tutor-card.full .tutor-price-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.unified-tutor-card.full .card-body {
+  margin: 1rem 0;
+}
+
+.unified-tutor-card.full .tutor-bio {
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.unified-tutor-card.full .subjects-section {
+  margin: 1rem 0;
+}
+
+.unified-tutor-card.full .subjects-section h4 {
+  margin: 0 0 0.5rem 0;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unified-tutor-card.full .subject-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.unified-tutor-card.full .subject-tag {
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.unified-tutor-card.math .subject-tag {
+  background: #eef2ff;
+  color: #667eea;
+}
+
+.unified-tutor-card.science .subject-tag {
+  background: #f0fdf4;
+  color: #48bb78;
+}
+
+.unified-tutor-card.full .grades-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.unified-tutor-card.full .grades-section .label {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.unified-tutor-card.full .grades-section .value {
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.unified-tutor-card.full .card-footer {
+  margin-top: 1.5rem;
+}
+
+.unified-tutor-card.full .book-session-btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.unified-tutor-card.full .book-session-btn:hover {
+  opacity: 0.9;
+}
+
+/* Compact Variant */
+.unified-tutor-card.compact {
+  padding: 1rem;
+}
+
+.unified-tutor-card.compact .tutor-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.unified-tutor-card.compact .tutor-avatar-initials,
+.unified-tutor-card.compact .tutor-avatar-img {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+}
+
+.unified-tutor-card.compact .tutor-info {
+  flex: 1;
+}
+
+.unified-tutor-card.compact .tutor-info h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.unified-tutor-card.compact .tutor-subjects {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unified-tutor-card.compact .tutor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unified-tutor-card.compact .tutor-price {
+  font-weight: 600;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.unified-tutor-card.compact .view-btn {
+  background: transparent;
+  color: #667eea;
+  border: 1px solid #667eea;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.unified-tutor-card.compact .view-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
+/* List Variant */
+.unified-tutor-card.list {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.unified-tutor-card.list .tutor-content {
+  flex: 1;
+}
+
+.unified-tutor-card.list .tutor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.unified-tutor-card.list .tutor-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.unified-tutor-card.list .tutor-price {
+  background: #f3f4f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.unified-tutor-card.list .tutor-bio {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0.5rem 0;
+}
+
+.unified-tutor-card.list .tutor-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.unified-tutor-card.list .grades {
+  font-weight: 500;
+}
+
+.unified-tutor-card.list .subjects {
+  font-style: italic;
+}
+
+.unified-tutor-card.list .book-btn {
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.unified-tutor-card.list .book-btn:hover {
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .unified-tutor-card.list {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .unified-tutor-card.list .tutor-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .unified-tutor-card.list .book-btn {
+    width: 100%;
+  }
+  
+  .unified-tutor-card.full .tutor-price-badge {
+    position: static;
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+}

@@ -4,10 +4,33 @@ import { requireAuth, requireRole } from '../middleware/auth';
 
 const router = Router();
 
-// Get all approved tutors
-router.get('/', async (_req: Request, res: Response) => {
+// Get all approved tutors with optional filtering
+router.get('/', async (req: Request, res: Response) => {
   try {
-    const result = await query(`
+    const { topic, subject, grade } = req.query;
+    
+    let whereConditions = ['t.approval_status = \'approved\'', 't.is_active = true'];
+    const params: any[] = [];
+    
+    // Filter by math topic
+    if (topic) {
+      params.push(topic);
+      whereConditions.push(`t.subjects->'math_topics' ? $${params.length}`);
+    }
+    
+    // Filter by science subject
+    if (subject) {
+      params.push(subject);
+      whereConditions.push(`t.subjects->'science_subjects' ? $${params.length}`);
+    }
+    
+    // Filter by grade
+    if (grade) {
+      params.push(grade);
+      whereConditions.push(`$${params.length} = ANY(t.grades)`);
+    }
+    
+    const queryText = `
       SELECT 
         t.id,
         t.display_name,
@@ -25,14 +48,134 @@ router.get('/', async (_req: Request, res: Response) => {
         u.last_name
       FROM tutors t
       JOIN users u ON t.user_id = u.id
-      WHERE t.approval_status = 'approved' AND t.is_active = true
+      WHERE ${whereConditions.join(' AND ')}
       ORDER BY t.rating DESC, t.total_sessions DESC
-    `);
-
-    res.json(result.rows);
+    `;
+    
+    const result = await query(queryText, params);
+    
+    // Add avatar field based on initials
+    const tutorsWithAvatar = result.rows.map((tutor: any) => ({
+      ...tutor,
+      avatar: `${tutor.first_name?.charAt(0) || ''}${tutor.last_name?.charAt(0) || ''}`.toUpperCase() || 'TT'
+    }));
+    
+    res.json(tutorsWithAvatar);
   } catch (error) {
     console.error('Error fetching tutors:', error);
     res.status(500).json({ error: 'Failed to fetch tutors' });
+  }
+});
+
+// Get tutors by math topic
+router.get('/by-topic/:topicName', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { topicName } = req.params;
+    const limit = parseInt(req.query.limit as string) || 2; // Default to 2 tutors per topic
+    
+    const result = await query(`
+      SELECT 
+        t.id,
+        t.display_name,
+        t.bio,
+        t.subjects,
+        t.grades,
+        t.hourly_rate,
+        t.accepts_group_sessions,
+        t.rating,
+        t.total_sessions,
+        u.first_name,
+        u.last_name,
+        SUBSTRING(u.first_name FROM 1 FOR 1) || SUBSTRING(u.last_name FROM 1 FOR 1) as avatar
+      FROM tutors t
+      JOIN users u ON t.user_id = u.id
+      WHERE t.approval_status = 'approved' 
+        AND t.is_active = true
+        AND t.subjects->'math_topics' ? $1
+      ORDER BY t.rating DESC, t.total_sessions DESC
+      LIMIT $2
+    `, [topicName, limit]);
+    
+    return res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching tutors by topic:', error);
+    return res.status(500).json({ error: 'Failed to fetch tutors' });
+  }
+});
+
+// Get science tutors
+router.get('/science/all', async (_req: Request, res: Response): Promise<Response> => {
+  try {
+    const result = await query(`
+      SELECT 
+        t.id,
+        t.display_name,
+        t.bio,
+        t.subjects,
+        t.grades,
+        t.hourly_rate,
+        t.accepts_group_sessions,
+        t.rating,
+        t.total_sessions,
+        u.first_name,
+        u.last_name
+      FROM tutors t
+      JOIN users u ON t.user_id = u.id
+      WHERE t.approval_status = 'approved' 
+        AND t.is_active = true
+        AND jsonb_array_length(t.subjects->'science_subjects') > 0
+      ORDER BY t.rating DESC, t.total_sessions DESC
+    `);
+    
+    // Add avatar field based on initials
+    const tutorsWithAvatar = result.rows.map((tutor: any) => ({
+      ...tutor,
+      avatar: `${tutor.first_name?.charAt(0) || ''}${tutor.last_name?.charAt(0) || ''}`.toUpperCase() || 'TT'
+    }));
+    
+    return res.json(tutorsWithAvatar);
+  } catch (error) {
+    console.error('Error fetching science tutors:', error);
+    return res.status(500).json({ error: 'Failed to fetch science tutors' });
+  }
+});
+
+// Get tutors by science subject
+router.get('/by-subject/:subject', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { subject } = req.params;
+    
+    const result = await query(`
+      SELECT 
+        t.id,
+        t.display_name,
+        t.bio,
+        t.subjects,
+        t.grades,
+        t.hourly_rate,
+        t.accepts_group_sessions,
+        t.rating,
+        t.total_sessions,
+        u.first_name,
+        u.last_name
+      FROM tutors t
+      JOIN users u ON t.user_id = u.id
+      WHERE t.approval_status = 'approved' 
+        AND t.is_active = true
+        AND t.subjects->'science_subjects' ? $1
+      ORDER BY t.rating DESC, t.total_sessions DESC
+    `, [subject]);
+    
+    // Add avatar field based on initials
+    const tutorsWithAvatar = result.rows.map((tutor: any) => ({
+      ...tutor,
+      avatar: `${tutor.first_name?.charAt(0) || ''}${tutor.last_name?.charAt(0) || ''}`.toUpperCase() || 'TT'
+    }));
+    
+    return res.json(tutorsWithAvatar);
+  } catch (error) {
+    console.error('Error fetching tutors by subject:', error);
+    return res.status(500).json({ error: 'Failed to fetch tutors' });
   }
 });
 

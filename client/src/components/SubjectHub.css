@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&family=Orbitron:wght@400;700;900&display=swap');
+
+.subject-hub {
+  min-height: 100vh;
+  padding: 2rem;
+  background: #faf8f3;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+.hub-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.hub-header h1 {
+  color: #660B05;
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(102, 11, 5, 0.3);
+}
+
+.hub-header p {
+  color: #8b7355;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #faf8f3;
+  border: 1px solid rgba(102, 11, 5, 0.15);
+  color: #660B05;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px;
+}
+
+.back-button:hover {
+  background: #ffffff;
+  border-color: #660B05;
+  transform: translateX(-3px);
+  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.1);
+}
+
+.hub-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto 3rem;
+}
+
+.hub-card {
+  background: #ffffff;
+  border: 1px solid rgba(102, 11, 5, 0.08);
+  border-radius: 12px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.hub-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(250, 248, 243, 0.5) 0%, transparent 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hub-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.08);
+  border-color: rgba(102, 11, 5, 0.2);
+  background: #faf8f3;
+}
+
+.hub-card:hover::before {
+  opacity: 1;
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  filter: sepia(0.5) hue-rotate(340deg) saturate(2);
+}
+
+.hub-card h2 {
+  color: #660B05;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hub-card p {
+  color: #3a3330;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.feature-list li {
+  color: #8b7355;
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 0.85rem;
+}
+
+.feature-list li::before {
+  content: '▸';
+  color: #660B05;
+  position: absolute;
+  left: 0;
+}
+
+.hub-button {
+  background: #660B05;
+  color: #faf8f3;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 0.9rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.hub-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(250, 248, 243, 0.2), transparent);
+  transition: left 0.3s ease;
+}
+
+.hub-button:hover::before {
+  left: 100%;
+}
+
+.hub-button:hover {
+  background: #8b1107;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+}
+
+.hub-stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px solid rgba(102, 11, 5, 0.08);
+  border-radius: 12px;
+  margin-top: 3rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-family: 'Orbitron', monospace;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #660B05;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 1px 2px rgba(102, 11, 5, 0.1);
+}
+
+.stat-label {
+  color: #8b7355;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .hub-header h1 {
+    font-size: 2rem;
+  }
+  
+  .hub-sections {
+    grid-template-columns: 1fr;
+  }
+  
+  .hub-stats {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}

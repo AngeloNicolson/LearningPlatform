@@ -782,3 +782,19 @@
     padding: 10px 12px;
   }
 }
+
+/* Tutors Content Styles */
+.tutors-content {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tutors-content .math-topic-tutors {
+  max-width: 100%;
+}
+
+.tutors-content .tutor-cards-grid {
+  gap: 20px;
+}

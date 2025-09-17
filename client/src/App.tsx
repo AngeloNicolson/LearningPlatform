@@ -4,12 +4,18 @@ import { Home } from './components/Home';
 import { Dashboard } from './components/Dashboard';
 import { AdminPanel } from './components/AdminPanel';
 import { MathResources } from './components/MathResources';
+import { MathHub } from './components/MathHub';
+import { ScienceHub } from './components/ScienceHub';
+import { DebatePage } from './components/DebatePage';
 import { TopicWorkspace } from './components/TopicWorkspace';
 import { MathGradeSelector } from './components/MathGradeSelector';
 import { TutorCards } from './components/TutorCards';
 import { TutorProfile } from './components/TutorProfile';
 import { BookingCalendar } from './components/BookingCalendar';
 import { TutorOnboarding } from './components/TutorOnboarding';
+import { ScienceSubjectSelector } from './components/ScienceSubjectSelector';
+import { ScienceTutorCards } from './components/ScienceTutorCards';
+import { FindTutorsHub } from './components/FindTutorsHub';
 import { Topic } from './types/wasm';
 import { TopicMetadata } from './types/storage';
 import { MathTemplate } from './utils/mathTemplates';
@@ -25,17 +31,19 @@ function App() {
   const [userId, setUserId] = useState<number | null>(null);
   const [userName, setUserName] = useState<string>('');
   const [, setSelectedTopic] = useState<Topic | null>(null); // For future debates feature
-  const [currentView, setCurrentView] = useState<'home' | 'dashboard' | 'resources' | 'tutor' | 'login' | 'admin' | 'onboarding'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'debate' | 'math' | 'science' | 'tutors' | 'dashboard' | 'login' | 'admin' | 'onboarding'>('home');
   const [, setWorkspaceTopicId] = useState<string | null>(null); // For future workspace feature
   const { getTopic, createTopic } = useTopics();
   const [workspaceTopic, setWorkspaceTopic] = useState<TopicMetadata | null>(null);
   const [impersonatingAs, setImpersonatingAs] = useState<{ role: string; name: string; } | null>(null);
 
   // Tutor booking flow state
-  const [tutorView, setTutorView] = useState<'grades' | 'tutors' | 'profile' | 'booking'>('grades');
+  const [tutorView, setTutorView] = useState<'hub' | 'grades' | 'tutors' | 'profile' | 'booking' | 'science-subjects' | 'science-tutors'>('hub');
   const [selectedGrade, setSelectedGrade] = useState<string>('');
   const [selectedTutor, setSelectedTutor] = useState<string>('');
   const [selectedSessionType, setSelectedSessionType] = useState<string>('');
+  const [selectedScienceSubject, setSelectedScienceSubject] = useState<string>('');
+  const [tutorType, setTutorType] = useState<'math' | 'science' | 'all'>('all');
 
   // Check for existing session on mount
   useEffect(() => {
@@ -176,8 +184,10 @@ function App() {
   };
 
   const resetTutorFlow = () => {
-    setTutorView('grades');
+    setTutorType('all');
+    setTutorView('hub');
     setSelectedGrade('');
+    setSelectedScienceSubject('');
     setSelectedTutor('');
     setSelectedSessionType('');
   };
@@ -201,6 +211,37 @@ function App() {
             <span className="nav-label">HOME</span>
           </button>
           <button 
+            className={currentView === 'debate' ? 'nav-item active' : 'nav-item'}
+            onClick={() => setCurrentView('debate')}
+          >
+            <span className="nav-icon">💬</span>
+            <span className="nav-label">DEBATE</span>
+          </button>
+          <button 
+            className={currentView === 'math' ? 'nav-item active' : 'nav-item'}
+            onClick={() => setCurrentView('math')}
+          >
+            <span className="nav-icon">📐</span>
+            <span className="nav-label">MATH</span>
+          </button>
+          <button 
+            className={currentView === 'science' ? 'nav-item active' : 'nav-item'}
+            onClick={() => setCurrentView('science')}
+          >
+            <span className="nav-icon">🔬</span>
+            <span className="nav-label">SCIENCE</span>
+          </button>
+          <button 
+            className={currentView === 'tutors' ? 'nav-item active' : 'nav-item'}
+            onClick={() => {
+              setCurrentView('tutors');
+              resetTutorFlow();
+            }}
+          >
+            <span className="nav-icon">🎓</span>
+            <span className="nav-label">FIND TUTORS</span>
+          </button>
+          <button 
             className={currentView === 'dashboard' ? 'nav-item active' : 'nav-item'}
             onClick={() => {
               if (!isAuthenticated) {
@@ -213,26 +254,6 @@ function App() {
             <span className="nav-icon">█</span>
             <span className="nav-label">DASHBOARD</span>
           </button>
-          <button 
-            className={currentView === 'resources' ? 'nav-item active' : 'nav-item'}
-            onClick={() => setCurrentView('resources')}
-          >
-            <span className="nav-icon">📚</span>
-            <span className="nav-label">RESOURCES</span>
-          </button>
-          {/* Hide Find a Tutor for child accounts (personal accounts with parent_id) */}
-          {!(userRole === 'personal' && parentId) && (
-            <button 
-              className={currentView === 'tutor' ? 'nav-item active' : 'nav-item'}
-              onClick={() => {
-                setCurrentView('tutor');
-                resetTutorFlow();
-              }}
-            >
-              <span className="nav-icon">🎓</span>
-              <span className="nav-label">FIND A TUTOR</span>
-            </button>
-          )}
           
           {/* Admin menu for owner and admin roles only */}
           {isAuthenticated && (userRole === 'owner' || userRole === 'admin') && (
@@ -310,7 +331,7 @@ function App() {
               parentId={parentId}
               impersonatingAs={impersonatingAs}
               onNavigateToTutors={() => {
-                setCurrentView('tutor');
+                setCurrentView('tutors');
                 resetTutorFlow();
               }}
             />
@@ -319,8 +340,33 @@ function App() {
           )
         )}
         
-        {currentView === 'resources' && (
-          <MathResources />
+        {currentView === 'debate' && (
+          <DebatePage />
+        )}
+        
+        {currentView === 'math' && (
+          <MathHub 
+            onNavigateToResources={() => setCurrentView('math')}
+            onNavigateToTutors={() => {
+              setTutorType('math');
+              setTutorView('grades');
+              setCurrentView('tutors');
+              setSelectedGrade('');
+            }}
+          />
+        )}
+        
+        {currentView === 'science' && (
+          <ScienceHub 
+            onNavigateToResources={() => setCurrentView('science')}
+            onNavigateToTutors={() => {
+              setTutorType('science');
+              setTutorView('science-subjects');
+              setCurrentView('tutors');
+              setSelectedGrade('');
+              setSelectedScienceSubject('');
+            }}
+          />
         )}
         
         {currentView === 'admin' && isAuthenticated && (
@@ -348,13 +394,36 @@ function App() {
           />
         )}
 
-        {currentView === 'tutor' && (
+        {currentView === 'tutors' && (
           <>
-            {tutorView === 'grades' && (
+            {tutorView === 'hub' && (
+              <FindTutorsHub
+                onTutorSelect={handleTutorSelect}
+                onNavigateToMath={() => {
+                  setTutorType('math');
+                  setTutorView('grades');
+                }}
+                onNavigateToScience={() => {
+                  setTutorType('science');
+                  setTutorView('science-subjects');
+                }}
+              />
+            )}
+            
+            {tutorView === 'grades' && tutorType === 'math' && (
               <MathGradeSelector onGradeSelect={handleGradeSelect} />
             )}
             
-            {tutorView === 'tutors' && (
+            {tutorView === 'science-subjects' && (
+              <ScienceSubjectSelector 
+                onSubjectSelect={(subject) => {
+                  setSelectedScienceSubject(subject);
+                  setTutorView('science-tutors');
+                }}
+              />
+            )}
+            
+            {tutorView === 'tutors' && tutorType === 'math' && (
               <TutorCards 
                 gradeLevel={selectedGrade}
                 onTutorSelect={handleTutorSelect}
@@ -362,10 +431,26 @@ function App() {
               />
             )}
             
+            {tutorView === 'science-tutors' && (
+              <ScienceTutorCards 
+                subject={selectedScienceSubject}
+                onTutorSelect={handleTutorSelect}
+                onBackToSubjects={() => setTutorView('science-subjects')}
+              />
+            )}
+            
             {tutorView === 'profile' && (
               <TutorProfile 
                 tutorId={selectedTutor}
-                onBackToTutors={() => setTutorView('tutors')}
+                onBackToTutors={() => {
+                  if (tutorType === 'science') {
+                    setTutorView('science-tutors');
+                  } else if (tutorType === 'math') {
+                    setTutorView('tutors');
+                  } else {
+                    setTutorView('hub');
+                  }
+                }}
                 onBookSession={handleBookSession}
               />
             )}

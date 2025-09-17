@@ -98,10 +98,28 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
       } else if (response.ok) {
         const data = await response.json();
         console.log('Fetched tutors data:', data);
+        // Map database fields to admin panel format
+        const mappedData = data.map((t: any) => ({
+          ...t,
+          name: t.display_name || t.name,
+          status: t.approval_status === 'pending' ? 'pending' : 
+                  (t.is_active ? 'active' : 'suspended'),
+          grade: Array.isArray(t.grades) ? t.grades.join(', ') : t.grade,
+          price_per_hour: t.hourly_rate || t.price_per_hour,
+          subjects: t.subjects ? (
+            t.subjects.math_topics ? 
+              [...(t.subjects.math_topics || []), ...(t.subjects.science_subjects || [])] :
+              t.subjects
+          ) : [],
+          rating: t.rating || 0,
+          reviews_count: t.total_sessions || t.reviews_count || 0,
+          description: t.bio || t.description
+        }));
+        
         // Separate tutors by status
-        const pending = data.filter((t: any) => t.status === 'pending');
-        const active = data.filter((t: any) => t.status === 'active');
-        const suspended = data.filter((t: any) => t.status === 'suspended');
+        const pending = mappedData.filter((t: any) => t.status === 'pending');
+        const active = mappedData.filter((t: any) => t.status === 'active');
+        const suspended = mappedData.filter((t: any) => t.status === 'suspended');
         console.log('Pending tutors:', pending);
         console.log('Active tutors:', active);
         console.log('Suspended tutors:', suspended);

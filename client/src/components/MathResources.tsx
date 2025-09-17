@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { MathTopicTutors } from './MathTopicTutors';
 import './MathResources.css';
 
 interface Resource {
@@ -1561,7 +1562,7 @@ export const MathResources: React.FC = () => {
   const [selectedGrade, setSelectedGrade] = useState<string>('elementary');
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
   const [selectedSubtopic, setSelectedSubtopic] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'worksheets' | 'videos' | 'practice' | 'quizzes' | 'history'>('worksheets');
+  const [activeTab, setActiveTab] = useState<'worksheets' | 'videos' | 'practice' | 'quizzes' | 'history' | 'tutors'>('worksheets');
   const [gradeData, setGradeData] = useState<GradeLevel[]>([]); // Use correct type
   const [resources, setResources] = useState<any>({
     worksheets: [],
@@ -1690,6 +1691,24 @@ export const MathResources: React.FC = () => {
           <div className="history-article">
             <ReactMarkdown>{history.content}</ReactMarkdown>
           </div>
+        </div>
+      );
+    }
+
+    if (activeTab === 'tutors') {
+      const topicName = currentGrade?.topics.find(t => 
+        t.subtopics.some(s => s.id === selectedSubtopic)
+      )?.name || '';
+      
+      return (
+        <div className="tutors-content">
+          <MathTopicTutors 
+            topicName={topicName}
+            onTutorSelect={(tutorId) => {
+              // Navigate to tutor profile - would need to be handled by parent component
+              console.log('Selected tutor:', tutorId);
+            }}
+          />
         </div>
       );
     }
@@ -1875,6 +1894,12 @@ export const MathResources: React.FC = () => {
                 onClick={() => setActiveTab('history')}
               >
                 📚 History
+              </button>
+              <button
+                className={`tab ${activeTab === 'tutors' ? 'active' : ''}`}
+                onClick={() => setActiveTab('tutors')}
+              >
+                🎓 Tutors
               </button>
             </div>
 
