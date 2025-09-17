@@ -147,12 +147,15 @@ const scienceTopics: Topic[] = [
 export const ScienceResources: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string>('physics');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
+  const [activeResourceType, setActiveResourceType] = useState<'all' | 'video' | 'worksheet' | 'experiment' | 'simulation'>('all');
 
   const currentTopic = scienceTopics.find(t => t.id === selectedTopic);
   
-  const filteredResources = currentTopic?.resources.filter(resource => 
-    selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade)
-  ) || [];
+  const filteredResources = currentTopic?.resources.filter(resource => {
+    const gradeMatch = selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade);
+    const typeMatch = activeResourceType === 'all' || resource.type === activeResourceType;
+    return gradeMatch && typeMatch;
+  }) || [];
 
   const getTypeIcon = (type: string) => {
     switch(type) {
@@ -192,8 +195,48 @@ export const ScienceResources: React.FC = () => {
             <option value="elementary">Elementary</option>
             <option value="middle">Middle School</option>
             <option value="high">High School</option>
+            <option value="college">College</option>
           </select>
         </div>
+      </div>
+
+      {/* Resource Type Tabs */}
+      <div className="resource-type-tabs">
+        <button
+          className={`resource-tab ${activeResourceType === 'all' ? 'active' : ''}`}
+          onClick={() => setActiveResourceType('all')}
+        >
+          <span className="tab-icon">📚</span>
+          <span className="tab-label">All Resources</span>
+        </button>
+        <button
+          className={`resource-tab ${activeResourceType === 'worksheet' ? 'active' : ''}`}
+          onClick={() => setActiveResourceType('worksheet')}
+        >
+          <span className="tab-icon">📝</span>
+          <span className="tab-label">Worksheets</span>
+        </button>
+        <button
+          className={`resource-tab ${activeResourceType === 'video' ? 'active' : ''}`}
+          onClick={() => setActiveResourceType('video')}
+        >
+          <span className="tab-icon">🎬</span>
+          <span className="tab-label">Videos</span>
+        </button>
+        <button
+          className={`resource-tab ${activeResourceType === 'experiment' ? 'active' : ''}`}
+          onClick={() => setActiveResourceType('experiment')}
+        >
+          <span className="tab-icon">🔬</span>
+          <span className="tab-label">Experiments</span>
+        </button>
+        <button
+          className={`resource-tab ${activeResourceType === 'simulation' ? 'active' : ''}`}
+          onClick={() => setActiveResourceType('simulation')}
+        >
+          <span className="tab-icon">💻</span>
+          <span className="tab-label">Simulations</span>
+        </button>
       </div>
 
       <div className="resources-grid">
