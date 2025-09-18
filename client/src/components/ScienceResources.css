@@ -40,11 +40,58 @@
   gap: 20px;
 }
 
+/* Topic Carousel Container */
+.topic-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Topic Navigation Buttons */
+.topic-nav {
+  background: #660B05;
+  color: #faf8f3;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(102, 11, 5, 0.15);
+}
+
+.topic-nav:hover:not(.disabled) {
+  background: #8b1107;
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(102, 11, 5, 0.25);
+}
+
+.topic-nav.disabled {
+  background: #d4a574;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Topic Filters */
 .topic-filters {
   display: flex;
-  justify-content: center;
   gap: 12px;
-  flex-wrap: wrap;
+  flex: 1;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.topic-filter {
+  flex: 1;
+  max-width: 200px;
+  min-width: 150px;
 }
 
 .topic-filter {
@@ -57,6 +104,7 @@
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.85rem;
@@ -202,9 +250,9 @@
 
 /* Resources Grid */
 .resources-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   max-width: 1200px;
   margin: 0 auto 48px;
   background: #faf8f3;
@@ -218,11 +266,16 @@
 .resource-card {
   background: #ffffff;
   border: 1px solid rgba(102, 11, 5, 0.08);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 25px;
+  padding: 16px 24px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  min-height: 80px;
 }
 
 .resource-card::before {
@@ -252,9 +305,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
   position: relative;
   z-index: 1;
+  flex: 0 0 auto;
 }
 
 .type-icon {
@@ -272,58 +325,67 @@
 .resource-card h3 {
   color: #660B05;
   font-family: 'Orbitron', monospace;
-  font-size: 1.2rem;
-  margin-bottom: 12px;
+  font-size: 1rem;
+  margin: 0;
   font-weight: 700;
   position: relative;
   z-index: 1;
+  flex: 0 0 auto;
+  min-width: 200px;
 }
 
 .resource-description {
   color: #3a3330;
   font-size: 0.85rem;
   line-height: 1.5;
-  margin-bottom: 16px;
   position: relative;
   z-index: 1;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .resource-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
   position: relative;
   z-index: 1;
+  flex: 0 0 auto;
+  gap: 8px;
 }
 
 .grade-level {
   background: #faf8f3;
   color: #660B05;
-  padding: 4px 12px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: 15px;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 1px solid rgba(102, 11, 5, 0.08);
+  white-space: nowrap;
 }
 
 .resource-button {
   background: #660B05;
   color: #faf8f3;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 8px 20px;
+  border-radius: 20px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
-  width: 100%;
   position: relative;
   z-index: 1;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .resource-button:hover {
@@ -436,12 +498,25 @@
     grid-template-columns: 1fr;
   }
   
+  .topic-carousel-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
   .topic-filters {
     flex-direction: column;
+    width: 100%;
   }
   
   .topic-filter {
     width: 100%;
     justify-content: center;
+  }
+  
+  .topic-nav {
+    position: static;
+    width: 100%;
+    height: 36px;
+    border-radius: 6px;
   }
 }

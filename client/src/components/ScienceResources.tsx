@@ -148,6 +148,7 @@ export const ScienceResources: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string>('physics');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
   const [activeResourceType, setActiveResourceType] = useState<'all' | 'video' | 'worksheet' | 'experiment' | 'simulation'>('all');
+  const [topicPage, setTopicPage] = useState<number>(0);
 
   const currentTopic = scienceTopics.find(t => t.id === selectedTopic);
   
@@ -156,6 +157,25 @@ export const ScienceResources: React.FC = () => {
     const typeMatch = activeResourceType === 'all' || resource.type === activeResourceType;
     return gradeMatch && typeMatch;
   }) || [];
+
+  // Topics carousel settings
+  const topicsPerPage = 4;
+  const totalTopicPages = Math.ceil(scienceTopics.length / topicsPerPage);
+  const topicStartIndex = topicPage * topicsPerPage;
+  const topicEndIndex = topicStartIndex + topicsPerPage;
+  const visibleTopics = scienceTopics.slice(topicStartIndex, topicEndIndex);
+
+  const handleNextTopicPage = () => {
+    if (topicPage < totalTopicPages - 1) {
+      setTopicPage(topicPage + 1);
+    }
+  };
+
+  const handlePrevTopicPage = () => {
+    if (topicPage > 0) {
+      setTopicPage(topicPage - 1);
+    }
+  };
 
   const getTypeIcon = (type: string) => {
     switch(type) {
@@ -175,17 +195,37 @@ export const ScienceResources: React.FC = () => {
       </div>
 
       <div className="filters-section">
-        <div className="topic-filters">
-          {scienceTopics.map(topic => (
-            <button
-              key={topic.id}
-              className={`topic-filter ${selectedTopic === topic.id ? 'active' : ''}`}
-              onClick={() => setSelectedTopic(topic.id)}
-            >
-              <span className="topic-icon">{topic.icon}</span>
-              <span className="topic-name">{topic.name}</span>
-            </button>
-          ))}
+        <div className="topic-carousel-container">
+          <button 
+            className={`topic-nav topic-nav-prev ${topicPage === 0 ? 'disabled' : ''}`}
+            onClick={handlePrevTopicPage}
+            disabled={topicPage === 0}
+            aria-label="Previous topics"
+          >
+            ‹
+          </button>
+          
+          <div className="topic-filters">
+            {visibleTopics.map(topic => (
+              <button
+                key={topic.id}
+                className={`topic-filter ${selectedTopic === topic.id ? 'active' : ''}`}
+                onClick={() => setSelectedTopic(topic.id)}
+              >
+                <span className="topic-icon">{topic.icon}</span>
+                <span className="topic-name">{topic.name}</span>
+              </button>
+            ))}
+          </div>
+          
+          <button 
+            className={`topic-nav topic-nav-next ${topicPage === totalTopicPages - 1 ? 'disabled' : ''}`}
+            onClick={handleNextTopicPage}
+            disabled={topicPage === totalTopicPages - 1}
+            aria-label="Next topics"
+          >
+            ›
+          </button>
         </div>
 
         <div className="grade-filter">
