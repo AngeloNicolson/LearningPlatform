@@ -8,6 +8,8 @@ interface Resource {
   url?: string;
   type: 'video' | 'worksheet' | 'experiment' | 'simulation';
   gradeLevel: string;
+  topicName?: string;
+  topicIcon?: string;
 }
 
 interface Topic {
@@ -145,21 +147,67 @@ const scienceTopics: Topic[] = [
 ];
 
 export const ScienceResources: React.FC = () => {
-  const [selectedTopic, setSelectedTopic] = useState<string>('physics');
+  const [selectedTopic, setSelectedTopic] = useState<string>('all');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
   const [activeResourceType, setActiveResourceType] = useState<'all' | 'video' | 'worksheet' | 'experiment' | 'simulation'>('all');
   const [topicPage, setTopicPage] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [visibleCount, setVisibleCount] = useState<number>(8);
 
-  const currentTopic = scienceTopics.find(t => t.id === selectedTopic);
+  // Simulate initial load
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Get all resources or filter by topic
+  const allResources = selectedTopic === 'all' 
+    ? scienceTopics.flatMap(topic => 
+        topic.resources.map(resource => ({ ...resource, topicName: topic.name, topicIcon: topic.icon }))
+      )
+    : scienceTopics.find(t => t.id === selectedTopic)?.resources.map(resource => 
+        ({ ...resource, topicName: scienceTopics.find(t => t.id === selectedTopic)?.name || '', 
+           topicIcon: scienceTopics.find(t => t.id === selectedTopic)?.icon || '' })
+      ) || [];
   
-  const filteredResources = currentTopic?.resources.filter(resource => {
+  const filteredResources = allResources.filter(resource => {
     const gradeMatch = selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade);
     const typeMatch = activeResourceType === 'all' || resource.type === activeResourceType;
-    return gradeMatch && typeMatch;
-  }) || [];
+    const searchMatch = searchQuery === '' || 
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (resource.topicName && resource.topicName.toLowerCase().includes(searchQuery.toLowerCase()));
+    return gradeMatch && typeMatch && searchMatch;
+  });
 
-  // Topics carousel settings
-  const topicsPerPage = 4;
+  // Infinite scroll implementation
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (isLoading) return;
+      
+      const scrollTop = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      
+      // Load more when user scrolls to 80% of the page
+      if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+        if (visibleCount < filteredResources.length) {
+          setVisibleCount(prev => Math.min(prev + 10, filteredResources.length));
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [visibleCount, filteredResources.length, isLoading]);
+
+  const visibleResources = filteredResources.slice(0, visibleCount);
+
+  // Topics carousel settings - Show all 4 topics since they fit with "All Topics"
+  const topicsPerPage = 4; // All 4 science topics fit perfectly
   const totalTopicPages = Math.ceil(scienceTopics.length / topicsPerPage);
   const topicStartIndex = topicPage * topicsPerPage;
   const topicEndIndex = topicStartIndex + topicsPerPage;
@@ -187,11 +235,41 @@ export const ScienceResources: React.FC = () => {
     }
   };
 
+  const handleResourceClick = (resource: Resource) => {
+    // Add to history with timestamp
+    const resourceWithTimestamp = { ...resource, viewedAt: new Date().toISOString() };
+    const savedHistory = localStorage.getItem('scienceResourcesHistory');
+    let history = [];
+    if (savedHistory) {
+      try {
+        history = JSON.parse(savedHistory);
+      } catch (e) {
+        console.error('Error parsing history:', e);
+      }
+    }
+    const newHistory = [resourceWithTimestamp, ...history.filter((r: any) => r.id !== resource.id)].slice(0, 50);
+    localStorage.setItem('scienceResourcesHistory', JSON.stringify(newHistory));
+  };
+
+
   return (
     <div className="science-resources">
       <div className="resources-header">
         <h1>Science Resources</h1>
         <p className="tagline">Explore interactive science content across multiple disciplines</p>
+      </div>
+
+      <div className="search-section">
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search science resources..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+          <span className="search-icon">🔍</span>
+        </div>
       </div>
 
       <div className="filters-section">
@@ -206,11 +284,24 @@ export const ScienceResources: React.FC = () => {
           </button>
           
           <div className="topic-filters">
+            <button
+              className={`topic-filter ${selectedTopic === 'all' ? 'active' : ''}`}
+              onClick={() => {
+                setSelectedTopic('all');
+                setVisibleCount(8);
+              }}
+            >
+              <span className="topic-icon">📚</span>
+              <span className="topic-name">All Topics</span>
+            </button>
             {visibleTopics.map(topic => (
               <button
                 key={topic.id}
                 className={`topic-filter ${selectedTopic === topic.id ? 'active' : ''}`}
-                onClick={() => setSelectedTopic(topic.id)}
+                onClick={() => {
+                  setSelectedTopic(topic.id);
+                  setVisibleCount(8);
+                }}
               >
                 <span className="topic-icon">{topic.icon}</span>
                 <span className="topic-name">{topic.name}</span>
@@ -228,15 +319,48 @@ export const ScienceResources: React.FC = () => {
           </button>
         </div>
 
-        <div className="grade-filter">
-          <label>Grade Level:</label>
-          <select value={selectedGrade} onChange={(e) => setSelectedGrade(e.target.value)}>
-            <option value="all">All Grades</option>
-            <option value="elementary">Elementary</option>
-            <option value="middle">Middle School</option>
-            <option value="high">High School</option>
-            <option value="college">College</option>
-          </select>
+        <div className="carousel-dots">
+          {Array.from({ length: totalTopicPages }).map((_, index) => (
+            <button
+              key={index}
+              className={`carousel-dot ${topicPage === index ? 'active' : ''}`}
+              onClick={() => setTopicPage(index)}
+              aria-label={`Go to page ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <div className="grade-filters">
+          <button
+            className={`grade-filter ${selectedGrade === 'all' ? 'active' : ''}`}
+            onClick={() => setSelectedGrade('all')}
+          >
+            All Grades
+          </button>
+          <button
+            className={`grade-filter ${selectedGrade === 'elementary' ? 'active' : ''}`}
+            onClick={() => setSelectedGrade('elementary')}
+          >
+            Elementary
+          </button>
+          <button
+            className={`grade-filter ${selectedGrade === 'middle' ? 'active' : ''}`}
+            onClick={() => setSelectedGrade('middle')}
+          >
+            Middle School
+          </button>
+          <button
+            className={`grade-filter ${selectedGrade === 'high' ? 'active' : ''}`}
+            onClick={() => setSelectedGrade('high')}
+          >
+            High School
+          </button>
+          <button
+            className={`grade-filter ${selectedGrade === 'college' ? 'active' : ''}`}
+            onClick={() => setSelectedGrade('college')}
+          >
+            College
+          </button>
         </div>
       </div>
 
@@ -280,29 +404,62 @@ export const ScienceResources: React.FC = () => {
       </div>
 
       <div className="resources-grid">
-        {filteredResources.length > 0 ? (
-          filteredResources.map(resource => (
-            <div key={resource.id} className="resource-card">
-              <div className="resource-type">
-                <span className="type-icon">{getTypeIcon(resource.type)}</span>
-                <span className="type-label">{resource.type}</span>
+        {isLoading ? (
+          // Loading skeleton
+          Array.from({ length: 8 }).map((_, index) => (
+            <div key={`skeleton-${index}`} className="resource-card skeleton">
+              <div className="skeleton-type"></div>
+              <div className="skeleton-title"></div>
+              <div className="skeleton-description"></div>
+              <div className="skeleton-meta">
+                <div className="skeleton-grade"></div>
+                <div className="skeleton-button"></div>
               </div>
-              <h3>{resource.title}</h3>
-              <p className="resource-description">{resource.description}</p>
-              <div className="resource-meta">
-                <span className="grade-level">{resource.gradeLevel}</span>
-              </div>
-              <button className="resource-button">
-                {resource.type === 'video' ? 'Watch' : 
-                 resource.type === 'worksheet' ? 'Download' : 
-                 resource.type === 'experiment' ? 'Start Lab' : 
-                 'Launch'}
-              </button>
             </div>
           ))
+        ) : filteredResources.length > 0 ? (
+          <>
+            {visibleResources.map(resource => (
+              <div key={resource.id} className="resource-card">
+                {resource.topicIcon && selectedTopic === 'all' && (
+                  <div className="resource-topic-badge">
+                    <span className="badge-icon">{resource.topicIcon}</span>
+                    <span className="badge-name">{resource.topicName}</span>
+                  </div>
+                )}
+                <div className="resource-type">
+                  <span className="type-icon">{getTypeIcon(resource.type)}</span>
+                  <span className="type-label">{resource.type}</span>
+                </div>
+                <h3>{resource.title}</h3>
+                <p className="resource-description">{resource.description}</p>
+                <div className="resource-meta">
+                  <span className="grade-level">{resource.gradeLevel}</span>
+                </div>
+                <button 
+                  className="resource-button"
+                  onClick={() => handleResourceClick(resource)}
+                >
+                  {resource.type === 'video' ? 'Watch' : 
+                   resource.type === 'worksheet' ? 'Download' : 
+                   resource.type === 'experiment' ? 'Start Lab' : 
+                   'Launch'}
+                </button>
+              </div>
+            ))}
+            {visibleCount < filteredResources.length && (
+              <div className="loading-more">
+                <div className="loading-spinner"></div>
+                <p>Loading more resources...</p>
+              </div>
+            )}
+          </>
         ) : (
           <div className="no-resources">
-            <p>No resources found for the selected filters.</p>
+            <p>No resources found matching your criteria.</p>
+            {searchQuery && (
+              <p className="search-hint">Try adjusting your search terms or filters.</p>
+            )}
           </div>
         )}
       </div>

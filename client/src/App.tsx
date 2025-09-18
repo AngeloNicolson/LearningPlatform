@@ -7,6 +7,7 @@ import { MathResources } from './components/MathResources';
 import { MathHub } from './components/MathHub';
 import { ScienceHub } from './components/ScienceHub';
 import { DebatePage } from './components/DebatePage';
+import { AmericanHistory } from './components/AmericanHistory';
 import { TopicWorkspace } from './components/TopicWorkspace';
 import { MathGradeSelector } from './components/MathGradeSelector';
 import { TutorCards } from './components/TutorCards';
@@ -31,7 +32,7 @@ function App() {
   const [userId, setUserId] = useState<number | null>(null);
   const [userName, setUserName] = useState<string>('');
   const [, setSelectedTopic] = useState<Topic | null>(null); // For future debates feature
-  const [currentView, setCurrentView] = useState<'home' | 'debate' | 'math' | 'science' | 'tutors' | 'dashboard' | 'login' | 'admin' | 'onboarding'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'debate' | 'math' | 'science' | 'history' | 'tutors' | 'dashboard' | 'login' | 'admin' | 'onboarding'>('home');
   const [, setWorkspaceTopicId] = useState<string | null>(null); // For future workspace feature
   const { getTopic, createTopic } = useTopics();
   const [workspaceTopic, setWorkspaceTopic] = useState<TopicMetadata | null>(null);
@@ -232,6 +233,13 @@ function App() {
             <span className="nav-label">SCIENCE</span>
           </button>
           <button 
+            className={currentView === 'history' ? 'nav-item active' : 'nav-item'}
+            onClick={() => setCurrentView('history')}
+          >
+            <span className="nav-icon">📜</span>
+            <span className="nav-label">HISTORY</span>
+          </button>
+          <button 
             className={currentView === 'tutors' ? 'nav-item active' : 'nav-item'}
             onClick={() => {
               setCurrentView('tutors');
@@ -367,6 +375,10 @@ function App() {
               setSelectedScienceSubject('');
             }}
           />
+        )}
+        
+        {currentView === 'history' && (
+          <AmericanHistory />
         )}
         
         {currentView === 'admin' && isAuthenticated && (
