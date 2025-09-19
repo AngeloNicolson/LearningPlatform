@@ -12,18 +12,18 @@
 }
 
 .leaderboard-header h2 {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', 'Share Tech Mono', monospace;
   font-size: 2rem;
   font-weight: 900;
   margin-bottom: 8px;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(102, 11, 5, 0.3);
+  text-shadow: 0 0 10px var(--theme-shadow-primary);
   text-transform: uppercase;
 }
 
 .leaderboard-header p {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.9rem;
   margin: 0;
   max-width: 600px;
@@ -41,15 +41,15 @@
 }
 
 .debater-card {
-  background: white;
-  border: 2px solid rgba(102, 11, 5, 0.1);
+  background: var(--theme-background-paper);
+  border: 2px solid var(--theme-border-light);
   border-radius: 12px;
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 20px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.04);
+  box-shadow: 0 2px 8px var(--theme-shadow-light);
   position: relative;
   overflow: hidden;
 }
@@ -61,7 +61,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.03), transparent);
+  background: linear-gradient(90deg, transparent, var(--theme-background-hover), transparent);
   transition: left 0.6s ease;
 }
 
@@ -70,8 +70,8 @@
 }
 
 .debater-card:hover {
-  border-color: #660B05;
-  box-shadow: 0 6px 20px rgba(102, 11, 5, 0.1);
+  border-color: var(--theme-primary);
+  box-shadow: 0 6px 20px var(--theme-shadow-medium);
   transform: translateY(-2px);
 }
 
@@ -89,31 +89,31 @@
   font-family: 'Orbitron', monospace;
   font-weight: 900;
   font-size: 1rem;
-  background: rgba(102, 11, 5, 0.05);
-  color: #660B05;
-  border: 2px solid rgba(102, 11, 5, 0.15);
+  background: var(--theme-background-subtle);
+  color: var(--theme-primary);
+  border: 2px solid var(--theme-border-medium);
 }
 
 .rank-badge.gold {
-  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
-  color: #f8f6f0;
-  border-color: #a88a2a;
-  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
-  text-shadow: 0 0 6px rgba(184, 148, 31, 0.5);
+  background: linear-gradient(135deg, var(--theme-accent-gold) 0%, var(--theme-accent-gold-dark) 100%);
+  color: var(--theme-text-inverse);
+  border-color: var(--theme-accent-gold-border);
+  box-shadow: 0 4px 10px var(--theme-shadow-gold);
+  text-shadow: 0 0 6px var(--theme-shadow-gold-text);
 }
 
 .rank-badge.silver {
-  background: linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%);
-  color: #2c2419;
-  border-color: #909090;
-  box-shadow: 0 4px 8px rgba(168, 168, 168, 0.3);
+  background: linear-gradient(135deg, var(--theme-accent-silver) 0%, var(--theme-accent-silver-dark) 100%);
+  color: var(--theme-text-primary);
+  border-color: var(--theme-accent-silver-border);
+  box-shadow: 0 4px 8px var(--theme-shadow-silver);
 }
 
 .rank-badge.bronze {
-  background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%);
-  color: #f8f6f0;
-  border-color: #8b4513;
-  box-shadow: 0 4px 8px rgba(205, 127, 50, 0.3);
+  background: linear-gradient(135deg, var(--theme-accent-bronze) 0%, var(--theme-accent-bronze-dark) 100%);
+  color: var(--theme-text-inverse);
+  border-color: var(--theme-accent-bronze-border);
+  box-shadow: 0 4px 8px var(--theme-shadow-bronze);
 }
 
 .debater-info {
@@ -130,7 +130,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--theme-background-paper);
   font-weight: 700;
   font-size: 1.25rem;
   flex-shrink: 0;
@@ -149,7 +149,7 @@
 }
 
 .debater-name {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-size: 1rem;
   font-weight: 700;
@@ -162,9 +162,9 @@
   font-size: 0.65rem;
   font-weight: 600;
   padding: 3px 8px;
-  background: rgba(102, 11, 5, 0.08);
-  color: #660B05;
-  border: 1px solid rgba(102, 11, 5, 0.2);
+  background: var(--theme-background-muted);
+  color: var(--theme-primary);
+  border: 1px solid var(--theme-border-medium);
   border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -183,7 +183,7 @@
 }
 
 .stat-value {
-  color: #2c2419;
+  color: var(--theme-text-primary);
   font-family: 'Orbitron', monospace;
   font-size: 1rem;
   font-weight: 700;
@@ -191,7 +191,7 @@
 }
 
 .stat-label {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.65rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -204,7 +204,7 @@
 }
 
 .activity-text {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -229,48 +229,48 @@
 }
 
 .view-btn {
-  background: white;
-  color: #660B05;
-  border-color: rgba(102, 11, 5, 0.2);
+  background: var(--theme-background-paper);
+  color: var(--theme-primary);
+  border-color: var(--theme-border-light);
   font-family: 'Share Tech Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .view-btn:hover {
-  background: rgba(102, 11, 5, 0.02);
-  color: #440703;
-  border-color: #660B05;
-  box-shadow: 0 3px 8px rgba(102, 11, 5, 0.1);
+  background: var(--theme-background-hover);
+  color: var(--theme-primary-dark);
+  border-color: var(--theme-primary);
+  box-shadow: 0 3px 8px var(--theme-shadow-medium);
 }
 
 .challenge-btn {
-  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
-  color: #f8f6f0;
-  border-color: #8b1009;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  color: var(--theme-text-inverse);
+  border-color: var(--theme-primary-light);
   font-family: 'Share Tech Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 3px 8px rgba(102, 11, 5, 0.15);
+  box-shadow: 0 3px 8px var(--theme-shadow-primary);
 }
 
 .challenge-btn:hover {
-  background: linear-gradient(135deg, #7d0e06 0%, #940f08 100%);
-  border-color: #a01109;
+  background: linear-gradient(135deg, var(--theme-primary-dark) 0%, var(--theme-primary-light) 100%);
+  border-color: var(--theme-primary-light);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+  box-shadow: 0 4px 12px var(--theme-shadow-primary);
 }
 
 .leaderboard-footer {
   text-align: center;
   padding-top: 24px;
-  border-top: 2px solid rgba(102, 11, 5, 0.1);
+  border-top: 2px solid var(--theme-border-light);
 }
 
 .view-all-btn {
-  background: rgba(102, 11, 5, 0.05);
-  color: #660B05;
-  border: 1px solid rgba(102, 11, 5, 0.2);
+  background: var(--theme-background-subtle);
+  color: var(--theme-primary);
+  border: 1px solid var(--theme-border-light);
   padding: 12px 24px;
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
@@ -284,15 +284,15 @@
 }
 
 .view-all-btn:hover {
-  background: rgba(102, 11, 5, 0.08);
-  border-color: #660B05;
-  color: #440703;
-  box-shadow: 0 3px 10px rgba(102, 11, 5, 0.1);
+  background: var(--theme-background-muted);
+  border-color: var(--theme-primary);
+  color: var(--theme-primary-dark);
+  box-shadow: 0 3px 10px var(--theme-shadow-medium);
   transform: translateY(-1px);
 }
 
 .rankings-note {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.75rem;
   margin: 0;
   max-width: 500px;

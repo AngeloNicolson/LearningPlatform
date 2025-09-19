@@ -3,7 +3,7 @@
 .subject-hub {
   min-height: 100vh;
   padding: 2rem;
-  background: #faf8f3;
+  background: var(--theme-background-main);
   font-family: 'Share Tech Mono', 'Courier New', monospace;
 }
 
@@ -14,18 +14,18 @@
 }
 
 .hub-header h1 {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', 'Share Tech Mono', monospace;
   font-size: 2.8rem;
   font-weight: 900;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 15px rgba(102, 11, 5, 0.3);
+  text-shadow: 0 0 15px var(--theme-shadow-primary);
 }
 
 .hub-header p {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -35,9 +35,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: #faf8f3;
-  border: 1px solid rgba(102, 11, 5, 0.15);
-  color: #660B05;
+  background: var(--theme-background-main);
+  border: 1px solid var(--theme-border-light);
+  color: var(--theme-primary);
   padding: 0.75rem 1.5rem;
   font-size: 0.9rem;
   cursor: pointer;
@@ -49,10 +49,10 @@
 }
 
 .back-button:hover {
-  background: #ffffff;
-  border-color: #660B05;
+  background: var(--theme-background-paper);
+  border-color: var(--theme-primary);
   transform: translateX(-3px);
-  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.1);
+  box-shadow: 0 2px 8px var(--theme-shadow-light);
 }
 
 .hub-sections {
@@ -64,15 +64,15 @@
 }
 
 .hub-card {
-  background: #ffffff;
-  border: 1px solid rgba(102, 11, 5, 0.08);
+  background: var(--theme-background-paper);
+  border: 1px solid var(--theme-border-very-light);
   border-radius: 12px;
   padding: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 4px var(--theme-shadow-minimal);
 }
 
 .hub-card::before {
@@ -82,7 +82,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(250, 248, 243, 0.5) 0%, transparent 100%);
+  background: linear-gradient(135deg, var(--theme-background-main-alpha) 0%, transparent 100%);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -90,9 +90,9 @@
 
 .hub-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.08);
-  border-color: rgba(102, 11, 5, 0.2);
-  background: #faf8f3;
+  box-shadow: 0 4px 12px var(--theme-shadow-light);
+  border-color: var(--theme-border-medium);
+  background: var(--theme-background-main);
 }
 
 .hub-card:hover::before {
@@ -106,7 +106,7 @@
 }
 
 .hub-card h2 {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-size: 1.6rem;
   margin-bottom: 1rem;
@@ -116,7 +116,7 @@
 }
 
 .hub-card p {
-  color: #3a3330;
+  color: var(--theme-text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.6;
   font-size: 0.9rem;
@@ -129,7 +129,7 @@
 }
 
 .feature-list li {
-  color: #8b7355;
+  color: var(--theme-secondary);
   padding: 0.5rem 0;
   padding-left: 1.5rem;
   position: relative;
@@ -138,14 +138,14 @@
 
 .feature-list li::before {
   content: '▸';
-  color: #660B05;
+  color: var(--theme-primary);
   position: absolute;
   left: 0;
 }
 
 .hub-button {
-  background: #660B05;
-  color: #faf8f3;
+  background: var(--theme-primary);
+  color: var(--theme-background-main);
   border: none;
   padding: 1rem 2rem;
   font-size: 0.9rem;
@@ -168,7 +168,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(250, 248, 243, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, var(--theme-background-main-light-alpha), transparent);
   transition: left 0.3s ease;
 }
 
@@ -177,9 +177,9 @@
 }
 
 .hub-button:hover {
-  background: #8b1107;
+  background: var(--theme-primary-dark);
   transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+  box-shadow: 0 4px 12px var(--theme-shadow-medium);
 }
 
 .hub-stats {
@@ -187,8 +187,8 @@
   justify-content: center;
   gap: 4rem;
   padding: 2rem;
-  background: #ffffff;
-  border: 1px solid rgba(102, 11, 5, 0.08);
+  background: var(--theme-background-paper);
+  border: 1px solid var(--theme-border-very-light);
   border-radius: 12px;
   margin-top: 3rem;
 }
@@ -202,13 +202,13 @@
   font-family: 'Orbitron', monospace;
   font-size: 2.2rem;
   font-weight: 900;
-  color: #660B05;
+  color: var(--theme-primary);
   margin-bottom: 0.5rem;
-  text-shadow: 0 1px 2px rgba(102, 11, 5, 0.1);
+  text-shadow: 0 1px 2px var(--theme-shadow-light);
 }
 
 .stat-label {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;

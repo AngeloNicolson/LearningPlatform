@@ -1,0 +1,166 @@
+/* Theme CSS Variables - Applied dynamically by ThemeContext */
+:root {
+  /* Primary colors */
+  --theme-primary: #660B05;
+  --theme-primary-light: #8b1009;
+  --theme-primary-dark: #4a0804;
+  --theme-primary-alpha-10: rgba(102, 11, 5, 0.1);
+  --theme-primary-alpha-20: rgba(102, 11, 5, 0.2);
+  
+  /* Secondary colors */
+  --theme-secondary: #8b7355;
+  --theme-secondary-light: #a08870;
+  --theme-secondary-dark: #6b5840;
+  
+  /* Background colors */
+  --theme-background-main: #faf8f3;
+  --theme-background-paper: #ffffff;
+  --theme-background-sidebar: #ffffff;
+  --theme-background-card: #ffffff;
+  --theme-background-hover: #f5f3ee;
+  --theme-background-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Text colors */
+  --theme-text-primary: #3a3330;
+  --theme-text-secondary: #660B05;
+  --theme-text-muted: #8b7355;
+  --theme-text-inverse: #ffffff;
+  --theme-text-link: #007bff;
+  
+  /* Border colors */
+  --theme-border-light: rgba(102, 11, 5, 0.08);
+  --theme-border-medium: rgba(102, 11, 5, 0.15);
+  --theme-border-dark: rgba(102, 11, 5, 0.3);
+  --theme-border-focus: #660B05;
+  
+  /* Status colors */
+  --theme-success: #28a745;
+  --theme-success-light: #5dd175;
+  --theme-success-dark: #1e7e34;
+  --theme-warning: #ffc107;
+  --theme-warning-light: #ffcd38;
+  --theme-warning-dark: #d39e00;
+  --theme-error: #dc3545;
+  --theme-error-light: #e4606d;
+  --theme-error-dark: #bd2130;
+  --theme-info: #17a2b8;
+  --theme-info-light: #3ab6cc;
+  --theme-info-dark: #117a8b;
+  
+  /* Shadow colors */
+  --theme-shadow-light: rgba(0, 0, 0, 0.02);
+  --theme-shadow-medium: rgba(102, 11, 5, 0.08);
+  --theme-shadow-dark: rgba(102, 11, 5, 0.25);
+  
+  /* Special colors */
+  --theme-accent: #007bff;
+  --theme-highlight: rgba(102, 11, 5, 0.06);
+  --theme-selection: rgba(102, 11, 5, 0.2);
+  --theme-scrollbar: #f1f1f1;
+  --theme-scrollbar-thumb: #c1c1c1;
+  
+  /* Theme metadata */
+  --theme-name: "Classic Burgundy";
+  --theme-is-dark: 0;
+}
+
+/* Utility classes using theme variables */
+.bg-primary { background-color: var(--theme-primary); }
+.bg-secondary { background-color: var(--theme-secondary); }
+.bg-main { background-color: var(--theme-background-main); }
+.bg-paper { background-color: var(--theme-background-paper); }
+.bg-card { background-color: var(--theme-background-card); }
+
+.text-primary { color: var(--theme-text-primary); }
+.text-secondary { color: var(--theme-text-secondary); }
+.text-muted { color: var(--theme-text-muted); }
+.text-inverse { color: var(--theme-text-inverse); }
+.text-link { color: var(--theme-text-link); }
+
+.border-light { border-color: var(--theme-border-light); }
+.border-medium { border-color: var(--theme-border-medium); }
+.border-dark { border-color: var(--theme-border-dark); }
+
+.text-success { color: var(--theme-success); }
+.text-warning { color: var(--theme-warning); }
+.text-error { color: var(--theme-error); }
+.text-info { color: var(--theme-info); }
+
+.bg-success { background-color: var(--theme-success); }
+.bg-warning { background-color: var(--theme-warning); }
+.bg-error { background-color: var(--theme-error); }
+.bg-info { background-color: var(--theme-info); }
+
+/* Shadow utilities */
+.shadow-sm { box-shadow: 0 1px 3px var(--theme-shadow-light); }
+.shadow-md { box-shadow: 0 4px 12px var(--theme-shadow-medium); }
+.shadow-lg { box-shadow: 0 8px 24px var(--theme-shadow-dark); }
+
+/* Hover utilities */
+.hover-bg:hover { background-color: var(--theme-background-hover); }
+.hover-primary:hover { background-color: var(--theme-primary-light); }
+
+/* Focus utilities */
+.focus-border:focus { 
+  border-color: var(--theme-border-focus);
+  outline: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-scrollbar);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-text-muted);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--theme-selection);
+  color: var(--theme-text-primary);
+}
+
+/* Dark mode specific adjustments */
+.theme-dark {
+  color-scheme: dark;
+}
+
+.theme-dark input,
+.theme-dark textarea,
+.theme-dark select {
+  color-scheme: dark;
+}
+
+/* High contrast mode specific adjustments */
+.theme-highContrast * {
+  font-weight: 500;
+}
+
+.theme-highContrast button,
+.theme-highContrast input,
+.theme-highContrast select,
+.theme-highContrast textarea {
+  border-width: 2px !important;
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease;
+}
+
+/* Disable transitions during theme switch for performance */
+.theme-switching * {
+  transition: none !important;
+}

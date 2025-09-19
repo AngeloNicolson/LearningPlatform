@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '../contexts/NavigationContext';
 import './AdminPanel.css';
 
 interface AdminPanelProps {
@@ -7,7 +8,15 @@ interface AdminPanelProps {
 }
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'resources'>('overview');
+  const navigation = useNavigation();
+  const initialTab = (navigation.currentState.adminTab as 'overview' | 'tutors' | 'articles' | 'users' | 'resources') || 'overview';
+  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'resources'>(initialTab);
+
+  // Update navigation when tab changes
+  const handleTabChange = (tab: 'overview' | 'tutors' | 'articles' | 'users' | 'resources') => {
+    setActiveTab(tab);
+    navigation.navigate({ adminTab: tab });
+  };
   const [editingArticle, setEditingArticle] = useState<any>(null);
   const [articleForm, setArticleForm] = useState({
     title: '',
@@ -372,32 +381,32 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
       <div className="admin-tabs">
         <button 
           className={activeTab === 'overview' ? 'tab active' : 'tab'}
-          onClick={() => setActiveTab('overview')}
+          onClick={() => handleTabChange('overview')}
         >
           Overview
         </button>
         <button 
           className={activeTab === 'tutors' ? 'tab active' : 'tab'}
-          onClick={() => setActiveTab('tutors')}
+          onClick={() => handleTabChange('tutors')}
         >
           Manage Tutors
         </button>
         <button 
           className={activeTab === 'articles' ? 'tab active' : 'tab'}
-          onClick={() => setActiveTab('articles')}
+          onClick={() => handleTabChange('articles')}
         >
           Articles
         </button>
         <button 
           className={activeTab === 'resources' ? 'tab active' : 'tab'}
-          onClick={() => setActiveTab('resources')}
+          onClick={() => handleTabChange('resources')}
         >
           Math Resources
         </button>
         {isOwner && (
           <button 
             className={activeTab === 'users' ? 'tab active' : 'tab'}
-            onClick={() => setActiveTab('users')}
+            onClick={() => handleTabChange('users')}
           >
             Users
           </button>

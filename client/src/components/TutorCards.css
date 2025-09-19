@@ -12,9 +12,9 @@
 }
 
 .back-button {
-  background: rgba(102, 11, 5, 0.05);
-  border: 1px solid rgba(102, 11, 5, 0.2);
-  color: #660B05;
+  background: var(--theme-highlight);
+  border: 1px solid var(--theme-border-medium);
+  color: var(--theme-primary);
   padding: 8px 16px;
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
@@ -31,14 +31,14 @@
 }
 
 .back-button:hover {
-  background: rgba(102, 11, 5, 0.08);
-  color: #440703;
-  border-color: #660B05;
-  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.1);
+  background: var(--theme-border-light);
+  color: var(--theme-primary-dark);
+  border-color: var(--theme-primary);
+  box-shadow: 0 2px 8px var(--theme-border-light);
 }
 
 .tutor-cards-header h2 {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', 'Share Tech Mono', monospace;
   font-size: 2rem;
   font-weight: 900;
@@ -49,7 +49,7 @@
 }
 
 .tutor-cards-header p {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.9rem;
   margin: 0;
   text-transform: uppercase;
@@ -63,13 +63,13 @@
 }
 
 .tutor-card {
-  background: white;
-  border: 2px solid rgba(102, 11, 5, 0.1);
+  background: var(--theme-background-paper);
+  border: 2px solid var(--theme-border-light);
   border-radius: 12px;
   padding: 24px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.04);
+  box-shadow: 0 2px 8px var(--theme-shadow-light);
   position: relative;
   overflow: hidden;
 }
@@ -81,7 +81,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.03), transparent);
+  background: linear-gradient(90deg, transparent, var(--theme-highlight), transparent);
   transition: left 0.6s ease;
 }
 
@@ -91,8 +91,8 @@
 
 .tutor-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(102, 11, 5, 0.1);
-  border-color: #660B05;
+  box-shadow: 0 6px 20px var(--theme-border-light);
+  border-color: var(--theme-primary);
 }
 
 .tutor-card-header {
@@ -109,9 +109,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(102, 11, 5, 0.03) 0%, rgba(102, 11, 5, 0.08) 100%);
+  background: linear-gradient(135deg, var(--theme-highlight) 0%, var(--theme-border-light) 100%);
   border-radius: 50%;
-  border: 2px solid rgba(102, 11, 5, 0.15);
+  border: 2px solid var(--theme-border-medium);
 }
 
 .availability-indicator {
@@ -127,15 +127,15 @@
 }
 
 .bg-green-500 {
-  background-color: #2d7d32;
+  background-color: var(--theme-success-dark);
 }
 
 .bg-yellow-500 {
-  background-color: #d4af37;
+  background-color: var(--theme-warning);
 }
 
 .bg-gray-400 {
-  background-color: #8b7355;
+  background-color: var(--theme-secondary);
 }
 
 .availability-text {
@@ -146,15 +146,15 @@
 }
 
 .text-green-600 {
-  color: #2d7d32;
+  color: var(--theme-success-dark);
 }
 
 .text-yellow-600 {
-  color: #b8941f;
+  color: var(--theme-warning-dark);
 }
 
 .text-gray-600 {
-  color: #8b7355;
+  color: var(--theme-secondary);
 }
 
 .tutor-info {
@@ -162,7 +162,7 @@
 }
 
 .tutor-name {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-size: 1.1rem;
   font-weight: 700;
@@ -172,7 +172,7 @@
 }
 
 .tutor-education {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.75rem;
   font-weight: 600;
   margin: 0 0 4px 0;
@@ -181,7 +181,7 @@
 }
 
 .tutor-experience {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.7rem;
   margin: 0 0 12px 0;
   text-transform: uppercase;
@@ -213,7 +213,7 @@
 }
 
 .rating-text {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -224,7 +224,7 @@
 }
 
 .specialties-label {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -240,10 +240,10 @@
 }
 
 .specialty-tag {
-  background: rgba(102, 11, 5, 0.05);
-  color: #660B05;
+  background: var(--theme-highlight);
+  color: var(--theme-primary);
   padding: 4px 8px;
-  border: 1px solid rgba(102, 11, 5, 0.15);
+  border: 1px solid var(--theme-border-medium);
   border-radius: 6px;
   font-size: 0.65rem;
   font-weight: 600;
@@ -252,9 +252,9 @@
 }
 
 .specialty-tag.more {
-  background: rgba(139, 115, 85, 0.1);
-  color: #8b7355;
-  border: 1px solid rgba(139, 115, 85, 0.2);
+  background: var(--theme-highlight);
+  color: var(--theme-secondary);
+  border: 1px solid var(--theme-border-medium);
 }
 
 .tutor-languages {
@@ -265,7 +265,7 @@
 }
 
 .languages-label {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -273,7 +273,7 @@
 }
 
 .languages-text {
-  color: #2c2419;
+  color: var(--theme-text-primary);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -284,7 +284,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 16px;
-  border-top: 1px solid rgba(102, 11, 5, 0.1);
+  border-top: 1px solid var(--theme-border-light);
   position: relative;
   z-index: 1;
 }
@@ -296,24 +296,24 @@
 }
 
 .price {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-size: 1.4rem;
   font-weight: 700;
-  text-shadow: 0 0 6px rgba(102, 11, 5, 0.2);
+  text-shadow: 0 0 6px var(--theme-border-medium);
 }
 
 .price-unit {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
 .view-profile-btn {
-  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
-  color: #f8f6f0;
-  border: 1px solid #8b1009;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
+  color: var(--theme-text-inverse);
+  border: 1px solid var(--theme-primary-light);
   padding: 10px 20px;
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
@@ -323,13 +323,13 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 3px 8px rgba(102, 11, 5, 0.15);
+  box-shadow: 0 3px 8px var(--theme-border-medium);
 }
 
 .view-profile-btn:hover {
-  background: linear-gradient(135deg, #7d0e06 0%, #940f08 100%);
+  background: linear-gradient(135deg, var(--theme-primary-light) 0%, var(--theme-primary-dark) 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.2);
+  box-shadow: 0 4px 12px var(--theme-border-medium);
 }
 
 .view-profile-btn:active {

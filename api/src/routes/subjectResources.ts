@@ -64,10 +64,10 @@ router.get('/:subject/resources', async (req, res) => {
     query += ` ORDER BY display_order, created_at DESC`;
 
     const result = await pool.query(query, params);
-    res.json(result.rows);
+    return res.json(result.rows);
   } catch (error) {
     console.error('Error fetching resources:', error);
-    res.status(500).json({ error: 'Failed to fetch resources' });
+    return res.status(500).json({ error: 'Failed to fetch resources' });
   }
 });
 
@@ -108,7 +108,7 @@ router.get('/:subject/topics', async (req, res) => {
 
 // Admin endpoints - require authentication
 router.use(requireAuth);
-router.use(requireRole(['admin', 'owner']));
+router.use(requireRole('admin', 'owner'));
 
 // Create a new resource
 router.post('/:subject/resources', async (req, res) => {
@@ -136,13 +136,13 @@ router.post('/:subject/resources', async (req, res) => {
       era || null, grade_level || null
     ]);
     
-    res.json({
+    return res.json({
       message: 'Resource created successfully',
       resource: result.rows[0]
     });
   } catch (error) {
     console.error('Error creating resource:', error);
-    res.status(500).json({ error: 'Failed to create resource' });
+    return res.status(500).json({ error: 'Failed to create resource' });
   }
 });
 
@@ -169,13 +169,13 @@ router.put('/resources/:id', async (req, res) => {
       return res.status(404).json({ error: 'Resource not found' });
     }
     
-    res.json({ 
+    return res.json({ 
       message: 'Resource updated successfully',
       resource: result.rows[0]
     });
   } catch (error) {
     console.error('Error updating resource:', error);
-    res.status(500).json({ error: 'Failed to update resource' });
+    return res.status(500).json({ error: 'Failed to update resource' });
   }
 });
 
@@ -193,10 +193,10 @@ router.delete('/resources/:id', async (req, res) => {
       return res.status(404).json({ error: 'Resource not found' });
     }
     
-    res.json({ message: 'Resource deleted successfully' });
+    return res.json({ message: 'Resource deleted successfully' });
   } catch (error) {
     console.error('Error deleting resource:', error);
-    res.status(500).json({ error: 'Failed to delete resource' });
+    return res.status(500).json({ error: 'Failed to delete resource' });
   }
 });
 
@@ -231,7 +231,7 @@ router.post('/bulk-insert', async (req, res) => {
       }
       
       await client.query('COMMIT');
-      res.json({ 
+      return res.json({ 
         message: 'Resources inserted successfully',
         count: resources.length 
       });
@@ -243,7 +243,7 @@ router.post('/bulk-insert', async (req, res) => {
     }
   } catch (error) {
     console.error('Error bulk inserting resources:', error);
-    res.status(500).json({ error: 'Failed to insert resources' });
+    return res.status(500).json({ error: 'Failed to insert resources' });
   }
 });
 

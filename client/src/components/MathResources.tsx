@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '../contexts/NavigationContext';
 import './MathResources.css';
 
 interface Resource {
@@ -6,7 +7,7 @@ interface Resource {
   title: string;
   description: string;
   url?: string;
-  type: 'video' | 'worksheet' | 'practice' | 'quiz' | 'game';
+  type: 'video' | 'worksheet' | 'quiz' | 'game';
   gradeLevel: string;
   topicName?: string;
   topicIcon?: string;
@@ -30,7 +31,7 @@ const mathTopics: Topic[] = [
         title: 'Single Digit Addition',
         description: 'Master adding numbers from 0-9',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Elementary'
       },
       {
@@ -68,9 +69,9 @@ const mathTopics: Topic[] = [
       {
         id: 'arith-6',
         title: 'Order of Operations',
-        description: 'Master PEMDAS with practice problems',
+        description: 'Master PEMDAS with interactive worksheets',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Middle School'
       },
       {
@@ -117,7 +118,7 @@ const mathTopics: Topic[] = [
         title: 'Converting Fractions to Decimals',
         description: 'Learn the conversion process',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Elementary'
       },
       {
@@ -133,7 +134,7 @@ const mathTopics: Topic[] = [
         title: 'Multiplying and Dividing Fractions',
         description: 'Advanced fraction operations',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Middle School'
       },
       {
@@ -172,7 +173,7 @@ const mathTopics: Topic[] = [
         title: 'Simplifying Expressions',
         description: 'Combine like terms and simplify',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Middle School'
       },
       {
@@ -204,7 +205,7 @@ const mathTopics: Topic[] = [
         title: 'Systems of Equations',
         description: 'Solve multiple equations simultaneously',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'High School'
       },
       {
@@ -220,7 +221,7 @@ const mathTopics: Topic[] = [
         title: 'Factoring Polynomials',
         description: 'Factor and solve polynomial equations',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'High School'
       },
       {
@@ -259,7 +260,7 @@ const mathTopics: Topic[] = [
         title: 'Pattern Recognition',
         description: 'Find and create patterns',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Elementary'
       },
       {
@@ -275,7 +276,7 @@ const mathTopics: Topic[] = [
         title: 'Triangle Properties',
         description: 'Sum of angles and triangle types',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Middle School'
       },
       {
@@ -323,7 +324,7 @@ const mathTopics: Topic[] = [
         title: 'Coordinate Geometry',
         description: 'Distance, midpoint, and slope formulas',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'High School'
       }
     ]
@@ -346,7 +347,7 @@ const mathTopics: Topic[] = [
         title: 'Right Triangle Problems',
         description: 'Solve triangles using trig ratios',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'High School'
       },
       {
@@ -378,7 +379,7 @@ const mathTopics: Topic[] = [
         title: 'Inverse Trig Functions',
         description: 'Arcsin, arccos, and arctan',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'High School'
       },
       {
@@ -425,7 +426,7 @@ const mathTopics: Topic[] = [
         title: 'Differentiation Rules',
         description: 'Chain rule, product rule, quotient rule',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'College'
       },
       {
@@ -457,7 +458,7 @@ const mathTopics: Topic[] = [
         title: 'Definite Integrals',
         description: 'Riemann sums and FTC',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'College'
       },
       {
@@ -496,7 +497,7 @@ const mathTopics: Topic[] = [
         title: 'Reading Charts and Tables',
         description: 'Interpret data presentations',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Elementary'
       },
       {
@@ -520,7 +521,7 @@ const mathTopics: Topic[] = [
         title: 'Box and Whisker Plots',
         description: 'Visualizing data distribution',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'Middle School'
       },
       {
@@ -575,7 +576,7 @@ const mathTopics: Topic[] = [
         title: 'Gaussian Elimination',
         description: 'Solving systems of equations',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'College'
       },
       {
@@ -599,7 +600,7 @@ const mathTopics: Topic[] = [
         title: 'Eigenvalues and Eigenvectors',
         description: 'Finding and using eigenvalues',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'College'
       },
       {
@@ -630,7 +631,7 @@ const mathTopics: Topic[] = [
         title: 'Proof Techniques',
         description: 'Direct, contradiction, and induction',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'College'
       },
       {
@@ -654,7 +655,7 @@ const mathTopics: Topic[] = [
         title: 'Trees and Algorithms',
         description: 'MST algorithms and applications',
         url: '#',
-        type: 'practice',
+        type: 'worksheet',
         gradeLevel: 'College'
       },
       {
@@ -670,13 +671,27 @@ const mathTopics: Topic[] = [
 ];
 
 export const MathResources: React.FC = () => {
-  const [selectedTopic, setSelectedTopic] = useState<string>('all');
+  const navigation = useNavigation();
+  const [selectedTopic, setSelectedTopic] = useState<string>(navigation.currentState.mathTab || 'all');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
-  const [activeResourceType, setActiveResourceType] = useState<'all' | 'video' | 'worksheet' | 'practice' | 'quiz' | 'game'>('all');
+  const [activeResourceType, setActiveResourceType] = useState<'all' | 'video' | 'worksheet' | 'quiz' | 'game'>('all');
   const [topicPage, setTopicPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [visibleCount, setVisibleCount] = useState<number>(8);
+
+  // Sync with navigation state
+  useEffect(() => {
+    if (navigation.currentState.mathTab) {
+      setSelectedTopic(navigation.currentState.mathTab);
+    }
+  }, [navigation.currentState.mathTab]);
+
+  // Update navigation when topic changes
+  const handleTopicChange = (topic: string) => {
+    setSelectedTopic(topic);
+    navigation.navigate({ mathTab: topic });
+  };
 
   // Simulate initial load
   React.useEffect(() => {
@@ -752,7 +767,6 @@ export const MathResources: React.FC = () => {
     switch(type) {
       case 'video': return '🎬';
       case 'worksheet': return '📝';
-      case 'practice': return '✏️';
       case 'quiz': return '📋';
       case 'game': return '🎮';
       default: return '📚';
@@ -811,7 +825,7 @@ export const MathResources: React.FC = () => {
             <button
               className={`topic-filter ${selectedTopic === 'all' ? 'active' : ''}`}
               onClick={() => {
-                setSelectedTopic('all');
+                handleTopicChange('all');
                 setVisibleCount(8);
               }}
             >
@@ -823,7 +837,7 @@ export const MathResources: React.FC = () => {
                 key={topic.id}
                 className={`topic-filter ${selectedTopic === topic.id ? 'active' : ''}`}
                 onClick={() => {
-                  setSelectedTopic(topic.id);
+                  handleTopicChange(topic.id);
                   setVisibleCount(8);
                 }}
               >
@@ -912,13 +926,6 @@ export const MathResources: React.FC = () => {
           <span className="tab-label">Videos</span>
         </button>
         <button
-          className={`resource-tab ${activeResourceType === 'practice' ? 'active' : ''}`}
-          onClick={() => setActiveResourceType('practice')}
-        >
-          <span className="tab-icon">✏️</span>
-          <span className="tab-label">Practice</span>
-        </button>
-        <button
           className={`resource-tab ${activeResourceType === 'quiz' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('quiz')}
         >
@@ -973,7 +980,6 @@ export const MathResources: React.FC = () => {
                 >
                   {resource.type === 'video' ? 'Watch' : 
                    resource.type === 'worksheet' ? 'Download' : 
-                   resource.type === 'practice' ? 'Practice' :
                    resource.type === 'quiz' ? 'Start Quiz' :
                    resource.type === 'game' ? 'Play' : 'Open'}
                 </button>

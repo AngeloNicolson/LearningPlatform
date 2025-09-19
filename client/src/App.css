@@ -2,18 +2,18 @@
 
 .app {
   min-height: 100vh;
-  background: #faf8f3;
+  background: var(--theme-background-main);
   font-family: 'Share Tech Mono', 'Courier New', monospace;
   display: flex;
-  color: #3a3330;
+  color: var(--theme-text-primary);
 }
 
 /* Retro Sidebar */
 .sidebar {
   width: 280px;
-  background: #ffffff;
-  border-right: 2px solid rgba(102, 11, 5, 0.15);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+  background: var(--theme-background-sidebar);
+  border-right: 2px solid var(--theme-border-medium);
+  box-shadow: 2px 0 10px var(--theme-shadow-light);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -32,16 +32,16 @@
   right: 0;
   bottom: 0;
   background: 
-    linear-gradient(180deg, rgba(250, 248, 243, 0.5) 0%, transparent 100%);
+    linear-gradient(180deg, var(--theme-background-main) 0%, transparent 100%);
   pointer-events: none;
 }
 
 .sidebar-header {
   padding: 24px;
-  border-bottom: 1px solid rgba(102, 11, 5, 0.1);
+  border-bottom: 1px solid var(--theme-border-light);
   position: relative;
   z-index: 1;
-  background: #faf8f3;
+  background: var(--theme-background-main);
 }
 
 .logo {
@@ -53,16 +53,16 @@
 
 .logo h1 {
   margin: 0;
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', 'Share Tech Mono', monospace;
   font-size: 1.5rem;
   font-weight: 900;
   letter-spacing: 2px;
-  text-shadow: 0 1px 2px rgba(102, 11, 5, 0.1);
+  text-shadow: 0 1px 2px var(--theme-primary-alpha-10);
 }
 
 .tagline {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 0.6rem;
   font-weight: 400;
   text-transform: uppercase;
@@ -81,9 +81,9 @@
 }
 
 .nav-item {
-  background: #faf8f3;
-  border: 1px solid rgba(102, 11, 5, 0.08);
-  color: #660B05;
+  background: var(--theme-background-main);
+  border: 1px solid var(--theme-border-light);
+  color: var(--theme-primary);
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.75rem;
   font-weight: 500;
@@ -107,7 +107,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.08), transparent);
+  background: linear-gradient(90deg, transparent, var(--theme-border-light), transparent);
   transition: left 0.5s ease;
 }
 
@@ -116,18 +116,18 @@
 }
 
 .nav-item:hover {
-  background: #ffffff;
-  border-color: rgba(102, 11, 5, 0.3);
-  color: #660B05;
-  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.08);
+  background: var(--theme-background-paper);
+  border-color: var(--theme-border-dark);
+  color: var(--theme-primary);
+  box-shadow: 0 2px 8px var(--theme-shadow-medium);
   transform: translateX(3px);
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
-  border-color: #8b1009;
-  color: #f8f6f0;
-  box-shadow: 0 6px 20px rgba(102, 11, 5, 0.25);
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  border-color: var(--theme-primary-light);
+  color: var(--theme-text-inverse);
+  box-shadow: 0 6px 20px var(--theme-shadow-dark);
   transform: translateX(6px);
 }
 
@@ -148,10 +148,10 @@
 
 .sidebar-footer {
   padding: 20px;
-  border-top: 1px solid rgba(102, 11, 5, 0.1);
+  border-top: 1px solid var(--theme-border-light);
   position: relative;
   z-index: 1;
-  background: #faf8f3;
+  background: var(--theme-background-main);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -159,9 +159,9 @@
 
 .logout-btn {
   width: 100%;
-  background: rgba(102, 11, 5, 0.06);
-  border: 1px solid rgba(102, 11, 5, 0.1);
-  color: #660B05;
+  background: var(--theme-highlight);
+  border: 1px solid var(--theme-border-light);
+  color: var(--theme-primary);
   padding: 10px;
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
@@ -178,8 +178,8 @@
 }
 
 .logout-btn:hover {
-  background: rgba(102, 11, 5, 0.1);
-  border-color: rgba(102, 11, 5, 0.2);
+  background: var(--theme-primary-alpha-10);
+  border-color: var(--theme-primary-alpha-20);
   transform: translateX(2px);
 }
 
@@ -192,8 +192,8 @@
 }
 
 .user-avatar {
-  background: linear-gradient(135deg, #660B05 0%, #7d0e06 100%);
-  color: #f8f6f0;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  color: var(--theme-text-inverse);
   padding: 8px 16px;
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
@@ -201,23 +201,23 @@
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
-  border: 1px solid #8b1009;
-  box-shadow: 0 3px 10px rgba(102, 11, 5, 0.2);
+  border: 1px solid var(--theme-primary-light);
+  box-shadow: 0 3px 10px var(--theme-primary-alpha-20);
 }
 
 .user-status {
-  color: #2d7d32;
+  color: var(--theme-success);
   font-size: 0.6rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  text-shadow: 0 0 5px rgba(45, 125, 50, 0.4);
+  text-shadow: 0 0 5px var(--theme-success-light);
 }
 
 .app-main {
   flex: 1;
   min-height: 100vh;
   padding: 0;
-  background: #faf8f3;
+  background: var(--theme-background-main);
   position: relative;
   overflow-x: hidden;
   margin-left: 280px; /* Account for fixed sidebar width */
@@ -231,7 +231,7 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.8) 0%, transparent 50%);
+    radial-gradient(ellipse at top right, var(--theme-background-paper) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -302,18 +302,18 @@
 }
 
 .debates-header h1 {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', 'Share Tech Mono', monospace;
   font-size: 2.5rem;
   font-weight: 900;
   margin: 0 0 12px 0;
   letter-spacing: 2px;
-  text-shadow: 0 0 12px rgba(102, 11, 5, 0.3);
+  text-shadow: 0 0 12px var(--theme-border-dark);
   text-transform: uppercase;
 }
 
 .debates-header p {
-  color: #8b7355;
+  color: var(--theme-secondary);
   font-size: 1rem;
   margin: 0;
   max-width: 600px;
@@ -324,11 +324,11 @@
 }
 
 .selected-topic-workspace {
-  background: #ffffff;
+  background: var(--theme-background-paper);
   border-radius: 12px;
   padding: 32px;
-  border: 1px solid rgba(102, 11, 5, 0.08);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--theme-border-light);
+  box-shadow: 0 2px 10px var(--theme-shadow-light);
   position: relative;
   overflow: hidden;
 }
@@ -357,12 +357,12 @@
 }
 
 .topic-header h2 {
-  color: #d4af37;
+  color: var(--theme-accent);
   font-family: 'Orbitron', monospace;
   font-size: 1.8rem;
   font-weight: 700;
   margin: 0 0 12px 0;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 10px var(--theme-shadow-medium);
 }
 
 .topic-meta {
@@ -396,7 +396,7 @@
 }
 
 .topic-description {
-  color: #c7a875;
+  color: var(--theme-text-muted);
   font-size: 1rem;
   line-height: 1.7;
   margin-bottom: 32px;
@@ -413,14 +413,14 @@
 }
 
 .action-card {
-  background: #ffffff;
-  border: 1px solid rgba(102, 11, 5, 0.1);
+  background: var(--theme-background-card);
+  border: 1px solid var(--theme-border-light);
   border-radius: 8px;
   padding: 24px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 4px var(--theme-shadow-light);
 }
 
 .action-card::before {
@@ -439,14 +439,14 @@
 }
 
 .action-card:hover {
-  border-color: rgba(102, 11, 5, 0.3);
-  background: #faf8f3;
+  border-color: var(--theme-border-dark);
+  background: var(--theme-background-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 11, 5, 0.08);
+  box-shadow: 0 4px 12px var(--theme-shadow-medium);
 }
 
 .action-card h3 {
-  color: #660B05;
+  color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-size: 1.1rem;
   font-weight: 700;
@@ -458,7 +458,7 @@
 }
 
 .action-card > p {
-  color: #8b7355;
+  color: var(--theme-secondary);
   margin: 0 0 16px 0;
   position: relative;
   z-index: 1;
@@ -477,7 +477,7 @@
 }
 
 .debates-view .coming-soon p {
-  color: #fbbf24;
+  color: var(--theme-warning);
   font-weight: 400;
   margin: 0 0 8px 0;
   font-size: 0.7rem;
@@ -499,11 +499,11 @@
 }
 
 .no-topic-selected {
-  background: #ffffff;
+  background: var(--theme-background-paper);
   border-radius: 8px;
   padding: 32px;
-  border: 1px solid rgba(102, 11, 5, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--theme-border-light);
+  box-shadow: 0 2px 8px var(--theme-shadow-light);
   text-align: center;
 }
 
@@ -514,7 +514,7 @@
     height: auto;
     position: relative;
     border-right: none;
-    border-bottom: 2px solid rgba(102, 11, 5, 0.15);
+    border-bottom: 2px solid var(--theme-border-medium);
   }
   
   .app-main {

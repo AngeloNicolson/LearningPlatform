@@ -6,7 +6,7 @@ interface Resource {
   title: string;
   description: string;
   url?: string;
-  type: 'lessons' | 'video' | 'timeline' | 'quiz' | 'primary-source';
+  type: 'lessons' | 'video' | 'quiz' | 'primary-source';
   era: string;
   topicName?: string;
   topicIcon?: string;
@@ -46,7 +46,7 @@ const historyTopics: Topic[] = [
         title: 'Life in the 13 Colonies',
         description: 'Daily life, social structure, and colonial culture',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1700-1770'
       },
       {
@@ -69,7 +69,7 @@ const historyTopics: Topic[] = [
         title: 'Road to Revolution',
         description: 'Taxation without representation and colonial unrest',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1763-1775'
       },
       {
@@ -132,7 +132,7 @@ const historyTopics: Topic[] = [
         title: 'War of 1812',
         description: 'The second war for independence',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1812-1815'
       }
     ]
@@ -163,7 +163,7 @@ const historyTopics: Topic[] = [
         title: 'California Gold Rush',
         description: 'The 49ers and rapid western growth',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1849-1855'
       },
       {
@@ -202,7 +202,7 @@ const historyTopics: Topic[] = [
         title: 'Major Civil War Battles',
         description: 'Gettysburg, Antietam, Bull Run, and more',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1861-1865'
       },
       {
@@ -264,7 +264,7 @@ const historyTopics: Topic[] = [
         title: 'Immigration Waves',
         description: 'Ellis Island and the American melting pot',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1880-1920'
       },
       {
@@ -295,7 +295,7 @@ const historyTopics: Topic[] = [
         title: 'Roaring Twenties',
         description: 'Jazz age, prohibition, and prosperity',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1920-1929'
       },
       {
@@ -334,7 +334,7 @@ const historyTopics: Topic[] = [
         title: 'Korean War',
         description: 'The forgotten war',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '1950-1953'
       },
       {
@@ -412,7 +412,7 @@ const historyTopics: Topic[] = [
         title: 'September 11th',
         description: 'Terror attacks and their aftermath',
         url: '#',
-        type: 'timeline',
+        type: 'lessons',
         era: '2001'
       },
       {
@@ -427,10 +427,14 @@ const historyTopics: Topic[] = [
   }
 ];
 
-export const AmericanHistory: React.FC = () => {
+interface AmericanHistoryProps {
+  onBack?: () => void;
+}
+
+export const AmericanHistory: React.FC<AmericanHistoryProps> = ({ onBack }) => {
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
   const [selectedEra, setSelectedEra] = useState<string>('all');
-  const [activeResourceType, setActiveResourceType] = useState<'all' | 'lessons' | 'video' | 'timeline' | 'quiz' | 'primary-source'>('all');
+  const [activeResourceType, setActiveResourceType] = useState<'all' | 'lessons' | 'video' | 'quiz' | 'primary-source'>('all');
   const [topicPage, setTopicPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -509,7 +513,6 @@ export const AmericanHistory: React.FC = () => {
     switch(type) {
       case 'lessons': return '📖';
       case 'video': return '🎬';
-      case 'timeline': return '📅';
       case 'quiz': return '❓';
       case 'primary-source': return '📜';
       default: return '📚';
@@ -535,7 +538,29 @@ export const AmericanHistory: React.FC = () => {
   return (
     <div className="american-history">
       <div className="resources-header">
-        <h1>American History</h1>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', position: 'relative' }}>
+          {onBack && (
+            <button 
+              className="back-button"
+              onClick={onBack}
+              style={{
+                position: 'absolute',
+                left: 0,
+                padding: '10px 20px',
+                background: 'var(--theme-primary)',
+                color: 'var(--theme-text-inverse)',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              ← Back to Countries
+            </button>
+          )}
+          <h1>American History</h1>
+        </div>
         <p className="tagline">Explore the journey of the United States from colonial times to today</p>
       </div>
 
@@ -668,13 +693,6 @@ export const AmericanHistory: React.FC = () => {
           <span className="tab-label">Videos</span>
         </button>
         <button
-          className={`resource-tab ${activeResourceType === 'timeline' ? 'active' : ''}`}
-          onClick={() => setActiveResourceType('timeline')}
-        >
-          <span className="tab-icon">📅</span>
-          <span className="tab-label">Timelines</span>
-        </button>
-        <button
           className={`resource-tab ${activeResourceType === 'primary-source' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('primary-source')}
         >
@@ -729,7 +747,6 @@ export const AmericanHistory: React.FC = () => {
                 >
                   {resource.type === 'lessons' ? 'Study Lesson' :
                    resource.type === 'video' ? 'Watch' : 
-                   resource.type === 'timeline' ? 'Explore' :
                    resource.type === 'quiz' ? 'Take Quiz' :
                    resource.type === 'primary-source' ? 'View Source' : 'Open'}
                 </button>
