@@ -11,664 +11,14 @@ interface Resource {
   gradeLevel: string;
   topicName?: string;
   topicIcon?: string;
+  topic_id?: string;
 }
 
 interface Topic {
   id: string;
   name: string;
   icon: string;
-  resources: Resource[];
 }
-
-const mathTopics: Topic[] = [
-  {
-    id: 'arithmetic',
-    name: 'Arithmetic',
-    icon: '➕',
-    resources: [
-      {
-        id: 'arith-1',
-        title: 'Single Digit Addition',
-        description: 'Master adding numbers from 0-9',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'arith-2',
-        title: 'Addition with Carrying',
-        description: 'Learn to add multi-digit numbers',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'arith-3',
-        title: 'Multiplication Tables Game',
-        description: 'Fun way to memorize multiplication facts',
-        url: '#',
-        type: 'game',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'arith-4',
-        title: 'Long Division Tutorial',
-        description: 'Step-by-step guide to division',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'arith-5',
-        title: 'Word Problems Workshop',
-        description: 'Apply arithmetic to real-world scenarios',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'arith-6',
-        title: 'Order of Operations',
-        description: 'Master PEMDAS with interactive worksheets',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'arith-7',
-        title: 'Mental Math Strategies',
-        description: 'Quick calculation techniques',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      }
-    ]
-  },
-  {
-    id: 'fractions',
-    name: 'Fractions & Decimals',
-    icon: '½',
-    resources: [
-      {
-        id: 'frac-1',
-        title: 'What is a Fraction?',
-        description: 'Visual introduction to fractions',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'frac-2',
-        title: 'Fraction Pizzas',
-        description: 'Interactive fraction visualization',
-        url: '#',
-        type: 'game',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'frac-3',
-        title: 'Decimal Place Values',
-        description: 'Understanding tenths and hundredths',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'frac-4',
-        title: 'Converting Fractions to Decimals',
-        description: 'Learn the conversion process',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'frac-5',
-        title: 'Adding and Subtracting Fractions',
-        description: 'Common denominators and mixed numbers',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'frac-6',
-        title: 'Multiplying and Dividing Fractions',
-        description: 'Advanced fraction operations',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'frac-7',
-        title: 'Decimal Operations',
-        description: 'Add, subtract, multiply, and divide decimals',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'frac-8',
-        title: 'Percentage Problems',
-        description: 'Converting and calculating percentages',
-        url: '#',
-        type: 'quiz',
-        gradeLevel: 'Middle School'
-      }
-    ]
-  },
-  {
-    id: 'algebra',
-    name: 'Algebra',
-    icon: '𝑥',
-    resources: [
-      {
-        id: 'alg-1',
-        title: 'Introduction to Variables',
-        description: 'Understanding unknowns in math',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'alg-2',
-        title: 'Simplifying Expressions',
-        description: 'Combine like terms and simplify',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'alg-3',
-        title: 'Solving One-Step Equations',
-        description: 'Basic equation solving techniques',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'alg-4',
-        title: 'Two-Step Equations',
-        description: 'Advanced equation solving',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'alg-5',
-        title: 'Linear Functions',
-        description: 'Slope, y-intercept, and graphing',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'alg-6',
-        title: 'Systems of Equations',
-        description: 'Solve multiple equations simultaneously',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'alg-7',
-        title: 'Quadratic Functions',
-        description: 'Parabolas and quadratic equations',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'alg-8',
-        title: 'Factoring Polynomials',
-        description: 'Factor and solve polynomial equations',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'alg-9',
-        title: 'Exponential Functions',
-        description: 'Growth and decay models',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'alg-10',
-        title: 'Logarithms',
-        description: 'Introduction to logarithmic functions',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      }
-    ]
-  },
-  {
-    id: 'geometry',
-    name: 'Geometry',
-    icon: '📐',
-    resources: [
-      {
-        id: 'geom-1',
-        title: '2D Shapes Explorer',
-        description: 'Learn about circles, squares, and triangles',
-        url: '#',
-        type: 'game',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'geom-2',
-        title: 'Pattern Recognition',
-        description: 'Find and create patterns',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'geom-3',
-        title: 'Types of Angles',
-        description: 'Acute, obtuse, and right angles',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'geom-4',
-        title: 'Triangle Properties',
-        description: 'Sum of angles and triangle types',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'geom-5',
-        title: 'Area and Perimeter',
-        description: 'Calculate area of various shapes',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'geom-6',
-        title: 'Volume and Surface Area',
-        description: '3D shapes and their properties',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'geom-7',
-        title: 'Geometric Proofs',
-        description: 'Logic and reasoning in geometry',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'geom-8',
-        title: 'Triangle Congruence',
-        description: 'SSS, SAS, ASA, AAS, and HL',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'geom-9',
-        title: 'Circle Theorems',
-        description: 'Angles, arcs, and chords',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'geom-10',
-        title: 'Coordinate Geometry',
-        description: 'Distance, midpoint, and slope formulas',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      }
-    ]
-  },
-  {
-    id: 'trigonometry',
-    name: 'Trigonometry',
-    icon: '△',
-    resources: [
-      {
-        id: 'trig-1',
-        title: 'Introduction to Sine, Cosine, Tangent',
-        description: 'Basic trigonometric ratios',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'trig-2',
-        title: 'Right Triangle Problems',
-        description: 'Solve triangles using trig ratios',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'trig-3',
-        title: 'Unit Circle Mastery',
-        description: 'Interactive unit circle exploration',
-        url: '#',
-        type: 'game',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'trig-4',
-        title: 'Trig Identities',
-        description: 'Prove and use trigonometric identities',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'trig-5',
-        title: 'Graphing Trig Functions',
-        description: 'Amplitude, period, and phase shift',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'trig-6',
-        title: 'Inverse Trig Functions',
-        description: 'Arcsin, arccos, and arctan',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'trig-7',
-        title: 'Law of Sines and Cosines',
-        description: 'Solve any triangle',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      }
-    ]
-  },
-  {
-    id: 'calculus',
-    name: 'Calculus',
-    icon: '∫',
-    resources: [
-      {
-        id: 'calc-1',
-        title: 'Introduction to Limits',
-        description: 'Understanding limits graphically',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'calc-2',
-        title: 'Limit Laws',
-        description: 'Calculate limits algebraically',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'calc-3',
-        title: 'Epsilon-Delta Definition',
-        description: 'Rigorous definition of limits',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-4',
-        title: 'Differentiation Rules',
-        description: 'Chain rule, product rule, quotient rule',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-5',
-        title: 'Implicit Differentiation',
-        description: 'Derivatives of implicit functions',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-6',
-        title: 'Optimization Problems',
-        description: 'Max/min applications',
-        url: '#',
-        type: 'quiz',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-7',
-        title: 'Antiderivatives',
-        description: 'Finding antiderivatives and indefinite integrals',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-8',
-        title: 'Definite Integrals',
-        description: 'Riemann sums and FTC',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-9',
-        title: 'Integration Techniques',
-        description: 'U-substitution, parts, and trig substitution',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'calc-10',
-        title: 'Series and Sequences',
-        description: 'Convergence tests and Taylor series',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      }
-    ]
-  },
-  {
-    id: 'statistics',
-    name: 'Statistics',
-    icon: '📊',
-    resources: [
-      {
-        id: 'stat-1',
-        title: 'Creating Bar Graphs',
-        description: 'Visualize data with graphs',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'stat-2',
-        title: 'Reading Charts and Tables',
-        description: 'Interpret data presentations',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Elementary'
-      },
-      {
-        id: 'stat-3',
-        title: 'Mean, Median, Mode',
-        description: 'Measures of central tendency',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'stat-4',
-        title: 'Range and Variability',
-        description: 'Understanding data spread',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'stat-5',
-        title: 'Box and Whisker Plots',
-        description: 'Visualizing data distribution',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'Middle School'
-      },
-      {
-        id: 'stat-6',
-        title: 'Probability Basics',
-        description: 'Introduction to probability concepts',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'stat-7',
-        title: 'Normal Distribution',
-        description: 'Bell curves and standard deviation',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'High School'
-      },
-      {
-        id: 'stat-8',
-        title: 'Hypothesis Testing',
-        description: 'Statistical inference and significance',
-        url: '#',
-        type: 'quiz',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'stat-9',
-        title: 'Regression Analysis',
-        description: 'Linear regression and correlation',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      }
-    ]
-  },
-  {
-    id: 'linear-algebra',
-    name: 'Linear Algebra',
-    icon: '⊗',
-    resources: [
-      {
-        id: 'la-1',
-        title: 'Matrix Operations',
-        description: 'Addition, multiplication, and inverses',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'la-2',
-        title: 'Gaussian Elimination',
-        description: 'Solving systems of equations',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'la-3',
-        title: 'Determinants',
-        description: 'Computing and using determinants',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'la-4',
-        title: 'Vector Spaces',
-        description: 'Understanding abstract vector spaces',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'la-5',
-        title: 'Eigenvalues and Eigenvectors',
-        description: 'Finding and using eigenvalues',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'la-6',
-        title: 'Linear Transformations',
-        description: 'Mappings between vector spaces',
-        url: '#',
-        type: 'quiz',
-        gradeLevel: 'College'
-      }
-    ]
-  },
-  {
-    id: 'discrete',
-    name: 'Discrete Math',
-    icon: '🎲',
-    resources: [
-      {
-        id: 'disc-1',
-        title: 'Propositional Logic',
-        description: 'Truth tables and logical operations',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'disc-2',
-        title: 'Proof Techniques',
-        description: 'Direct, contradiction, and induction',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'disc-3',
-        title: 'Set Theory',
-        description: 'Operations and cardinality',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'disc-4',
-        title: 'Graph Theory Basics',
-        description: 'Vertices, edges, and representations',
-        url: '#',
-        type: 'video',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'disc-5',
-        title: 'Trees and Algorithms',
-        description: 'MST algorithms and applications',
-        url: '#',
-        type: 'worksheet',
-        gradeLevel: 'College'
-      },
-      {
-        id: 'disc-6',
-        title: 'Combinatorics',
-        description: 'Counting principles and permutations',
-        url: '#',
-        type: 'quiz',
-        gradeLevel: 'College'
-      }
-    ]
-  }
-];
 
 export const MathResources: React.FC = () => {
   const navigation = useNavigation();
@@ -679,6 +29,68 @@ export const MathResources: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [visibleCount, setVisibleCount] = useState<number>(8);
+  const [apiResources, setApiResources] = useState<Resource[]>([]);
+  const [apiTopics, setApiTopics] = useState<Topic[]>([]);
+
+  // Fetch topics from API
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch(`https://localhost:3001/api/resources/math/topics`, {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setApiTopics(data);
+        }
+      } catch (error) {
+        console.error('Error fetching topics:', error);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
+  // Fetch resources from API
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams();
+        if (selectedTopic !== 'all') {
+          params.append('topic', selectedTopic);
+        }
+        
+        const response = await fetch(`https://localhost:3001/api/resources/math?${params.toString()}`, {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          // Map API data to match Resource interface
+          const mappedResources = data.map((r: any) => ({
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            type: r.type,
+            gradeLevel: r.gradeLevel,
+            url: r.url,
+            topic_id: r.topic_id,
+            topicName: apiTopics.find(t => t.id === r.topic_id)?.name,
+            topicIcon: apiTopics.find(t => t.id === r.topic_id)?.icon
+          }));
+          setApiResources(mappedResources);
+        }
+      } catch (error) {
+        console.error('Error fetching resources:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchResources();
+  }, [selectedTopic, apiTopics]);
 
   // Sync with navigation state
   useEffect(() => {
@@ -693,23 +105,8 @@ export const MathResources: React.FC = () => {
     navigation.navigate({ mathTab: topic });
   };
 
-  // Simulate initial load
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Get all resources or filter by topic
-  const allResources = selectedTopic === 'all' 
-    ? mathTopics.flatMap(topic => 
-        topic.resources.map(resource => ({ ...resource, topicName: topic.name, topicIcon: topic.icon }))
-      )
-    : mathTopics.find(t => t.id === selectedTopic)?.resources.map(resource => 
-        ({ ...resource, topicName: mathTopics.find(t => t.id === selectedTopic)?.name || '', 
-           topicIcon: mathTopics.find(t => t.id === selectedTopic)?.icon || '' })
-      ) || [];
+  // Get all resources or filter by topic (now uses API data)
+  const allResources = apiResources;
   
   const filteredResources = allResources.filter(resource => {
     const gradeMatch = selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade);
@@ -746,10 +143,10 @@ export const MathResources: React.FC = () => {
 
   // Topics carousel settings - Always show 3 topics + "All Topics" = 4 total
   const topicsPerPage = 3; // 3 topics + "All" button = 4 items
-  const totalTopicPages = Math.ceil(mathTopics.length / topicsPerPage);
+  const totalTopicPages = Math.ceil(apiTopics.length / topicsPerPage);
   const topicStartIndex = topicPage * topicsPerPage;
   const topicEndIndex = topicStartIndex + topicsPerPage;
-  const visibleTopics = mathTopics.slice(topicStartIndex, topicEndIndex);
+  const visibleTopics = apiTopics.slice(topicStartIndex, topicEndIndex);
 
   const handleNextTopicPage = () => {
     if (topicPage < totalTopicPages - 1) {

@@ -1,0 +1,305 @@
+/* AdminUpload Styles */
+.admin-upload-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--theme-background-overlay);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.admin-upload {
+  background: var(--theme-background-paper);
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px var(--theme-shadow-dark);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.admin-upload-header {
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--theme-border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--theme-background-main);
+}
+
+.admin-upload-header h1 {
+  color: var(--theme-primary);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.close-btn {
+  background: var(--theme-error-light);
+  color: var(--theme-error);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: var(--theme-error);
+  color: white;
+}
+
+/* Upload Type Selector */
+.upload-type-selector {
+  display: flex;
+  gap: 12px;
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--theme-border-light);
+  background: var(--theme-background-main);
+}
+
+.type-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid var(--theme-border-medium);
+  background: var(--theme-background-paper);
+  color: var(--theme-text-primary);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.type-btn:hover {
+  border-color: var(--theme-primary);
+  background: var(--theme-background-hover);
+}
+
+.type-btn.active {
+  background: var(--theme-primary);
+  color: white;
+  border-color: var(--theme-primary);
+}
+
+/* Message */
+.message {
+  margin: 20px 30px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.message.success {
+  background: var(--theme-success-light);
+  color: var(--theme-success);
+  border: 1px solid var(--theme-success);
+}
+
+.message.error {
+  background: var(--theme-error-light);
+  color: var(--theme-error);
+  border: 1px solid var(--theme-error);
+}
+
+/* Lesson Form */
+.lesson-form {
+  padding: 30px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  color: var(--theme-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--theme-border-medium);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--theme-text-primary);
+  background: var(--theme-background-paper);
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px var(--theme-primary-light);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Markdown Toolbar */
+.markdown-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  background: var(--theme-background-main);
+  border: 1px solid var(--theme-border-medium);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  flex-wrap: wrap;
+}
+
+.markdown-toolbar button {
+  padding: 6px 10px;
+  background: var(--theme-background-paper);
+  border: 1px solid var(--theme-border-light);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  transition: all 0.2s;
+  min-width: 30px;
+}
+
+.markdown-toolbar button:hover {
+  background: var(--theme-primary-light);
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+.toolbar-separator {
+  width: 1px;
+  background: var(--theme-border-medium);
+  margin: 0 4px;
+}
+
+#markdown-editor {
+  border-radius: 0 0 6px 6px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 300px;
+}
+
+.markdown-help {
+  margin-top: 8px;
+  color: var(--theme-text-muted);
+  font-size: 12px;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--theme-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--theme-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--theme-shadow-medium);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Worksheet Upload */
+.worksheet-upload {
+  padding: 30px;
+}
+
+.upload-info {
+  color: var(--theme-text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background: var(--theme-info-light);
+  border-radius: 8px;
+  border: 1px solid var(--theme-info);
+}
+
+.uploaded-list {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--theme-background-main);
+  border-radius: 8px;
+}
+
+.uploaded-list h3 {
+  color: var(--theme-primary);
+  font-size: 16px;
+  margin: 0 0 12px 0;
+}
+
+.uploaded-item {
+  padding: 8px;
+  color: var(--theme-success);
+  font-size: 14px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .admin-upload {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .admin-upload-header {
+    padding: 15px 20px;
+  }
+
+  .upload-type-selector {
+    flex-direction: column;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-form,
+  .worksheet-upload {
+    padding: 20px;
+  }
+
+  .markdown-toolbar {
+    padding: 6px;
+  }
+
+  .markdown-toolbar button {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 26px;
+  }
+}

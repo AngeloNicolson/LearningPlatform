@@ -1,7 +1,6 @@
 import express from 'express';
 import https from 'https';
 import fs from 'fs';
-import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -15,6 +14,7 @@ import teacherRoutes from './routes/teachers';
 import userRoutes from './routes/users';
 import resourcesRoutes from './routes/resources';
 import subjectResourcesRoutes from './routes/subjectResources';
+import topicsRoutes from './routes/topics';
 
 dotenv.config();
 
@@ -77,6 +77,7 @@ app.use('/api/teachers', teacherRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/resources', resourcesRoutes);
 app.use('/api/subject-resources', subjectResourcesRoutes);
+app.use('/api/topics', topicsRoutes);
 
 // Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
@@ -94,9 +95,9 @@ app.use((_req, res) => {
 
 // Start server with HTTPS support in production-like mode
 if (USE_HTTPS) {
-  // Check for certificates
-  const keyPath = path.resolve('/app/certs/localhost-key.pem');
-  const certPath = path.resolve('/app/certs/localhost.pem');
+  // Check for certificates - use absolute path in container
+  const keyPath = '/app/certs/localhost-key.pem';
+  const certPath = '/app/certs/localhost.pem';
   
   if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
     const httpsOptions = {

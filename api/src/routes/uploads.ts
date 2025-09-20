@@ -1,0 +1,222 @@
+import { Router, Request, Response } from 'express';
+import { uploadWorksheet, uploadImage, handleUploadError } from '../middleware/upload';
+import { query } from '../database/connection';
+import { requireAuth, requireRole } from '../middleware/auth';
+import path from 'path';
+import fs from 'fs';
+
+const router = Router();
+
+// Upload a worksheet (PDF)
+router.post('/worksheet', 
+  requireAuth,
+  requireRole('admin', 'owner', 'tutor'),
+  uploadWorksheet.single('file'),
+  handleUploadError,
+  async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const { title, description, category, grade_level, topic_id } = req.body;
+      const user = (req as any).user;
+
+      // Save to database
+      const result = await query(
+        `INSERT INTO documents (
+          title, description, filename, original_name, 
+          mime_type, file_size, file_path, category, 
+          resource_type, grade_level, topic_id, uploaded_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+        RETURNING *`,
+        [
+          title || req.file.originalname,
+          description || '',
+          req.file.filename,
+          req.file.originalname,
+          req.file.mimetype,
+          req.file.size,
+          req.file.path,
+          category || 'general',
+          'worksheet',
+          grade_level || null,
+          topic_id || null,
+          user.id
+        ]
+      );
+
+      res.json({
+        success: true,
+        document: result.rows[0]
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      // Clean up uploaded file on database error
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+      res.status(500).json({ error: 'Failed to save document' });
+    }
+    return;
+  }
+);
+
+// Upload an image for lessons
+router.post('/image',
+  requireAuth,
+  requireRole('admin', 'owner', 'tutor'),
+  uploadImage.single('image'),
+  handleUploadError,
+  async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No image uploaded' });
+      }
+
+      // Return the image URL for use in markdown
+      const imageUrl = `/api/uploads/images/${req.file.filename}`;
+      
+      res.json({
+        success: true,
+        url: imageUrl,
+        filename: req.file.filename,
+        size: req.file.size
+      });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+      res.status(500).json({ error: 'Failed to upload image' });
+    }
+    return;
+  }
+);
+
+// Download a document
+router.get('/download/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    
+    // Get document info from database
+    const result = await query(
+      'SELECT * FROM documents WHERE id = $1',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+
+    const document = result.rows[0];
+    const filePath = document.file_path;
+
+    // Check if file exists
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'File not found on server' });
+    }
+
+    // Update download count
+    await query(
+      'UPDATE documents SET download_count = download_count + 1 WHERE id = $1',
+      [id]
+    );
+
+    // Set headers for download
+    res.setHeader('Content-Type', document.mime_type);
+    res.setHeader('Content-Disposition', `attachment; filename="${document.original_name}"`);
+    res.setHeader('Content-Length', document.file_size);
+
+    // Send file
+    res.sendFile(path.resolve(filePath));
+  } catch (error) {
+    console.error('Download error:', error);
+    res.status(500).json({ error: 'Failed to download document' });
+  }
+  return;
+});
+
+// Get list of documents
+router.get('/list', async (req: Request, res: Response) => {
+  try {
+    const { category, resource_type, grade_level } = req.query;
+    
+    let queryStr = 'SELECT * FROM documents WHERE 1=1';
+    const params: any[] = [];
+    let paramCount = 0;
+
+    if (category) {
+      paramCount++;
+      queryStr += ` AND category = $${paramCount}`;
+      params.push(category);
+    }
+
+    if (resource_type) {
+      paramCount++;
+      queryStr += ` AND resource_type = $${paramCount}`;
+      params.push(resource_type);
+    }
+
+    if (grade_level) {
+      paramCount++;
+      queryStr += ` AND grade_level = $${paramCount}`;
+      params.push(grade_level);
+    }
+
+    queryStr += ' ORDER BY created_at DESC';
+
+    const result = await query(queryStr, params);
+
+    res.json({
+      success: true,
+      documents: result.rows
+    });
+  } catch (error) {
+    console.error('List documents error:', error);
+    res.status(500).json({ error: 'Failed to list documents' });
+  }
+  return;
+});
+
+// Delete a document (admin only)
+router.delete('/:id',
+  requireAuth,
+  requireRole('admin', 'owner'),
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      
+      // Get document info
+      const result = await query(
+        'SELECT * FROM documents WHERE id = $1',
+        [id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Document not found' });
+      }
+
+      const document = result.rows[0];
+
+      // Delete file from filesystem
+      if (fs.existsSync(document.file_path)) {
+        fs.unlinkSync(document.file_path);
+      }
+
+      // Delete from database
+      await query('DELETE FROM documents WHERE id = $1', [id]);
+
+      res.json({
+        success: true,
+        message: 'Document deleted successfully'
+      });
+    } catch (error) {
+      console.error('Delete error:', error);
+      res.status(500).json({ error: 'Failed to delete document' });
+    }
+    return;
+  }
+);
+
+export default router;

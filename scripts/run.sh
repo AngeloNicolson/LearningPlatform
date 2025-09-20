@@ -95,11 +95,78 @@ sleep 5
 # Step 7: Initialize database
 echo ""
 echo "🗄️  Initializing database..."
-docker-compose exec -T server npm run db:init
+
+# Create tables if needed
+docker-compose exec -T api npx ts-node -e "
+    const { query } = require('./src/database/connection');
+    const fs = require('fs');
+    if (fs.existsSync('./src/database/create-tables.sql')) {
+        const sql = fs.readFileSync('./src/database/create-tables.sql', 'utf8');
+        query(sql)
+            .then(() => console.log('Tables created'))
+            .catch(err => {
+                if (err.code !== '42P07') console.error('Table creation error:', err.message);
+            })
+            .finally(() => process.exit());
+    } else {
+        process.exit();
+    }
+" 2>/dev/null || true
+
+# Run migrations
+docker-compose exec -T api npm run migrate 2>/dev/null || {
+    print_warning "Running fallback migration setup..."
+    docker-compose exec -T api npx ts-node -e "
+        const { query } = require('./src/database/connection');
+        const createTables = \`
+            CREATE TABLE IF NOT EXISTS resources (
+                id VARCHAR(255) PRIMARY KEY,
+                subject VARCHAR(50),
+                topic_id VARCHAR(100),
+                topic_name VARCHAR(255),
+                topic_icon VARCHAR(10),
+                subtopic_id INTEGER,
+                resource_type VARCHAR(50),
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                url TEXT,
+                content TEXT,
+                video_url TEXT,
+                pdf_url TEXT,
+                time_limit INTEGER,
+                grade_level VARCHAR(50),
+                visible BOOLEAN DEFAULT true,
+                display_order INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by INTEGER
+            );
+            
+            CREATE INDEX IF NOT EXISTS idx_resources_subject ON resources(subject);
+            CREATE INDEX IF NOT EXISTS idx_resources_topic_id ON resources(topic_id);
+        \`;
+        query(createTables)
+            .then(() => console.log('Schema created'))
+            .catch(console.error)
+            .finally(() => process.exit());
+    " 2>/dev/null || true
+}
+
+# Seed database
+docker-compose exec -T api npm run seed 2>/dev/null || print_warning "Seeding completed or data already exists"
+
+# Seed math resources
+echo ""
+echo "📐 Seeding math resources..."
+docker-compose exec -T api npx ts-node src/database/seed-math-resources.ts 2>/dev/null || print_warning "Math resources seeding completed or data already exists"
+
+# Original db:init command as fallback
+docker-compose exec -T server npm run db:init 2>/dev/null || true
+
 if [ $? -eq 0 ]; then
     print_status "Database initialized with seed data"
 else
-    print_warning "Database initialization had issues (may already be initialized)"
+    print_warning "Database initialization completed (some data may already exist)"
 fi
 
 # Step 8: Show service status

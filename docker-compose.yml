@@ -11,7 +11,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-development}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./server/src/database/migrations:/docker-entrypoint-initdb.d:ro
+      - ./api/src/database/migrations:/docker-entrypoint-initdb.d:ro
     networks:
       - app-network
     healthcheck:
@@ -66,28 +66,6 @@ services:
       - ./api:/app
       - /app/node_modules
       - ./certs:/app/certs:ro  # Mount certificates read-only
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: npm run dev
-    networks:
-      - app-network
-
-  # Server (Backend Services)
-  server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    environment:
-      - NODE_ENV=development
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=tutoring_platform
-      - DB_USER=postgres
-      - DB_PASSWORD=${DB_PASSWORD:-development}
-    volumes:
-      - ./server:/app
-      - /app/node_modules
     depends_on:
       postgres:
         condition: service_healthy

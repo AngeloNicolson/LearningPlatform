@@ -58,6 +58,58 @@ router.get('/grades', async (_req: Request, res: Response) => {
   }
 });
 
+// Get math topics (redirect to new topics endpoint)
+router.get('/math/topics', async (_req: Request, res: Response) => {
+  try {
+    const result = await query(`
+      SELECT id, name, icon
+      FROM topics
+      WHERE subject = 'math'
+      ORDER BY display_order
+    `);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching math topics:', error);
+    res.status(500).json({ error: 'Failed to fetch math topics' });
+  }
+});
+
+// Get math resources by topic (with JOIN to topics table)
+router.get('/math', async (req: Request, res: Response) => {
+  try {
+    const { topic } = req.query;
+    
+    let queryText = `
+      SELECT 
+        r.id, r.title, r.description, 
+        r.resource_type as type, 
+        r.grade_level as "gradeLevel", 
+        r.url, r.content, r.topic_id,
+        t.name as "topicName",
+        t.icon as "topicIcon"
+      FROM resources r
+      LEFT JOIN topics t ON r.topic_id = t.id
+      WHERE r.subject = 'math' AND r.visible = true
+    `;
+    const params: any[] = [];
+    
+    if (topic && topic !== 'all') {
+      queryText += ` AND LOWER(r.topic_id) = LOWER($1)`;
+      params.push(topic);
+    }
+    
+    queryText += ` ORDER BY r.display_order, r.created_at DESC`;
+    
+    const result = await query(queryText, params);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching math resources:', error);
+    res.status(500).json({ error: 'Failed to fetch math resources' });
+  }
+});
+
 // Get resources for a specific subtopic
 router.get('/subtopics/:subtopicId/resources', async (req: Request, res: Response) => {
   try {
