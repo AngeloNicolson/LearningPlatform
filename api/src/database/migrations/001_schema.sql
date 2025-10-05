@@ -2,8 +2,60 @@
 -- Supports multiple subjects with topics and resources
 
 -- Drop existing tables to start fresh (comment out in production)
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS tutors CASCADE;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS topics CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- Users table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  role VARCHAR(20) DEFAULT 'student' CHECK (role IN ('student', 'tutor', 'teacher', 'parent', 'admin')),
+  parent_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tutors table
+CREATE TABLE tutors (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  display_name VARCHAR(100) NOT NULL,
+  bio TEXT,
+  subjects JSONB DEFAULT '{}'::jsonb,
+  grades TEXT[] DEFAULT ARRAY[]::TEXT[],
+  hourly_rate DECIMAL(10, 2),
+  accepts_group_sessions BOOLEAN DEFAULT false,
+  min_group_size INTEGER,
+  max_group_size INTEGER,
+  group_pricing JSONB,
+  availability JSONB DEFAULT '{}'::jsonb,
+  approval_status VARCHAR(20) DEFAULT 'pending' CHECK (approval_status IN ('pending', 'approved', 'rejected')),
+  is_active BOOLEAN DEFAULT true,
+  rating DECIMAL(3, 2) DEFAULT 0.0,
+  total_sessions INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bookings table
+CREATE TABLE bookings (
+  id SERIAL PRIMARY KEY,
+  tutor_id INTEGER NOT NULL REFERENCES tutors(id) ON DELETE CASCADE,
+  student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  session_date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Topics table (categories within each subject)
 CREATE TABLE topics (
@@ -34,6 +86,15 @@ CREATE TABLE resources (
 );
 
 -- Indexes for performance
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_users_parent_id ON users(parent_id);
+CREATE INDEX idx_tutors_user_id ON tutors(user_id);
+CREATE INDEX idx_tutors_approval_status ON tutors(approval_status);
+CREATE INDEX idx_tutors_is_active ON tutors(is_active);
+CREATE INDEX idx_bookings_tutor_id ON bookings(tutor_id);
+CREATE INDEX idx_bookings_student_id ON bookings(student_id);
+CREATE INDEX idx_bookings_session_date ON bookings(session_date);
 CREATE INDEX idx_topics_subject ON topics(subject);
 CREATE INDEX idx_resources_subject_topic ON resources(subject, topic_id);
 CREATE INDEX idx_resources_grade_level ON resources(grade_level);
