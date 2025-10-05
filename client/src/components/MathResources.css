@@ -651,11 +651,11 @@
   gap: 0;
   margin: 24px auto 0;
   max-width: 1200px;
-  background: var(--theme-background-paper);
+  background: transparent;
   border: 1px solid var(--theme-border-medium);
+  border-bottom: none;
   border-radius: 12px 12px 0 0;
   overflow: hidden;
-  box-shadow: 0 2px 4px var(--theme-shadow-light);
 }
 
 .resource-tab {
