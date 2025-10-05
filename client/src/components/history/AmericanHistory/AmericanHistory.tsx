@@ -49,8 +49,8 @@ export const AmericanHistory: React.FC<AmericanHistoryProps> = ({ onBack }) => {
   };
 
   return (
-    <div>
-      <button onClick={onBack} className="back-button" style={{ marginBottom: '20px', padding: '10px 20px', cursor: 'pointer' }}>
+    <div style={{ position: 'relative' }}>
+      <button onClick={onBack} className="back-button" style={{ position: 'absolute', top: '20px', left: '20px', padding: '10px 20px', cursor: 'pointer', zIndex: 10 }}>
         ← Back to Countries
       </button>
       <ResourcePageLayout
