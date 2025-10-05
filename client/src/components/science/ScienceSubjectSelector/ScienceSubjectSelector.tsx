@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../math/MathGradeSelector/MathGradeSelector.css'; // Reuse the same styles
+import './ScienceSubjectSelector.css';
 
 interface ScienceSubjectSelectorProps {
   onSubjectSelect: (subjectId: string) => void;
@@ -53,18 +53,14 @@ export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ 
           <div
             key={subject.id}
             className="grade-card"
-            style={{
-              background: `linear-gradient(135deg, ${subject.color}20, ${subject.color}10)`,
-              borderTop: `4px solid ${subject.color}`
-            }}
             onClick={() => onSubjectSelect(subject.id)}
           >
-            <div className="grade-icon" style={{ fontSize: '3rem' }}>
+            <div className="grade-icon">
               {subject.icon}
             </div>
             <h3>{subject.name}</h3>
             <p className="grade-description">{subject.description}</p>
-            
+
             <div className="grade-topics">
               <h4>Popular Topics:</h4>
               <ul>
@@ -73,8 +69,8 @@ export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ 
                 ))}
               </ul>
             </div>
-            
-            <button className="select-grade-btn" style={{ background: subject.color }}>
+
+            <button className="select-grade-btn">
               Browse {subject.name} Tutors →
             </button>
           </div>
