@@ -116,7 +116,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({ onNavigateToTu
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/child/${childId}/reset-password`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/children/${childId}/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({ onNavigateToTu
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/child/${childId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/children/${childId}`, {
         method: 'DELETE',
         credentials: 'include'
       });

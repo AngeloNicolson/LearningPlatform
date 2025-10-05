@@ -1,5 +1,5 @@
 import React from 'react';
-import { MathResources } from '../MathResources/MathResources';
+import { MathPage } from '../../../pages/MathPage/MathPage';
 
 interface MathHubProps {
   onNavigateToResources: () => void;
@@ -7,5 +7,5 @@ interface MathHubProps {
 }
 
 export const MathHub: React.FC<MathHubProps> = ({ onNavigateToResources, onNavigateToTutors }) => {
-  return <MathResources onNavigateToTutors={onNavigateToTutors} />;
+  return <MathPage />;
 };

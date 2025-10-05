@@ -38,3 +38,11 @@
 .cassette-button-label {
   font-weight: 700;
 }
+
+.cassette-button:first-child {
+  border-radius: 12px 0 0 0;
+}
+
+.cassette-button:last-child {
+  border-radius: 0 12px 0 0;
+}

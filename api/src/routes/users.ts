@@ -224,6 +224,49 @@ router.put('/profile',
   }
 );
 
+// Reset child account password (parent only)
+router.post('/children/:childId/reset-password', async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'parent') {
+    return res.status(403).json({ error: 'Only parents can reset child passwords' });
+  }
+
+  try {
+    const { childId } = req.params;
+    const { password } = req.body;
+    const parentId = req.user.userId;
+
+    // Validate password
+    if (!password || password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters' });
+    }
+
+    // Verify the child belongs to this parent
+    const result = await query(
+      'SELECT id FROM users WHERE id = $1 AND parent_id = $2',
+      [childId, parentId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Child account not found' });
+    }
+
+    // Hash new password
+    const saltRounds = 12;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    // Update password
+    await query(
+      'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      [passwordHash, childId]
+    );
+
+    return res.json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Error resetting child password:', error);
+    return res.status(500).json({ message: 'Failed to reset password' });
+  }
+});
+
 // Delete child account (parent only)
 router.delete('/children/:childId', async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'parent') {

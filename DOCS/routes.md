@@ -169,7 +169,7 @@ Create a child account (parent only).
 ### GET `/api/users/children`
 Get all children for current parent.
 
-**Auth Required**: Yes  
+**Auth Required**: Yes
 **Role Required**: parent
 
 **Response**: `200 OK`
@@ -180,9 +180,59 @@ Get all children for current parent.
     "firstName": "Emma",
     "lastName": "Doe",
     "email": "emma.doe@student.com",
-    "accountStatus": "active"
+    "createdAt": "2025-01-15T10:00:00Z",
+    "lastLoginAt": "2025-01-20T14:30:00Z"
   }
 ]
+```
+
+### POST `/api/users/children/:childId/reset-password`
+Reset a child account's password (parent only).
+
+**Auth Required**: Yes
+**Role Required**: parent
+
+**Request Body**:
+```json
+{
+  "password": "newpassword123"
+}
+```
+
+**Response**: `200 OK`
+```json
+{
+  "message": "Password reset successfully"
+}
+```
+
+### DELETE `/api/users/children/:childId`
+Delete a child account (parent only).
+
+**Auth Required**: Yes
+**Role Required**: parent
+
+**Response**: `200 OK`
+```json
+{
+  "message": "Child account deleted successfully"
+}
+```
+
+### GET `/api/users/parent`
+Get parent information (child accounts only).
+
+**Auth Required**: Yes
+**Role Required**: personal (with parent_id)
+
+**Response**: `200 OK`
+```json
+{
+  "id": 2,
+  "email": "parent@example.com",
+  "firstName": "Jane",
+  "lastName": "Doe"
+}
 ```
 
 ---

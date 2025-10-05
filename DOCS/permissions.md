@@ -153,10 +153,9 @@
 ### Parent-Only Endpoints
 - POST `/api/users/create-child`
 - GET `/api/users/children`
-- GET `/api/users/child/:id`
-- PUT `/api/users/child/:id`
-- POST `/api/users/child/:id/reset-password`
-- DELETE `/api/users/child/:id`
+- GET `/api/users/parent` (for children to view parent info)
+- POST `/api/users/children/:childId/reset-password`
+- DELETE `/api/users/children/:childId`
 
 ### Admin/Owner-Only Endpoints
 - GET `/api/tutors/admin/all`

@@ -3,11 +3,12 @@ import { Login } from './components/auth/Login/Login';
 import { Home } from './components/layout/Home/Home';
 import { Dashboard } from './components/layout/Dashboard/Dashboard';
 import { AdminPanel } from './components/admin/AdminPanel/AdminPanel';
-import { MathResources } from './components/math/MathResources/MathResources';
+import { MathPage } from './pages/MathPage/MathPage';
+import { SciencePage } from './pages/SciencePage/SciencePage';
+import { HistoryPage } from './pages/HistoryPage/HistoryPage';
 import { MathHub } from './components/math/MathHub/MathHub';
 import { ScienceHub } from './components/science/ScienceHub/ScienceHub';
 import { DebatePage } from './components/debate/DebatePage/DebatePage';
-import { History } from './components/history/History/History';
 import { TopicWorkspace } from './components/resources/TopicWorkspace/TopicWorkspace';
 import { MathGradeSelector } from './components/math/MathGradeSelector/MathGradeSelector';
 import { TutorCards } from './components/tutoring/TutorCards/TutorCards';
@@ -403,7 +404,7 @@ function AppContent() {
         )}
         
         {currentView === 'history' && (
-          <History />
+          <HistoryPage />
         )}
         
         {currentView === 'admin' && isAuthenticated && (
