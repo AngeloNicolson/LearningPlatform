@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
+import { MathWorksheetUpload } from '../MathWorksheetUpload/MathWorksheetUpload';
 import './AdminPanel.css';
 
 interface AdminPanelProps {
@@ -9,11 +10,11 @@ interface AdminPanelProps {
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate }) => {
   const navigation = useNavigation();
-  const initialTab = (navigation.currentState.adminTab as 'overview' | 'tutors' | 'articles' | 'users' | 'resources') || 'overview';
-  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'resources'>(initialTab);
+  const initialTab = (navigation.currentState.adminTab as 'overview' | 'tutors' | 'articles' | 'users' | 'resources' | 'upload') || 'overview';
+  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'resources' | 'upload'>(initialTab);
 
   // Update navigation when tab changes
-  const handleTabChange = (tab: 'overview' | 'tutors' | 'articles' | 'users' | 'resources') => {
+  const handleTabChange = (tab: 'overview' | 'tutors' | 'articles' | 'users' | 'resources' | 'upload') => {
     setActiveTab(tab);
     navigation.navigate({ adminTab: tab });
   };
@@ -397,14 +398,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
         >
           Articles
         </button>
-        <button 
+        <button
           className={activeTab === 'resources' ? 'tab active' : 'tab'}
           onClick={() => handleTabChange('resources')}
         >
           Math Resources
         </button>
+        <button
+          className={activeTab === 'upload' ? 'tab active' : 'tab'}
+          onClick={() => handleTabChange('upload')}
+        >
+          Upload Content
+        </button>
         {isOwner && (
-          <button 
+          <button
             className={activeTab === 'users' ? 'tab active' : 'tab'}
             onClick={() => handleTabChange('users')}
           >
@@ -1106,6 +1113,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                 )}
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'upload' && (
+          <div className="upload-section">
+            <MathWorksheetUpload />
           </div>
         )}
       </div>

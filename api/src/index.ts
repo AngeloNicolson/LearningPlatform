@@ -15,6 +15,7 @@ import userRoutes from './routes/users';
 import resourcesRoutes from './routes/resources';
 import subjectResourcesRoutes from './routes/subjectResources';
 import topicsRoutes from './routes/topics';
+import uploadsRoutes from './routes/uploads';
 
 dotenv.config();
 
@@ -78,6 +79,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/resources', resourcesRoutes);
 app.use('/api/subject-resources', subjectResourcesRoutes);
 app.use('/api/topics', topicsRoutes);
+app.use('/api/uploads', uploadsRoutes);
 
 // Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

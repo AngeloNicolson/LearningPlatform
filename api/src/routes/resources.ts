@@ -266,33 +266,30 @@ router.get('/all', async (_req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   try {
     const {
-      subtopic_id,
+      subject,
+      topic_id,
       resource_type,
       title,
       description,
       url,
       content,
-      video_url,
-      pdf_url,
-      time_limit,
+      grade_level,
       visible = true,
       display_order = 0
     } = req.body;
 
     // Generate a unique ID
-    const id = `${resource_type}-${Date.now()}`;
+    const id = `${subject}-${resource_type}-${Date.now()}`;
 
     const result = await query(`
       INSERT INTO resources (
-        id, subtopic_id, resource_type, title, description, 
-        url, content, video_url, pdf_url, time_limit, 
-        visible, display_order
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        id, subject, topic_id, resource_type, title, description,
+        url, content, grade_level, visible, display_order
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *
     `, [
-      id, subtopic_id, resource_type, title, description,
-      url, content, video_url, pdf_url, time_limit,
-      visible, display_order
+      id, subject, topic_id, resource_type, title, description,
+      url, content, grade_level, visible, display_order
     ]);
 
     res.status(201).json(result.rows[0]);

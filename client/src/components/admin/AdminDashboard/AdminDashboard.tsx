@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MathWorksheetUpload } from '../MathWorksheetUpload/MathWorksheetUpload';
 import './AdminDashboard.css';
 
 interface AdminDashboardProps {
@@ -6,7 +7,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'settings' | 'bookings'>(
+  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'settings' | 'bookings' | 'upload'>(
     userRole === 'teacher' ? 'bookings' : 'overview'
   );
   const [editingArticle, setEditingArticle] = useState<any>(null);
@@ -193,17 +194,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
         
         {isAdmin && (
           <>
-            <button 
+            <button
               className={activeTab === 'tutors' ? 'tab active' : 'tab'}
               onClick={() => setActiveTab('tutors')}
             >
               Manage Tutors
             </button>
-            <button 
+            <button
               className={activeTab === 'articles' ? 'tab active' : 'tab'}
               onClick={() => setActiveTab('articles')}
             >
               Articles
+            </button>
+            <button
+              className={activeTab === 'upload' ? 'tab active' : 'tab'}
+              onClick={() => setActiveTab('upload')}
+            >
+              Upload Content
             </button>
           </>
         )}
@@ -604,7 +611,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
                   placeholder="Tell students about yourself..."
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Hourly Rate ($)</label>
                 <input
@@ -615,7 +622,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
                   max="200"
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Specializations</label>
                 <input
@@ -623,20 +630,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
                   placeholder="e.g., Algebra, Calculus, Geometry (comma separated)"
                   value={teacherProfile.specializations.join(', ')}
                   onChange={(e) => setTeacherProfile({
-                    ...teacherProfile, 
+                    ...teacherProfile,
                     specializations: e.target.value.split(',').map(s => s.trim()).filter(s => s)
                   })}
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Availability</label>
                 <div className="availability-grid">
                   {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map(day => (
                     <div key={day} className="day-schedule">
                       <label>{day}</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         placeholder="9:00-17:00"
                         value={(teacherProfile.availability as any)[day.toLowerCase()] || ''}
                         onChange={(e) => setTeacherProfile({
@@ -651,9 +658,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
                   ))}
                 </div>
               </div>
-              
+
               <button type="submit" className="btn btn-primary">Update Profile</button>
             </form>
+          </div>
+        )}
+
+        {activeTab === 'upload' && isAdmin && (
+          <div className="upload-section">
+            <MathWorksheetUpload />
           </div>
         )}
       </div>

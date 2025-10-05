@@ -14,6 +14,9 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
+# Create upload directories
+RUN mkdir -p /app/uploads/worksheets /app/uploads/images
+
 # Expose port
 EXPOSE 3001
 

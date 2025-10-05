@@ -1,0 +1,216 @@
+/* Math Worksheet Upload - Retro Theme */
+.math-worksheet-upload {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.upload-header {
+  margin-bottom: 32px;
+}
+
+.upload-header h2 {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  color: var(--theme-primary);
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.upload-subtitle {
+  color: var(--theme-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.upload-message {
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  border: 2px solid;
+}
+
+.upload-message.success {
+  background: var(--theme-success-light, #e8f5e9);
+  border-color: var(--theme-success, #4caf50);
+  color: var(--theme-success-dark, #2e7d32);
+}
+
+.upload-message.error {
+  background: var(--theme-error-light);
+  border-color: var(--theme-error);
+  color: var(--theme-error);
+}
+
+.worksheet-form {
+  background: var(--theme-background-paper);
+  border: 3px solid var(--theme-border-dark);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  color: var(--theme-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  background: var(--theme-background-main);
+  border: 2px solid var(--theme-border-medium);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  color: var(--theme-text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  background: var(--theme-background-paper);
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 3px var(--theme-primary-alpha-10);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.file-input-wrapper {
+  position: relative;
+}
+
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  background: var(--theme-background-main);
+  border: 2px dashed var(--theme-border-medium);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+  border-color: var(--theme-primary);
+  background: var(--theme-background-paper);
+}
+
+.file-input-info {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.file-selected {
+  color: var(--theme-success, #4caf50);
+  font-weight: 600;
+}
+
+.file-placeholder {
+  color: var(--theme-text-muted);
+}
+
+.upload-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  border: 2px solid var(--theme-primary-light);
+  color: var(--theme-text-inverse);
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.upload-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--theme-primary-dark) 0%, var(--theme-primary-light) 100%);
+  box-shadow: 0 4px 12px var(--theme-primary-alpha-20);
+  transform: translateY(-2px);
+}
+
+.upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.upload-info {
+  background: var(--theme-background-main);
+  border: 2px solid var(--theme-border-light);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.upload-info h3 {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  color: var(--theme-primary);
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.upload-info ul {
+  margin: 0;
+  padding-left: 24px;
+  color: var(--theme-text-secondary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.upload-info li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .math-worksheet-upload {
+    padding: 16px;
+  }
+
+  .worksheet-form {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-header h2 {
+    font-size: 1.5rem;
+  }
+}
