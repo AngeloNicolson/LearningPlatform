@@ -300,43 +300,37 @@ export const MathResources: React.FC = () => {
       </div>
 
       {/* Resource Type Tabs */}
-      <div className="resource-type-tabs">
-        <button
+      <div className="resource-type-tabs"><button
           className={`resource-tab ${activeResourceType === 'all' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('all')}
         >
           <span className="tab-icon">📚</span>
           <span className="tab-label">All Resources</span>
-        </button>
-        <button
+        </button><button
           className={`resource-tab ${activeResourceType === 'worksheet' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('worksheet')}
         >
           <span className="tab-icon">📝</span>
           <span className="tab-label">Worksheets</span>
-        </button>
-        <button
+        </button><button
           className={`resource-tab ${activeResourceType === 'video' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('video')}
         >
           <span className="tab-icon">🎬</span>
           <span className="tab-label">Videos</span>
-        </button>
-        <button
+        </button><button
           className={`resource-tab ${activeResourceType === 'quiz' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('quiz')}
         >
           <span className="tab-icon">📋</span>
           <span className="tab-label">Quizzes</span>
-        </button>
-        <button
+        </button><button
           className={`resource-tab ${activeResourceType === 'game' ? 'active' : ''}`}
           onClick={() => setActiveResourceType('game')}
         >
           <span className="tab-icon">🎮</span>
           <span className="tab-label">Games</span>
-        </button>
-      </div>
+        </button></div>
 
       <div className="resources-grid">
         {isLoading ? (

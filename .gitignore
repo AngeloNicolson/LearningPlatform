@@ -50,5 +50,9 @@ package-lock.json
 # Docker volumes
 docker-volumes/
 
+# Certificates (created by Docker mounts)
+client/certs/
+api/certs/
+
 # Emscripten
 emsdk/
