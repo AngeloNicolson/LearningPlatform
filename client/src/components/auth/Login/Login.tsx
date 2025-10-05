@@ -18,6 +18,48 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [selectedRole, setSelectedRole] = useState<'personal' | 'parent' | 'tutor'>('personal');
 
+  const quickLogin = async (email: string, password: string) => {
+    setEmail(email);
+    setPassword(password);
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        let errorMessage = 'Login failed';
+        try {
+          const errorData = JSON.parse(text);
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          errorMessage = `Server error: ${response.status} ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (err) {
+      console.error('Quick login error:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -161,32 +203,49 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
             </button>
 
             <div className="demo-credentials">
-              <p>Demo Accounts:</p>
-              <details>
-                <summary>Owner Account</summary>
-                <code>Email: owner@tutorplatform.com</code>
-                <code>Password: password123</code>
-              </details>
-              <details>
-                <summary>Admin Account</summary>
-                <code>Email: admin@tutorplatform.com</code>
-                <code>Password: password123</code>
-              </details>
-              <details>
-                <summary>Tutor Account</summary>
-                <code>Email: sarah.chen@tutors.com</code>
-                <code>Password: password123</code>
-              </details>
-              <details>
-                <summary>Parent Account</summary>
-                <code>Email: john.parent@email.com</code>
-                <code>Password: password123</code>
-              </details>
-              <details>
-                <summary>Student Account</summary>
-                <code>Email: alex.student@email.com</code>
-                <code>Password: password123</code>
-              </details>
+              <p>Quick Login (Dev Mode):</p>
+              <div className="quick-login-buttons">
+                <button
+                  type="button"
+                  className="quick-login-btn"
+                  onClick={() => quickLogin('owner@tutorplatform.com', 'password123')}
+                  disabled={isLoading}
+                >
+                  👑 Owner
+                </button>
+                <button
+                  type="button"
+                  className="quick-login-btn"
+                  onClick={() => quickLogin('admin@tutorplatform.com', 'password123')}
+                  disabled={isLoading}
+                >
+                  🔧 Admin
+                </button>
+                <button
+                  type="button"
+                  className="quick-login-btn"
+                  onClick={() => quickLogin('sarah.chen@tutors.com', 'password123')}
+                  disabled={isLoading}
+                >
+                  👨‍🏫 Tutor
+                </button>
+                <button
+                  type="button"
+                  className="quick-login-btn"
+                  onClick={() => quickLogin('john.parent@email.com', 'password123')}
+                  disabled={isLoading}
+                >
+                  👨‍👩‍👧 Parent
+                </button>
+                <button
+                  type="button"
+                  className="quick-login-btn"
+                  onClick={() => quickLogin('alex.student@email.com', 'password123')}
+                  disabled={isLoading}
+                >
+                  🎓 Student
+                </button>
+              </div>
             </div>
 
             <div className="auth-switch">

@@ -175,6 +175,42 @@
   margin-bottom: 8px;
 }
 
+.quick-login-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.quick-login-btn {
+  flex: 1;
+  min-width: 90px;
+  padding: 8px 12px;
+  background: var(--theme-background-paper);
+  border: 2px solid var(--theme-border-light);
+  border-radius: 8px;
+  color: var(--theme-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-login-btn:hover:not(:disabled) {
+  background: var(--theme-primary);
+  color: #F5F5DC;
+  border-color: var(--theme-primary);
+  transform: scale(1.05);
+}
+
+.quick-login-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .auth-switch {
   text-align: center;
   margin-top: 24px;

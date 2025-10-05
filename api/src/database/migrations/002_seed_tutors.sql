@@ -1,16 +1,25 @@
 -- Seed Tutors Migration
 -- Creates sample tutor users and tutor profiles for testing
 
--- Insert sample users for tutors (password is 'password123' hashed with bcrypt)
-INSERT INTO users (email, password_hash, first_name, last_name, role, created_at) VALUES
-  ('sarah.math@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'Sarah', 'Johnson', 'tutor', NOW()),
-  ('mike.science@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'Mike', 'Chen', 'tutor', NOW()),
-  ('emma.algebra@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'Emma', 'Williams', 'tutor', NOW()),
-  ('david.physics@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'David', 'Martinez', 'tutor', NOW()),
-  ('lisa.bio@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'Lisa', 'Anderson', 'tutor', NOW()),
-  ('james.calc@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'James', 'Taylor', 'tutor', NOW()),
-  ('rachel.chem@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'Rachel', 'Brown', 'tutor', NOW()),
-  ('kevin.stats@tutorplatform.com', '$2b$10$rKJ5VqH5gH5gH5gH5gH5geuKJ5VqH5gH5gH5gH5gH5gH5gH5gH5gH', 'Kevin', 'Lee', 'tutor', NOW())
+-- Insert demo accounts (password is 'password123' hashed with bcrypt)
+INSERT INTO users (email, password_hash, first_name, last_name, role, account_status, created_at) VALUES
+  ('owner@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Platform', 'Owner', 'admin', 'active', NOW()),
+  ('admin@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Admin', 'User', 'admin', 'active', NOW()),
+  ('john.parent@email.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'John', 'Parent', 'parent', 'active', NOW()),
+  ('alex.student@email.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Alex', 'Student', 'student', 'active', NOW()),
+  ('sarah.chen@tutors.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Sarah', 'Chen', 'tutor', 'active', NOW())
+ON CONFLICT (email) DO NOTHING;
+
+-- Insert sample tutor users (password is 'password123')
+INSERT INTO users (email, password_hash, first_name, last_name, role, account_status, created_at) VALUES
+  ('sarah.math@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Sarah', 'Johnson', 'tutor', 'active', NOW()),
+  ('mike.science@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Mike', 'Chen', 'tutor', 'active', NOW()),
+  ('emma.algebra@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Emma', 'Williams', 'tutor', 'active', NOW()),
+  ('david.physics@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'David', 'Martinez', 'tutor', 'active', NOW()),
+  ('lisa.bio@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Lisa', 'Anderson', 'tutor', 'active', NOW()),
+  ('james.calc@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'James', 'Taylor', 'tutor', 'active', NOW()),
+  ('rachel.chem@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Rachel', 'Brown', 'tutor', 'active', NOW()),
+  ('kevin.stats@tutorplatform.com', '$2b$10$D6NvakH8tMTVWLp6MD/ubOJzSaO6zgTrjrED88ETQAzCJZiwneWg6', 'Kevin', 'Lee', 'tutor', 'active', NOW())
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert tutor profiles
