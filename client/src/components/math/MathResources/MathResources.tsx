@@ -255,7 +255,7 @@ export const MathResources: React.FC = () => {
           </button>
         </div>
 
-        <div className="carousel-dots">
+        <div className="carousel-dots" style={{marginTop: '-16px'}}>
           {Array.from({ length: totalTopicPages }).map((_, index) => (
             <button
               key={index}
