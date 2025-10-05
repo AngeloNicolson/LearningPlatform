@@ -1,5 +1,5 @@
 import React from 'react';
-import './MathGradeSelector.css'; // Reuse the same styles
+import '../../math/MathGradeSelector/MathGradeSelector.css'; // Reuse the same styles
 
 interface ScienceSubjectSelectorProps {
   onSubjectSelect: (subjectId: string) => void;

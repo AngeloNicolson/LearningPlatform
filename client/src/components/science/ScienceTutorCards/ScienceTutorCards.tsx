@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './TutorCards.css'; // Reuse the same styles
+import '../../tutoring/TutorCards/TutorCards.css'; // Reuse the same styles
 
 interface ScienceTutor {
   id: number;
