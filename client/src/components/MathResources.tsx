@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../contexts/NavigationContext';
+import { CassetteButton } from './CassetteButton';
 import './MathResources.css';
 
 interface Resource {
@@ -300,37 +301,32 @@ export const MathResources: React.FC = () => {
       </div>
 
       {/* Resource Type Tabs */}
-      <div className="resource-type-tabs"><button
-          className={`resource-tab ${activeResourceType === 'all' ? 'active' : ''}`}
+      <div className="resource-type-tabs"><CassetteButton
+          icon="📚"
+          label="All Resources"
+          isActive={activeResourceType === 'all'}
           onClick={() => setActiveResourceType('all')}
-        >
-          <span className="tab-icon">📚</span>
-          <span className="tab-label">All Resources</span>
-        </button><button
-          className={`resource-tab ${activeResourceType === 'worksheet' ? 'active' : ''}`}
+        /><CassetteButton
+          icon="📝"
+          label="Worksheets"
+          isActive={activeResourceType === 'worksheet'}
           onClick={() => setActiveResourceType('worksheet')}
-        >
-          <span className="tab-icon">📝</span>
-          <span className="tab-label">Worksheets</span>
-        </button><button
-          className={`resource-tab ${activeResourceType === 'video' ? 'active' : ''}`}
+        /><CassetteButton
+          icon="🎬"
+          label="Videos"
+          isActive={activeResourceType === 'video'}
           onClick={() => setActiveResourceType('video')}
-        >
-          <span className="tab-icon">🎬</span>
-          <span className="tab-label">Videos</span>
-        </button><button
-          className={`resource-tab ${activeResourceType === 'quiz' ? 'active' : ''}`}
+        /><CassetteButton
+          icon="📋"
+          label="Quizzes"
+          isActive={activeResourceType === 'quiz'}
           onClick={() => setActiveResourceType('quiz')}
-        >
-          <span className="tab-icon">📋</span>
-          <span className="tab-label">Quizzes</span>
-        </button><button
-          className={`resource-tab ${activeResourceType === 'game' ? 'active' : ''}`}
+        /><CassetteButton
+          icon="🎮"
+          label="Games"
+          isActive={activeResourceType === 'game'}
           onClick={() => setActiveResourceType('game')}
-        >
-          <span className="tab-icon">🎮</span>
-          <span className="tab-label">Games</span>
-        </button></div>
+        /></div>
 
       <div className="resources-grid">
         {isLoading ? (

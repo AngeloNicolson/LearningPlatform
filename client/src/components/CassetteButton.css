@@ -1,0 +1,40 @@
+/* Cassette Deck Button */
+.cassette-button {
+  background: var(--theme-background-paper);
+  color: var(--theme-primary);
+  padding: 8px 12px;
+  margin: 0;
+  border: 0;
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex: 1;
+  transition: all 0.1s ease;
+  user-select: none;
+  vertical-align: top;
+}
+
+.cassette-button:hover:not(.cassette-button-active) {
+  background: var(--theme-background-main);
+  color: var(--theme-primary);
+}
+
+.cassette-button-active {
+  background: var(--theme-primary);
+  color: #F5F5DC;
+}
+
+.cassette-button-icon {
+  font-size: 1rem;
+}
+
+.cassette-button-label {
+  font-weight: 700;
+}

@@ -646,66 +646,24 @@
   border-color: var(--theme-primary);
 }
 
-/* Resource Type Tabs - Cassette Player Style */
+/* Resource Type Tabs Container - Cassette Deck Housing */
 .resource-type-tabs {
   display: flex;
   justify-content: center;
   gap: 0;
-  margin: 24px auto 0;
-  max-width: 1200px;
+  margin: 32px auto;
+  max-width: 900px;
   padding: 0;
-  background: transparent;
-  border: 2px solid var(--theme-border-medium);
-  border-radius: 0;
-}
-
-.resource-tab {
-  background: var(--theme-background-paper);
-  border: none;
-  color: var(--theme-primary);
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  position: relative;
-  flex: 1;
-  justify-content: center;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 0;
-}
-
-.resource-tab:hover:not(.active) {
-  background: var(--theme-background-main);
-  color: var(--theme-primary);
-}
-
-.resource-tab.active {
-  background: var(--theme-primary);
-  color: var(--theme-background-main);
+  background: var(--theme-border-medium);
+  border: 2px solid var(--theme-border-dark);
   box-shadow:
-    inset 0 3px 6px rgba(0, 0, 0, 0.3),
-    0 1px 0 rgba(255, 255, 255, 0.1);
-  transform: translateY(2px);
-  font-weight: 700;
+    0 8px 16px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-size: 0;
 }
 
-.resource-tab .tab-icon {
-  font-size: 0.9rem;
-  filter: none;
-}
-
-.resource-tab.active .tab-icon {
-  filter: brightness(1.2);
-}
-
-.resource-tab .tab-label {
-  font-weight: 600;
+.resource-type-tabs > * {
+  font-size: 0.7rem;
 }
 
 /* Resources Grid */
