@@ -20,6 +20,7 @@ import { ScienceTutorCards } from './components/science/ScienceTutorCards/Scienc
 import { FindTutorsHub } from './components/tutoring/FindTutorsHub/FindTutorsHub';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeSwitcher } from './components/common/ThemeSwitcher/ThemeSwitcher';
 import { Topic } from './types/wasm';
 import { TopicMetadata } from './types/storage';
@@ -31,13 +32,8 @@ import './App.css';
 function AppContent() {
   const navigation = useNavigation();
   const currentState = navigation.currentState;
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<string>('personal');
-  const [accountStatus, setAccountStatus] = useState<string>('active');
-  const [parentId, setParentId] = useState<number | null>(null);
-  const [needsOnboarding, setNeedsOnboarding] = useState(false); // Used in onboarding check
-  const [userId, setUserId] = useState<number | null>(null);
-  const [userName, setUserName] = useState<string>('');
+  const auth = useAuth();
+  const { isAuthenticated, userRole, accountStatus, parentId, userId, userName, needsOnboarding, login, logout } = auth;
   const [, setSelectedTopic] = useState<Topic | null>(null); // For future debates feature
   const [, setWorkspaceTopicId] = useState<string | null>(null); // For future workspace feature
   const { getTopic, createTopic } = useTopics();
@@ -53,54 +49,17 @@ function AppContent() {
   const selectedScienceSubject = currentState.selectedScienceSubject || '';
   const tutorType = currentState.tutorType || 'all';
 
-  // Check for existing session on mount
-  useEffect(() => {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      setIsAuthenticated(true);
-      setUserRole(user.role || 'personal');
-      setAccountStatus(user.accountStatus || 'active');
-      setParentId(user.parentId || null);
-    }
-  }, []);
-
   const handleLoginSuccess = () => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       const user = JSON.parse(userStr);
-      setUserRole(user.role || 'personal');
-      setAccountStatus(user.accountStatus || 'active');
-      setParentId(user.parentId || null);
-      setUserId(user.id || null);
-      setUserName(`${user.firstName || ''} ${user.lastName || ''}`);
-      
-      // Check if tutor needs onboarding
-      if (user.role === 'tutor' && user.needsOnboarding) {
-        setNeedsOnboarding(true);
-        setIsAuthenticated(true);
-        navigation.navigate({ view: 'onboarding' });
-        return;
-      }
+      login(user); // Use auth context login
     }
-    setIsAuthenticated(true);
-    navigation.navigate({ view: 'dashboard' }); // Navigate to dashboard after login
   };
 
   const handleLogout = async () => {
-    try {
-      await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    setUserRole('personal');
     setImpersonatingAs(null);
-    navigation.navigate({ view: 'home' });
+    await logout(); // Use auth context logout
   };
   
   const handleImpersonate = (role: string, name: string) => {
@@ -414,19 +373,18 @@ function AppContent() {
           />
         )}
         
-        {currentView === 'onboarding' && isAuthenticated && userRole === 'tutor' && (
+        {currentView === 'onboarding' && isAuthenticated && userRole === 'tutor' && needsOnboarding && (
           <TutorOnboarding
             userId={userId || 0}
             userName={userName}
             onComplete={() => {
-              setNeedsOnboarding(false);
-              navigation.navigate({ view: 'dashboard' });
-              // Update user in localStorage
+              // Update user to mark onboarding as complete
               const userStr = localStorage.getItem('user');
               if (userStr) {
                 const user = JSON.parse(userStr);
                 user.needsOnboarding = false;
                 localStorage.setItem('user', JSON.stringify(user));
+                login(user); // Re-login to update auth context
               }
             }}
           />
@@ -528,7 +486,9 @@ function App() {
   return (
     <ThemeProvider>
       <NavigationProvider>
-        <AppContent />
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
       </NavigationProvider>
     </ThemeProvider>
   );

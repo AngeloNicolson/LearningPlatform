@@ -157,7 +157,7 @@ export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTut
       setLoading(true);
       setError(null);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/${tutorId}`
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/${tutorId}`
       );
       
       if (!response.ok) {

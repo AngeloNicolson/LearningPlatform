@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { authFetch } from '../../../utils/authFetch';
 import { FileUpload } from '../../common/FileUpload/FileUpload';
 import './AdminUpload.css';
 
@@ -25,8 +26,8 @@ export const AdminUpload: React.FC<AdminUploadProps> = ({ onClose }) => {
     setMessage(null);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/content/lesson`,
+      const response = await authFetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/content/lesson`,
         {
           method: 'POST',
           headers: {

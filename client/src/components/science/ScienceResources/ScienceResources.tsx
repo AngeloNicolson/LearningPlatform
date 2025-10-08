@@ -174,9 +174,9 @@ export const ScienceResources: React.FC = () => {
       ) || [];
   
   const filteredResources = allResources.filter(resource => {
-    const gradeMatch = selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade);
+    const gradeMatch = selectedGrade === 'all' || (resource.gradeLevel && resource.gradeLevel.toLowerCase().includes(selectedGrade));
     const typeMatch = activeResourceType === 'all' || resource.type === activeResourceType;
-    const searchMatch = searchQuery === '' || 
+    const searchMatch = searchQuery === '' ||
       resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (resource.topicName && resource.topicName.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -434,7 +434,7 @@ export const ScienceResources: React.FC = () => {
                 <h3>{resource.title}</h3>
                 <p className="resource-description">{resource.description}</p>
                 <div className="resource-meta">
-                  <span className="grade-level">{resource.gradeLevel}</span>
+                  <span className="grade-level">{resource.gradeLevel || 'All Levels'}</span>
                 </div>
                 <button 
                   className="resource-button"

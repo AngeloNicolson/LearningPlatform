@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState } from 'react';
 import './TutorOnboarding.css';
 
@@ -123,7 +124,7 @@ export const TutorOnboarding: React.FC<TutorOnboardingProps> = ({ userId, userNa
     setError('');
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/complete-profile`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/complete-profile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

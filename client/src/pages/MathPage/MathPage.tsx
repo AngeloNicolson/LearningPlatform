@@ -1,3 +1,4 @@
+import { authFetch } from '../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../contexts/NavigationContext';
 import { ResourcePageLayout, Resource, Topic } from '../../components/common/ResourcePageLayout/ResourcePageLayout';
@@ -13,7 +14,7 @@ export const MathPage: React.FC = () => {
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await fetch(`https://localhost:3001/api/resources/math/topics`, {
+        const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/math/topics`, {
           credentials: 'include'
         });
 
@@ -39,7 +40,7 @@ export const MathPage: React.FC = () => {
           params.append('topic', selectedTopic);
         }
 
-        const response = await fetch(`https://localhost:3001/api/resources/math?${params.toString()}`, {
+        const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/math?${params.toString()}`, {
           credentials: 'include'
         });
 
@@ -50,12 +51,14 @@ export const MathPage: React.FC = () => {
             id: r.id,
             title: r.title,
             description: r.description,
-            type: r.type,
-            gradeLevel: r.gradeLevel,
+            type: r.resource_type || r.type,
+            gradeLevel: r.grade_level || r.gradeLevel,
             url: r.url,
             topic_id: r.topic_id,
             topicName: apiTopics.find(t => t.id === r.topic_id)?.name,
-            topicIcon: apiTopics.find(t => t.id === r.topic_id)?.icon
+            topicIcon: apiTopics.find(t => t.id === r.topic_id)?.icon,
+            document_id: r.document_id,
+            resource_type: r.resource_type
           }));
           setApiResources(mappedResources);
         }

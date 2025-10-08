@@ -26,9 +26,9 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
+      - "5777:5777"
     environment:
-      - VITE_API_URL=https://localhost:3001/api
+      - VITE_API_URL=https://localhost:3777/api
       - NODE_ENV=production
       - NODE_TLS_REJECT_UNAUTHORIZED=0  # Required for self-signed certs
     volumes:
@@ -47,12 +47,12 @@ services:
       context: ./api
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "3777:3777"
     environment:
       - NODE_ENV=production
-      - PORT=3001
+      - PORT=3777
       - USE_HTTPS=true
-      - CLIENT_URL=https://localhost:5173
+      - CLIENT_URL=https://localhost:5777
       - JWT_ACCESS_SECRET=prod-access-secret-${JWT_ACCESS_SECRET:-change-in-production}
       - JWT_REFRESH_SECRET=prod-refresh-secret-${JWT_REFRESH_SECRET:-change-in-production}
       - DB_HOST=postgres

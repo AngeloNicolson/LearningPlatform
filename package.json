@@ -6,23 +6,18 @@
   "workspaces": [
     "client",
     "api",
-    "server",
     "shared"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:api\" \"npm run dev:client\"",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:client\"",
     "dev:client": "npm run dev --workspace=client",
     "dev:api": "npm run dev --workspace=api",
-    "dev:server": "npm run dev --workspace=server",
-    "build": "npm run build:shared && npm run build:server && npm run build:api && npm run build:client",
+    "build": "npm run build:shared && npm run build:api && npm run build:client",
     "build:client": "npm run build --workspace=client",
     "build:api": "npm run build --workspace=api",
-    "build:server": "npm run build --workspace=server",
     "build:shared": "npm run build --workspace=shared",
-    "start": "concurrently \"npm run start:server\" \"npm run start:api\"",
+    "start": "npm run start:api",
     "start:api": "npm run start --workspace=api",
-    "start:server": "npm run start --workspace=server",
-    "db:init": "npm run db:init --workspace=server",
     "setup:https": "bash scripts/setup-https.sh",
     "run": "bash scripts/run.sh",
     "docker:up": "bash -c '[ ! -f certs/localhost.pem ] && command -v mkcert &> /dev/null && bash scripts/setup-https.sh || mkdir -p certs; docker-compose up -d'",
@@ -31,7 +26,7 @@
     "docker:reset": "docker-compose down -v && bash scripts/run.sh",
     "docker:status": "bash scripts/status.sh",
     "install:all": "npm install",
-    "clean": "rm -rf node_modules client/node_modules api/node_modules server/node_modules shared/node_modules"
+    "clean": "rm -rf node_modules client/node_modules api/node_modules shared/node_modules"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

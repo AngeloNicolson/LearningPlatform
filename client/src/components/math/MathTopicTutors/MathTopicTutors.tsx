@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import './MathTopicTutors.css';
 
@@ -38,8 +39,8 @@ export const MathTopicTutors: React.FC<MathTopicTutorsProps> = ({
   const fetchTutors = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/by-topic/${encodeURIComponent(topicName)}?limit=${showAll ? 10 : 2}`,
+      const response = await authFetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/by-topic/${encodeURIComponent(topicName)}?limit=${showAll ? 10 : 2}`,
         {
           credentials: 'include'
         }

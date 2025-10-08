@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || 'https://localhost:3001/api';
+import { authFetch } from '../utils/authFetch';
+const API_URL = import.meta.env.VITE_API_URL || 'https://localhost:3777/api';
 
 export interface Resource {
   id: string;
@@ -52,7 +53,7 @@ class ResourcesService {
       const queryString = params.toString();
       const url = `${API_URL}/subject-resources/${subject}/resources${queryString ? '?' + queryString : ''}`;
       
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -75,7 +76,7 @@ class ResourcesService {
   // Fetch topics for a specific subject
   async getTopics(subject: 'math' | 'science' | 'history'): Promise<Topic[]> {
     try {
-      const response = await fetch(`${API_URL}/subject-resources/${subject}/topics`, {
+      const response = await authFetch(`${API_URL}/subject-resources/${subject}/topics`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -214,7 +215,7 @@ class ResourcesService {
 
   // Admin functions (require authentication)
   async createResource(subject: string, resource: Partial<Resource>): Promise<Resource> {
-    const response = await fetch(`${API_URL}/subject-resources/${subject}/resources`, {
+    const response = await authFetch(`${API_URL}/subject-resources/${subject}/resources`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -232,7 +233,7 @@ class ResourcesService {
   }
 
   async updateResource(id: string, updates: Partial<Resource>): Promise<Resource> {
-    const response = await fetch(`${API_URL}/subject-resources/resources/${id}`, {
+    const response = await authFetch(`${API_URL}/subject-resources/resources/${id}`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -250,7 +251,7 @@ class ResourcesService {
   }
 
   async deleteResource(id: string): Promise<void> {
-    const response = await fetch(`${API_URL}/subject-resources/resources/${id}`, {
+    const response = await authFetch(`${API_URL}/subject-resources/resources/${id}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: {

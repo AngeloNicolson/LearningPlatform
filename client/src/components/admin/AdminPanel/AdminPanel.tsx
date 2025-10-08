@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
-import { MathWorksheetUpload } from '../MathWorksheetUpload/MathWorksheetUpload';
+import { authFetch } from '../../../utils/authFetch';
+import { MathResourceUpload } from '../MathResourceUpload/MathResourceUpload';
 import './AdminPanel.css';
 
 interface AdminPanelProps {
@@ -10,11 +11,11 @@ interface AdminPanelProps {
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate }) => {
   const navigation = useNavigation();
-  const initialTab = (navigation.currentState.adminTab as 'overview' | 'tutors' | 'articles' | 'users' | 'resources' | 'upload') || 'overview';
-  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'resources' | 'upload'>(initialTab);
+  const initialTab = (navigation.currentState.adminTab as 'overview' | 'tutors' | 'articles' | 'users' | 'upload') || 'overview';
+  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'upload'>(initialTab);
 
   // Update navigation when tab changes
-  const handleTabChange = (tab: 'overview' | 'tutors' | 'articles' | 'users' | 'resources' | 'upload') => {
+  const handleTabChange = (tab: 'overview' | 'tutors' | 'articles' | 'users' | 'upload') => {
     setActiveTab(tab);
     navigation.navigate({ adminTab: tab });
   };
@@ -26,15 +27,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
     subject: '',
     published: false
   });
-  const [selectedGrade, setSelectedGrade] = useState<string>('');
-  const [selectedTopic, setSelectedTopic] = useState<string>('');
-  const [selectedSubtopic, setSelectedSubtopic] = useState<string>('');
-  const [resourceType, setResourceType] = useState<'worksheets' | 'videos' | 'practice' | 'quizzes' | 'history'>('worksheets');
-  const [editingResource, setEditingResource] = useState<any>(null);
-  const [showMarkdownPreview, setShowMarkdownPreview] = useState(false);
-  const [grades, setGrades] = useState<any[]>([]);
-  const [resources, setResources] = useState<any[]>([]);
-  const [loadingResources, setLoadingResources] = useState(false);
   const [tutors, setTutors] = useState<any[]>([]);
   const [loadingTutors, setLoadingTutors] = useState(false);
   const [pendingTutors, setPendingTutors] = useState<any[]>([]);
@@ -69,39 +61,21 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
     { id: '5', email: 'student@example.com', name: 'Jimmy Doe', role: 'student', joined: 'Jan 10, 2024' },
   ];
 
-  // Fetch grades on component mount
+  // Fetch tutors on component mount
   useEffect(() => {
-    fetchGrades();
     fetchTutors();
   }, []);
-
-  // Fetch resources when subtopic changes
-  useEffect(() => {
-    if (selectedSubtopic) {
-      fetchResources(selectedSubtopic);
-    }
-  }, [selectedSubtopic]);
-
-  const fetchGrades = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/grades`);
-      const data = await response.json();
-      setGrades(data);
-    } catch (error) {
-      console.error('Error fetching grades:', error);
-    }
-  };
 
   const fetchTutors = async () => {
     setLoadingTutors(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/all`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/admin/all`, {
         credentials: 'include'
       });
       
       if (response.status === 401) {
         // Fall back to public endpoint if not authorized
-        const publicResponse = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors`);
+        const publicResponse = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors`);
         const data = await publicResponse.json();
         setTutors(data);
         setPendingTutors([]);
@@ -145,62 +119,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
     }
   };
 
-  const fetchResources = async (subtopicId: string) => {
-    setLoadingResources(true);
-    try {
-      // For admin, we need to get all resources including hidden ones
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/admin/subtopics/${subtopicId}/resources`, {
-        credentials: 'include'
-      });
-      
-      if (response.status === 401) {
-        // If unauthorized, fall back to public endpoint
-        const publicResponse = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/subtopics/${subtopicId}/resources`);
-        const data = await publicResponse.json();
-        setResources(data.resources || []);
-      } else {
-        const data = await response.json();
-        setResources(data.resources || []);
-      }
-    } catch (error) {
-      console.error('Error fetching resources:', error);
-      setResources([]);
-    } finally {
-      setLoadingResources(false);
-    }
-  };
-
-  const toggleResourceVisibility = async (resourceId: string) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/admin/resources/${resourceId}/visibility`, {
-        method: 'PATCH',
-        credentials: 'include'
-      });
-
-      if (response.status === 401) {
-        alert('Session expired. Please login again through the main app.');
-        return;
-      }
-
-      if (response.ok) {
-        const data = await response.json();
-        // Update local state
-        setResources(prev => prev.map(r => 
-          r.id === resourceId ? { ...r, visible: data.visible ? 1 : 0 } : r
-        ));
-      } else {
-        console.error('Failed to toggle visibility');
-        alert('Failed to update visibility. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error toggling visibility:', error);
-      alert('Error connecting to server. Please try again.');
-    }
-  };
-
   const handleApproveTutor = async (tutorId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}/approve`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/admin/${tutorId}/approve`, {
         method: 'PATCH',
         credentials: 'include'
       });
@@ -221,7 +142,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
 
   const handleRejectTutor = async (tutorId: string, reason: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}/reject`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/admin/${tutorId}/reject`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
@@ -248,7 +169,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleUpdateTutor = async (tutorId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/admin/${tutorId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -287,7 +208,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/admin/${tutorId}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -317,7 +238,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
 
   const handleToggleTutorStatus = async (tutorId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/admin/${tutorId}/toggle`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/admin/${tutorId}/toggle`, {
         method: 'PATCH',
         credentials: 'include'
       });
@@ -392,17 +313,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
         >
           Manage Tutors
         </button>
-        <button 
+        <button
           className={activeTab === 'articles' ? 'tab active' : 'tab'}
           onClick={() => handleTabChange('articles')}
         >
           Articles
-        </button>
-        <button
-          className={activeTab === 'resources' ? 'tab active' : 'tab'}
-          onClick={() => handleTabChange('resources')}
-        >
-          Math Resources
         </button>
         <button
           className={activeTab === 'upload' ? 'tab active' : 'tab'}
@@ -771,354 +686,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
           </div>
         )}
 
-        {activeTab === 'resources' && (
-          <div className="resources-section">
-            <h2>Math Resources Management</h2>
-            
-            <div className="resource-selector">
-              <div className="selector-row">
-                <div className="selector-group">
-                  <label>Grade Level</label>
-                  <select 
-                    value={selectedGrade} 
-                    onChange={(e) => {
-                      setSelectedGrade(e.target.value);
-                      setSelectedTopic('');
-                      setSelectedSubtopic('');
-                      setResources([]);
-                    }}
-                  >
-                    <option value="">Select Grade</option>
-                    {grades.map(grade => (
-                      <option key={grade.id} value={grade.id}>
-                        {grade.name} ({grade.grade_range})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {selectedGrade && (
-                  <div className="selector-group">
-                    <label>Topic</label>
-                    <select 
-                      value={selectedTopic}
-                      onChange={(e) => {
-                        setSelectedTopic(e.target.value);
-                        setSelectedSubtopic('');
-                        setResources([]);
-                      }}
-                    >
-                      <option value="">Select Topic</option>
-                      {grades
-                        .find(g => g.id === selectedGrade)
-                        ?.topics?.map((topic: any) => (
-                          <option key={topic.id} value={topic.id}>
-                            {topic.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                )}
-
-                {selectedTopic && (
-                  <div className="selector-group">
-                    <label>Subtopic</label>
-                    <select 
-                      value={selectedSubtopic}
-                      onChange={(e) => setSelectedSubtopic(e.target.value)}
-                    >
-                      <option value="">Select Subtopic</option>
-                      {grades
-                        .find(g => g.id === selectedGrade)
-                        ?.topics?.find((t: any) => t.id === selectedTopic)
-                        ?.subtopics?.map((subtopic: any) => (
-                          <option key={subtopic.id} value={subtopic.id}>
-                            {subtopic.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                )}
-              </div>
-
-              {selectedSubtopic && (
-                <div className="resource-type-tabs">
-                  <button 
-                    className={resourceType === 'worksheets' ? 'resource-tab active' : 'resource-tab'}
-                    onClick={() => setResourceType('worksheets')}
-                  >
-                    Worksheets
-                  </button>
-                  <button 
-                    className={resourceType === 'videos' ? 'resource-tab active' : 'resource-tab'}
-                    onClick={() => setResourceType('videos')}
-                  >
-                    Videos
-                  </button>
-                  <button 
-                    className={resourceType === 'practice' ? 'resource-tab active' : 'resource-tab'}
-                    onClick={() => setResourceType('practice')}
-                  >
-                    Practice
-                  </button>
-                  <button 
-                    className={resourceType === 'quizzes' ? 'resource-tab active' : 'resource-tab'}
-                    onClick={() => setResourceType('quizzes')}
-                  >
-                    Quizzes
-                  </button>
-                  <button 
-                    className={resourceType === 'history' ? 'resource-tab active' : 'resource-tab'}
-                    onClick={() => setResourceType('history')}
-                  >
-                    History
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {selectedSubtopic && (
-              <div className="resource-manager">
-                {resourceType === 'history' ? (
-                  <div className="history-editor">
-                    <h3>Edit History Article</h3>
-                    <div className="history-form">
-                      <div className="form-group">
-                        <label>Article Title</label>
-                        <input 
-                          type="text" 
-                          placeholder="The History of..."
-                          className="form-control"
-                        />
-                      </div>
-                      
-                      <div className="markdown-editor-group">
-                        <div className="editor-toolbar">
-                          <button 
-                            className={!showMarkdownPreview ? 'toolbar-btn active' : 'toolbar-btn'}
-                            onClick={() => setShowMarkdownPreview(false)}
-                          >
-                            Edit
-                          </button>
-                          <button 
-                            className={showMarkdownPreview ? 'toolbar-btn active' : 'toolbar-btn'}
-                            onClick={() => setShowMarkdownPreview(true)}
-                          >
-                            Preview
-                          </button>
-                        </div>
-                        
-                        {!showMarkdownPreview ? (
-                          <div className="form-group">
-                            <label>Content (Markdown)</label>
-                            <textarea 
-                              rows={20}
-                              placeholder="# History Title&#10;&#10;## Section&#10;Content here..."
-                              className="markdown-textarea"
-                            />
-                          </div>
-                        ) : (
-                          <div className="markdown-preview">
-                            <p>Preview will appear here...</p>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="form-actions">
-                        <button className="btn btn-primary">Save History Article</button>
-                        <button className="btn btn-secondary">Cancel</button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="resource-list">
-                    <div className="resource-header">
-                      <h3>{resourceType.charAt(0).toUpperCase() + resourceType.slice(1)}</h3>
-                      <button 
-                        className="btn btn-primary"
-                        onClick={() => setEditingResource({})}
-                      >
-                        Add New {resourceType.slice(0, -1)}
-                      </button>
-                    </div>
-
-                    {editingResource ? (
-                      <div className="resource-form">
-                        <h4>{editingResource.id ? 'Edit' : 'Add New'} {resourceType.slice(0, -1)}</h4>
-                        
-                        <div className="form-group">
-                          <label>Title</label>
-                          <input 
-                            type="text" 
-                            placeholder={`${resourceType.slice(0, -1)} title`}
-                            className="form-control"
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label>Description</label>
-                          <textarea 
-                            rows={3}
-                            placeholder="Brief description..."
-                            className="form-control"
-                          />
-                        </div>
-
-                        {resourceType === 'worksheets' && (
-                          <div className="form-group">
-                            <label>Upload PDF</label>
-                            <input 
-                              type="file" 
-                              accept=".pdf"
-                              className="form-control"
-                            />
-                            <small>Max file size: 10MB</small>
-                          </div>
-                        )}
-
-                        {resourceType === 'videos' && (
-                          <div className="form-group">
-                            <label>Video URL</label>
-                            <input 
-                              type="url" 
-                              placeholder="https://youtube.com/..."
-                              className="form-control"
-                            />
-                            <small>YouTube, Vimeo, or direct video URLs</small>
-                          </div>
-                        )}
-
-                        {resourceType === 'practice' && (
-                          <>
-                            <div className="form-group">
-                              <label>Problem Set</label>
-                              <textarea 
-                                rows={10}
-                                placeholder="Enter problems (one per line)..."
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Answer Key</label>
-                              <textarea 
-                                rows={10}
-                                placeholder="Enter answers (one per line)..."
-                                className="form-control"
-                              />
-                            </div>
-                          </>
-                        )}
-
-                        {resourceType === 'quizzes' && (
-                          <>
-                            <div className="form-group">
-                              <label>Quiz Type</label>
-                              <select className="form-control">
-                                <option value="multiple-choice">Multiple Choice</option>
-                                <option value="short-answer">Short Answer</option>
-                                <option value="mixed">Mixed</option>
-                              </select>
-                            </div>
-                            <div className="form-group">
-                              <label>Time Limit (minutes)</label>
-                              <input 
-                                type="number" 
-                                min="5" 
-                                max="120"
-                                placeholder="30"
-                                className="form-control"
-                              />
-                            </div>
-                          </>
-                        )}
-
-                        <div className="form-group">
-                          <label>
-                            <input type="checkbox" /> Visible to students
-                          </label>
-                        </div>
-
-                        <div className="form-group">
-                          <label>Grade Restrictions</label>
-                          <select className="form-control">
-                            <option value="all">All grades</option>
-                            <option value="k-2">K-2 only</option>
-                            <option value="3-5">3-5 only</option>
-                            <option value="6-8">6-8 only</option>
-                            <option value="9-12">9-12 only</option>
-                          </select>
-                        </div>
-
-                        <div className="form-actions">
-                          <button className="btn btn-primary">Save</button>
-                          <button 
-                            className="btn btn-secondary"
-                            onClick={() => setEditingResource(null)}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="resource-items">
-                        {loadingResources ? (
-                          <div className="loading">Loading resources...</div>
-                        ) : (
-                          <>
-                            {resources
-                              .filter(r => r.resource_type === resourceType)
-                              .map(resource => (
-                                <div key={resource.id} className="resource-item">
-                                  <div className="resource-info">
-                                    <h4>{resource.title}</h4>
-                                    <p>{resource.description}</p>
-                                    <span className="resource-meta">
-                                      <span className={`visibility-badge ${resource.visible ? 'visible' : 'hidden'}`}>
-                                        {resource.visible ? 'Visible' : 'Hidden'}
-                                      </span>
-                                      <span className="date">
-                                        Updated: {new Date(resource.updated_at).toLocaleDateString()}
-                                      </span>
-                                    </span>
-                                  </div>
-                                  <div className="resource-actions">
-                                    <button className="btn btn-small">Edit</button>
-                                    <button 
-                                      className="btn btn-small"
-                                      onClick={() => toggleResourceVisibility(resource.id)}
-                                    >
-                                      {resource.visible ? 'Hide' : 'Show'}
-                                    </button>
-                                    <button className="btn btn-small btn-danger">Delete</button>
-                                  </div>
-                                </div>
-                              ))}
-                            
-                            {resources.filter(r => r.resource_type === resourceType).length === 0 && (
-                              <div className="empty-state">
-                                <p>No {resourceType} available for this subtopic.</p>
-                                <button 
-                                  className="btn btn-primary"
-                                  onClick={() => setEditingResource({})}
-                                >
-                                  Add First {resourceType.slice(0, -1)}
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
         {activeTab === 'upload' && (
           <div className="upload-section">
-            <MathWorksheetUpload />
+            <MathResourceUpload />
           </div>
         )}
       </div>

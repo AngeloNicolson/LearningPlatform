@@ -120,9 +120,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         // Determine the upload endpoint
         let endpoint = '';
         if (uploadType === 'worksheet') {
-          endpoint = '/api/uploads/worksheet';
+          endpoint = '/uploads/worksheet';
         } else if (uploadType === 'image') {
-          endpoint = '/api/uploads/image';
+          endpoint = '/uploads/image';
         }
 
         const xhr = new XMLHttpRequest();
@@ -148,8 +148,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             }
           };
           xhr.onerror = () => reject(new Error('Upload failed'));
-          
-          xhr.open('POST', `${import.meta.env.VITE_API_URL || 'https://localhost:3001'}${endpoint}`);
+
+          xhr.open('POST', `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}${endpoint}`);
+          xhr.withCredentials = true; // Include authentication cookies
           xhr.send(formData);
         });
 

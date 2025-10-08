@@ -56,3 +56,6 @@ api/certs/
 
 # Emscripten
 emsdk/
+
+# Old server folder (using api/ instead)
+server/

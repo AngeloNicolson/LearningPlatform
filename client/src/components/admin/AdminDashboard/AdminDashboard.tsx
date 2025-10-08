@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MathWorksheetUpload } from '../MathWorksheetUpload/MathWorksheetUpload';
+import { authFetch } from '../../../utils/authFetch';
+import { MathResourceUpload } from '../MathResourceUpload/MathResourceUpload';
 import './AdminDashboard.css';
 
 interface AdminDashboardProps {
@@ -59,7 +60,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   const handleTeacherProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/teachers/profile`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/teachers/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const fetchTeacherBookings = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/bookings/teacher/bookings`, {
         credentials: 'include',
       });
       
@@ -116,7 +117,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const fetchTeacherProfile = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/teachers/profile`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/teachers/profile`, {
         credentials: 'include',
       });
       
@@ -136,7 +137,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const handleBookingConfirm = async (bookingId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/confirm`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/bookings/teacher/bookings/${bookingId}/confirm`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -151,7 +152,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
   
   const handleBookingDecline = async (bookingId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/decline`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/bookings/teacher/bookings/${bookingId}/decline`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -666,7 +667,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ userRole }) => {
 
         {activeTab === 'upload' && isAdmin && (
           <div className="upload-section">
-            <MathWorksheetUpload />
+            <h2>Upload Content</h2>
+            <div className="upload-tabs">
+              <MathResourceUpload />
+            </div>
           </div>
         )}
       </div>

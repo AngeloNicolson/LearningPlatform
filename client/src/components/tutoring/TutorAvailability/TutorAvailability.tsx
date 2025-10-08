@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, Save, X, Plus } from 'lucide-react';
 import './TutorAvailability.css';
@@ -53,7 +54,7 @@ const TutorAvailability: React.FC<TutorAvailabilityProps> = ({ tutorId }) => {
     try {
       setLoading(true);
       // In a real app, fetch from API
-      // const response = await fetch(`/api/tutors/${tutorId}/availability`);
+      // const response = await authFetch(`/api/tutors/${tutorId}/availability`);
       // const data = await response.json();
       // setAvailability(data.availability || initializeAvailability());
       // setOverrides(data.overrides || []);
@@ -108,7 +109,7 @@ const TutorAvailability: React.FC<TutorAvailabilityProps> = ({ tutorId }) => {
     try {
       setSaving(true);
       
-      const response = await fetch(`/api/tutors/${tutorId}/availability`, {
+      const response = await authFetch(`/api/tutors/${tutorId}/availability`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +121,7 @@ const TutorAvailability: React.FC<TutorAvailabilityProps> = ({ tutorId }) => {
       if (response.ok) {
         // Save overrides separately
         for (const override of overrides) {
-          await fetch(`/api/tutors/${tutorId}/availability/override`, {
+          await authFetch(`/api/tutors/${tutorId}/availability/override`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { CassetteButton } from '../../common/CassetteButton/CassetteButton';
@@ -13,6 +14,10 @@ interface Resource {
   topicName?: string;
   topicIcon?: string;
   topic_id?: string;
+  document_id?: number;
+  document_name?: string;
+  document_size?: number;
+  resource_type?: string;
 }
 
 interface Topic {
@@ -37,7 +42,7 @@ export const MathResources: React.FC = () => {
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await fetch(`https://localhost:3001/api/resources/math/topics`, {
+        const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/math/topics`, {
           credentials: 'include'
         });
         
@@ -62,25 +67,40 @@ export const MathResources: React.FC = () => {
         if (selectedTopic !== 'all') {
           params.append('topic', selectedTopic);
         }
-        
-        const response = await fetch(`https://localhost:3001/api/resources/math?${params.toString()}`, {
+
+        const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/math?${params.toString()}`, {
           credentials: 'include'
         });
-        
+
         if (response.ok) {
           const data = await response.json();
+          console.log('=== MATH RESOURCES DEBUG START ===');
+          console.log('Raw API data:', data);
+          console.log('First resource grade_level:', data[0]?.grade_level);
           // Map API data to match Resource interface
-          const mappedResources = data.map((r: any) => ({
-            id: r.id,
-            title: r.title,
-            description: r.description,
-            type: r.type,
-            gradeLevel: r.gradeLevel,
-            url: r.url,
-            topic_id: r.topic_id,
-            topicName: apiTopics.find(t => t.id === r.topic_id)?.name,
-            topicIcon: apiTopics.find(t => t.id === r.topic_id)?.icon
-          }));
+          const mappedResources = data.map((r: any) => {
+            console.log('Mapping resource:', r.title);
+            console.log('  grade_level from API:', r.grade_level);
+            const mapped = {
+              id: r.id,
+              title: r.title,
+              description: r.description,
+              type: r.resource_type || r.type,
+              gradeLevel: r.grade_level || r.gradeLevel || null,
+              url: r.url,
+              topic_id: r.topic_id,
+              topicName: apiTopics.find(t => t.id === r.topic_id)?.name,
+              topicIcon: apiTopics.find(t => t.id === r.topic_id)?.icon,
+              document_id: r.document_id,
+              document_name: r.document_name,
+              document_size: r.document_size,
+              resource_type: r.resource_type
+            };
+            console.log('  Mapped gradeLevel:', mapped.gradeLevel);
+            return mapped;
+          });
+          console.log('Final mapped resources:', mappedResources);
+          console.log('=== MATH RESOURCES DEBUG END ===');
           setApiResources(mappedResources);
         }
       } catch (error) {
@@ -108,14 +128,16 @@ export const MathResources: React.FC = () => {
 
   // Get all resources or filter by topic (now uses API data)
   const allResources = apiResources;
-  
+
   const filteredResources = allResources.filter(resource => {
-    const gradeMatch = selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade);
+    console.log('Filtering resource:', resource.title, 'gradeLevel:', resource.gradeLevel, 'selectedGrade:', selectedGrade);
+    const gradeMatch = selectedGrade === 'all' || (resource.gradeLevel && resource.gradeLevel.toLowerCase().includes(selectedGrade));
     const typeMatch = activeResourceType === 'all' || resource.type === activeResourceType;
-    const searchMatch = searchQuery === '' || 
+    const searchMatch = searchQuery === '' ||
       resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (resource.topicName && resource.topicName.toLowerCase().includes(searchQuery.toLowerCase()));
+    console.log('gradeMatch:', gradeMatch, 'typeMatch:', typeMatch, 'searchMatch:', searchMatch);
     return gradeMatch && typeMatch && searchMatch;
   });
 
@@ -172,6 +194,11 @@ export const MathResources: React.FC = () => {
   };
 
   const handleResourceClick = (resource: Resource) => {
+    console.log('Resource clicked:', resource);
+    console.log('Resource type:', resource.type);
+    console.log('Resource resource_type:', resource.resource_type);
+    console.log('Document ID:', resource.document_id);
+
     // Add to history with timestamp
     const resourceWithTimestamp = { ...resource, viewedAt: new Date().toISOString() };
     const savedHistory = localStorage.getItem('mathResourcesHistory');
@@ -185,6 +212,25 @@ export const MathResources: React.FC = () => {
     }
     const newHistory = [resourceWithTimestamp, ...history.filter((r: any) => r.id !== resource.id)].slice(0, 50);
     localStorage.setItem('mathResourcesHistory', JSON.stringify(newHistory));
+
+    // Handle different resource types
+    const resourceType = resource.resource_type || resource.type;
+    console.log('Using resource type:', resourceType);
+
+    if (resourceType === 'worksheet' && resource.document_id) {
+      const downloadUrl = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/download/${resource.id}`;
+      console.log('Downloading from:', downloadUrl);
+      // Download the PDF
+      window.open(downloadUrl, '_blank');
+    } else if (resourceType === 'video' && resource.url) {
+      // Open video URL
+      window.open(resource.url, '_blank');
+    } else if (resource.url) {
+      // Open external URL
+      window.open(resource.url, '_blank');
+    } else {
+      console.warn('No action available for this resource');
+    }
   };
 
 
@@ -359,7 +405,9 @@ export const MathResources: React.FC = () => {
                 <h3>{resource.title}</h3>
                 <p className="resource-description">{resource.description}</p>
                 <div className="resource-meta">
-                  <span className="grade-level">{resource.gradeLevel}</span>
+                  <span className="grade-level">Grade: {JSON.stringify(resource.gradeLevel)} | Type: {typeof resource.gradeLevel}</span>
+                  <br/>
+                  <span style={{fontSize: '10px'}}>DEBUG: {JSON.stringify(resource)}</span>
                 </div>
                 <button 
                   className="resource-button"

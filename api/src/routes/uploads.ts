@@ -7,8 +7,8 @@ import fs from 'fs';
 
 const router = Router();
 
-// Upload a worksheet (PDF)
-router.post('/worksheet', 
+// Upload a worksheet (PDF) and create resource in one transaction
+router.post('/worksheet',
   requireAuth,
   requireRole('admin', 'owner', 'tutor'),
   uploadWorksheet.single('file'),
@@ -19,16 +19,15 @@ router.post('/worksheet',
         return res.status(400).json({ error: 'No file uploaded' });
       }
 
-      const { title, description, category, grade_level, topic_id } = req.body;
+      const { title, description, grade_level, topic_id, subject } = req.body;
       const user = (req as any).user;
 
-      // Save to database
-      const result = await query(
+      // Save document to database (file metadata only)
+      const documentResult = await query(
         `INSERT INTO documents (
-          title, description, filename, original_name, 
-          mime_type, file_size, file_path, category, 
-          resource_type, grade_level, topic_id, uploaded_by
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+          title, description, filename, original_name,
+          mime_type, file_size, file_path, uploaded_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *`,
         [
           title || req.file.originalname,
@@ -38,17 +37,66 @@ router.post('/worksheet',
           req.file.mimetype,
           req.file.size,
           req.file.path,
-          category || 'general',
-          'worksheet',
-          grade_level || null,
-          topic_id || null,
           user.id
         ]
       );
 
+      const document = documentResult.rows[0];
+      const fileUrl = `/api/uploads/download/${document.id}`;
+
+      // Get topic metadata for subject_resources
+      let topicName = null;
+      let topicIcon = null;
+      if (topic_id) {
+        const topicResult = await query(
+          'SELECT name, icon FROM topics WHERE id = $1',
+          [topic_id]
+        );
+        if (topicResult.rows.length > 0) {
+          topicName = topicResult.rows[0].name;
+          topicIcon = topicResult.rows[0].icon;
+        }
+      }
+
+      // Create resource entry in subject_resources table
+      const resourceId = `${subject || 'math'}-worksheet-${Date.now()}`;
+      const resourceResult = await query(
+        `INSERT INTO subject_resources (
+          id, subject, topic_id, topic_name, topic_icon, resource_type,
+          title, description, url, grade_level, document_id, visible, display_order
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        RETURNING *`,
+        [
+          resourceId,
+          subject || 'math',
+          topic_id,
+          topicName,
+          topicIcon,
+          'worksheet',
+          title || req.file.originalname,
+          description || '',
+          fileUrl,
+          grade_level,
+          document.id,
+          true,
+          0
+        ]
+      );
+
+      console.log('=== WORKSHEET UPLOAD SUCCESS ===');
+      console.log('Resource ID:', resourceId);
+      console.log('Subject:', subject || 'math');
+      console.log('Topic ID:', topic_id);
+      console.log('Topic Name:', topicName);
+      console.log('Grade Level:', grade_level);
+      console.log('Visible:', true);
+      console.log('Resource saved:', resourceResult.rows[0]);
+      console.log('================================');
+
       res.json({
         success: true,
-        document: result.rows[0]
+        document: document,
+        resource: resourceResult.rows[0]
       });
     } catch (error) {
       console.error('Upload error:', error);

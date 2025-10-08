@@ -52,7 +52,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
     } else if (action === 'download' && actionUrl) {
       // Download the document
       const link = document.createElement('a');
-      link.href = `${import.meta.env.VITE_API_URL || 'https://localhost:3001'}${actionUrl}`;
+      link.href = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}${actionUrl}`;
       link.download = title;
       document.body.appendChild(link);
       link.click();

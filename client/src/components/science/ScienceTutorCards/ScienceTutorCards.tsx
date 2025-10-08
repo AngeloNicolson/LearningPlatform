@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import '../../tutoring/TutorCards/TutorCards.css'; // Reuse the same styles
 
@@ -53,8 +54,8 @@ export const ScienceTutorCards: React.FC<ScienceTutorCardsProps> = ({
       
       const subjectName = subjectMap[subject] || subject;
       
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/by-subject/${encodeURIComponent(subjectName)}`,
+      const response = await authFetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/by-subject/${encodeURIComponent(subjectName)}`,
         {
           credentials: 'include'
         }

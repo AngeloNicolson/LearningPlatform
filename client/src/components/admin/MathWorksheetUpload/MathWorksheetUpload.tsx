@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { authFetch } from '../../../utils/authFetch';
 import './MathWorksheetUpload.css';
 
 interface MathTopic {
@@ -25,8 +26,8 @@ export const MathWorksheetUpload: React.FC = () => {
 
   const fetchMathTopics = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources/math/topics`,
+      const response = await authFetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/math/topics`,
         { credentials: 'include' }
       );
 
@@ -75,17 +76,17 @@ export const MathWorksheetUpload: React.FC = () => {
     setMessage(null);
 
     try {
-      // Step 1: Upload the file
+      // Upload file and create resource in one request
       const uploadFormData = new FormData();
       uploadFormData.append('file', selectedFile);
       uploadFormData.append('title', formData.title);
       uploadFormData.append('description', formData.description);
       uploadFormData.append('topic_id', formData.topicId);
       uploadFormData.append('grade_level', formData.gradeLevel);
-      uploadFormData.append('category', 'math');
+      uploadFormData.append('subject', 'math');
 
-      const uploadResponse = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/uploads/worksheet`,
+      const response = await authFetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/worksheet`,
         {
           method: 'POST',
           credentials: 'include',
@@ -93,43 +94,17 @@ export const MathWorksheetUpload: React.FC = () => {
         }
       );
 
-      if (!uploadResponse.ok) {
-        const errorData = await uploadResponse.json();
-        throw new Error(errorData.error || 'Failed to upload file');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload worksheet');
       }
 
-      const uploadResult = await uploadResponse.json();
-      const fileUrl = `/api/uploads/download/${uploadResult.document.id}`;
-
-      // Step 2: Create resource entry
-      const resourceResponse = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/resources`,
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            subject: 'math',
-            topic_id: formData.topicId,
-            title: formData.title,
-            description: formData.description,
-            resource_type: 'worksheet',
-            grade_level: formData.gradeLevel,
-            url: fileUrl,
-            visible: true,
-          }),
-        }
-      );
-
-      if (!resourceResponse.ok) {
-        throw new Error('Failed to create resource entry');
-      }
+      const result = await response.json();
+      console.log('Worksheet uploaded:', result);
 
       setMessage({
         type: 'success',
-        text: `Worksheet "${formData.title}" uploaded successfully!`
+        text: `Worksheet "${formData.title}" uploaded successfully! Refresh the page to see it.`
       });
 
       // Reset form

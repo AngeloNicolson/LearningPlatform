@@ -47,17 +47,24 @@ router.post('/create-child',
       // Create child account
       const result = await query(`
         INSERT INTO users (
-          email, 
-          password_hash, 
-          first_name, 
-          last_name, 
-          role, 
-          parent_id,
+          email,
+          password_hash,
+          first_name,
+          last_name,
+          role,
           account_status,
           email_verified
-        ) VALUES ($1, $2, $3, $4, 'personal', $5, 'active', false)
+        ) VALUES ($1, $2, $3, $4, 'personal', 'active', false)
         RETURNING id, email, first_name, last_name
-      `, [email, passwordHash, firstName, lastName, parentId]);
+      `, [email, passwordHash, firstName, lastName]);
+
+      const childId = result.rows[0].id;
+
+      // Create parent-child relationship
+      await query(`
+        INSERT INTO user_relationships (parent_user_id, child_user_id, relationship_type)
+        VALUES ($1, $2, 'parent')
+      `, [parentId, childId]);
 
       return res.json({
         message: 'Child account created successfully',
@@ -86,16 +93,17 @@ router.get('/children', async (req: AuthRequest, res: Response) => {
 
   try {
     const result = await query(`
-      SELECT 
-        id,
-        email,
-        first_name,
-        last_name,
-        created_at,
-        last_login_at
-      FROM users
-      WHERE parent_id = $1
-      ORDER BY created_at DESC
+      SELECT
+        u.id,
+        u.email,
+        u.first_name,
+        u.last_name,
+        u.created_at,
+        u.last_login_at
+      FROM users u
+      INNER JOIN user_relationships ur ON u.id = ur.child_user_id
+      WHERE ur.parent_user_id = $1
+      ORDER BY u.created_at DESC
     `, [req.user.userId]);
 
     return res.json(result.rows.map(child => ({
@@ -241,10 +249,12 @@ router.post('/children/:childId/reset-password', async (req: AuthRequest, res: R
     }
 
     // Verify the child belongs to this parent
-    const result = await query(
-      'SELECT id FROM users WHERE id = $1 AND parent_id = $2',
-      [childId, parentId]
-    );
+    const result = await query(`
+      SELECT u.id
+      FROM users u
+      INNER JOIN user_relationships ur ON u.id = ur.child_user_id
+      WHERE u.id = $1 AND ur.parent_user_id = $2
+    `, [childId, parentId]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Child account not found' });
@@ -278,10 +288,12 @@ router.delete('/children/:childId', async (req: AuthRequest, res: Response) => {
     const parentId = req.user.userId;
 
     // Verify the child belongs to this parent
-    const result = await query(
-      'SELECT id FROM users WHERE id = $1 AND parent_id = $2',
-      [childId, parentId]
-    );
+    const result = await query(`
+      SELECT u.id
+      FROM users u
+      INNER JOIN user_relationships ur ON u.id = ur.child_user_id
+      WHERE u.id = $1 AND ur.parent_user_id = $2
+    `, [childId, parentId]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Child account not found' });
@@ -304,13 +316,19 @@ router.get('/parent', async (req: AuthRequest, res: Response) => {
   }
 
   try {
-    // Get parent_id from current user
-    const userResult = await query('SELECT parent_id FROM users WHERE id = $1', [req.user.userId]);
-    const parentId = userResult.rows[0]?.parent_id;
+    // Get parent from user_relationships
+    const relationshipResult = await query(`
+      SELECT parent_user_id
+      FROM user_relationships
+      WHERE child_user_id = $1
+      LIMIT 1
+    `, [req.user.userId]);
 
-    if (!parentId) {
+    if (relationshipResult.rows.length === 0) {
       return res.status(404).json({ message: 'No parent account linked' });
     }
+
+    const parentId = relationshipResult.rows[0].parent_user_id;
 
     // Get parent information
     const parentResult = await query(`

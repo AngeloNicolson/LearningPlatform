@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { requireAuth } from '../middleware/auth';
+import { query } from '../database/connection';
 
 const router = Router();
 
@@ -64,7 +65,7 @@ router.post('/',
     body('studentEmail').isEmail(),
     body('studentId').optional().isInt() // For parents booking for children
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -73,25 +74,33 @@ router.post('/',
     const user = (req as any).user;
     
     // Check booking permissions
-    // Child accounts (personal with parent_id) cannot book
+    // Child accounts (personal with parent relationship) cannot book
     if (user.role === 'personal') {
       // Check if this is a child account
-      const userRecord = (req as any).db?.prepare('SELECT parent_id FROM users WHERE id = ?').get(user.userId);
-      if (userRecord?.parent_id) {
-        return res.status(403).json({ 
-          error: 'Child accounts cannot book tutoring sessions. Please ask your parent to book for you.' 
+      const relationshipCheck = await query(
+        'SELECT id FROM user_relationships WHERE child_user_id = $1 LIMIT 1',
+        [user.userId]
+      );
+      if (relationshipCheck.rows.length > 0) {
+        return res.status(403).json({
+          error: 'Child accounts cannot book tutoring sessions. Please ask your parent to book for you.'
         });
       }
     }
-    
+
     // If parent is booking, they must specify which child (or themselves)
     if (user.role === 'parent' && req.body.studentId) {
       // Verify the student belongs to this parent
-      const child = (req as any).db?.prepare('SELECT id FROM users WHERE id = ? AND parent_id = ?')
-        .get(req.body.studentId, user.userId);
-      if (!child && req.body.studentId !== user.userId) {
-        return res.status(403).json({ 
-          error: 'You can only book sessions for yourself or your children.' 
+      const childCheck = await query(`
+        SELECT u.id
+        FROM users u
+        INNER JOIN user_relationships ur ON u.id = ur.child_user_id
+        WHERE u.id = $1 AND ur.parent_user_id = $2
+      `, [req.body.studentId, user.userId]);
+
+      if (childCheck.rows.length === 0 && req.body.studentId !== user.userId) {
+        return res.status(403).json({
+          error: 'You can only book sessions for yourself or your children.'
         });
       }
     }

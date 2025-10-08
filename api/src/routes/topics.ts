@@ -7,11 +7,13 @@ const router = Router();
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const result = await query(`
-      SELECT id, name, icon, subject, description, display_order
-      FROM topics
-      ORDER BY subject, display_order
+      SELECT t.id, t.name, t.icon, t.description, t.display_order,
+             gl.subject, gl.name as grade_level
+      FROM topics t
+      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      ORDER BY gl.subject, gl.display_order, t.display_order
     `);
-    
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching topics:', error);
@@ -23,14 +25,16 @@ router.get('/', async (_req: Request, res: Response) => {
 router.get('/:subject', async (req: Request, res: Response) => {
   try {
     const { subject } = req.params;
-    
+
     const result = await query(`
-      SELECT id, name, icon, subject, description, display_order
-      FROM topics
-      WHERE subject = $1
-      ORDER BY display_order
+      SELECT t.id, t.name, t.icon, t.description, t.display_order,
+             gl.subject, gl.name as grade_level
+      FROM topics t
+      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      WHERE gl.subject = $1
+      ORDER BY gl.display_order, t.display_order
     `, [subject]);
-    
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching topics by subject:', error);
@@ -43,14 +47,15 @@ router.get('/:subject/:topicId/resources', async (req: Request, res: Response) =
   try {
     const { subject, topicId } = req.params;
     const { gradeLevel, type } = req.query;
-    
+
     let queryText = `
-      SELECT r.id, r.title, r.description, r.resource_type as type, 
+      SELECT r.id, r.title, r.description, r.resource_type as type,
              r.grade_level as "gradeLevel", r.url, r.content,
              t.name as "topicName", t.icon as "topicIcon"
       FROM resources r
       INNER JOIN topics t ON r.topic_id = t.id
-      WHERE t.subject = $1 AND r.topic_id = $2 AND r.visible = true
+      INNER JOIN grade_levels gl ON t.grade_level_id = gl.id
+      WHERE gl.subject = $1 AND r.topic_id = $2 AND r.visible = true
     `;
     const params: any[] = [subject, topicId];
     
@@ -79,19 +84,20 @@ router.get('/:subject/:topicId/resources', async (req: Request, res: Response) =
 router.get('/:subject/stats', async (req: Request, res: Response) => {
   try {
     const { subject } = req.params;
-    
+
     const result = await query(`
-      SELECT 
+      SELECT
         t.id, t.name, t.icon,
         COUNT(r.id) as resource_count,
         COUNT(DISTINCT r.grade_level) as grade_levels_count
       FROM topics t
+      JOIN grade_levels gl ON t.grade_level_id = gl.id
       LEFT JOIN resources r ON t.id = r.topic_id AND r.visible = true
-      WHERE t.subject = $1
+      WHERE gl.subject = $1
       GROUP BY t.id, t.name, t.icon, t.display_order
       ORDER BY t.display_order
     `, [subject]);
-    
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching topic stats:', error);

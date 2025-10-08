@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import './ParentDashboard.css';
 
@@ -40,7 +41,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({ onNavigateToTu
 
   const fetchChildren = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/children`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/users/children`, {
         credentials: 'include'
       });
       
@@ -69,7 +70,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({ onNavigateToTu
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/create-child`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/users/create-child`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -116,7 +117,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({ onNavigateToTu
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/children/${childId}/reset-password`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/users/children/${childId}/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -142,7 +143,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({ onNavigateToTu
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/children/${childId}`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/users/children/${childId}`, {
         method: 'DELETE',
         credentials: 'include'
       });

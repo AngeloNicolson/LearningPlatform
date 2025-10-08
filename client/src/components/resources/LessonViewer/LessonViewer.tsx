@@ -39,7 +39,7 @@ export const LessonViewer: React.FC<LessonViewerProps> = ({
     
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/content/lesson/${lessonId}`
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/content/lesson/${lessonId}`
       );
       
       if (!response.ok) {

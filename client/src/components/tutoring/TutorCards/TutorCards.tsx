@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import './TutorCards.css';
 
@@ -50,8 +51,8 @@ export const TutorCards: React.FC<TutorCardsProps> = ({
       
       const grade = gradeMap[gradeLevel] || gradeLevel;
       
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors`,
+      const response = await authFetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors`,
         {
           credentials: 'include'
         }

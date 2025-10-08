@@ -58,16 +58,17 @@ router.get('/grades', async (_req: Request, res: Response) => {
   }
 });
 
-// Get math topics (redirect to new topics endpoint)
+// Get math topics (using new grade_levels structure)
 router.get('/math/topics', async (_req: Request, res: Response) => {
   try {
     const result = await query(`
-      SELECT id, name, icon
-      FROM topics
-      WHERE subject = 'math'
-      ORDER BY display_order
+      SELECT t.id, t.name, t.icon, gl.name as grade_level, gl.display_order as gl_order, t.display_order as t_order
+      FROM topics t
+      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      WHERE gl.subject = 'math'
+      ORDER BY gl.display_order, t.display_order
     `);
-    
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching math topics:', error);

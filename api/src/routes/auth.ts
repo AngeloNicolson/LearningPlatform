@@ -119,8 +119,8 @@ router.post('/login',
 
       // Get user from database
       const result = await query(`
-        SELECT id, email, password_hash, first_name, last_name, role, account_status, parent_id 
-        FROM users 
+        SELECT id, email, password_hash, first_name, last_name, role, account_status
+        FROM users
         WHERE email = $1
       `, [email]);
 
@@ -180,8 +180,7 @@ router.post('/login',
           firstName: user.first_name,
           lastName: user.last_name,
           role: user.role,
-          accountStatus: user.account_status,
-          parentId: user.parent_id
+          accountStatus: user.account_status
         }
       });
     } catch (error) {

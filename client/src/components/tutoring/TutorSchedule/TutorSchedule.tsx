@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, Video, MapPin } from 'lucide-react';
 import './TutorSchedule.css';
@@ -44,7 +45,7 @@ const TutorSchedule: React.FC<TutorScheduleProps> = ({ tutorId }) => {
       const startDate = getStartDate();
       const endDate = getEndDate();
       
-      const response = await fetch(
+      const response = await authFetch(
         `/api/tutors/${tutorId}/schedule?startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`,
         {
           credentials: 'include'

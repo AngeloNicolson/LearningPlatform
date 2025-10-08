@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { PaymentForm } from '../../payments/PaymentForm/PaymentForm';
 import { PaymentSuccess } from '../../payments/PaymentSuccess/PaymentSuccess';
@@ -117,7 +118,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   const fetchChildren = async () => {
     setLoadingChildren(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/users/children`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/users/children`, {
         credentials: 'include'
       });
       
@@ -152,7 +153,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
         const dateStr = date.toISOString().split('T')[0];
         
         promises.push(
-          fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors/${tutorId}/availability?date=${dateStr}`)
+          fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/${tutorId}/availability?date=${dateStr}`)
             .then(res => res.ok ? res.json() : null)
             .then(data => {
               if (data) {

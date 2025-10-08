@@ -28,7 +28,7 @@ const httpsConfig = (() => {
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,
+    port: 5777,
     host: '0.0.0.0', // Allow external connections for Docker
     https: httpsConfig, // Enable HTTPS if certificates exist
     watch: {
@@ -39,8 +39,5 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true
   },
-  publicDir: 'public',
-  optimizeDeps: {
-    exclude: ['debate_platform.js'] // Don't bundle our WASM module
-  }
+  publicDir: 'public'
 })

@@ -17,7 +17,6 @@ CREATE TABLE users (
   last_name VARCHAR(100),
   role VARCHAR(20) DEFAULT 'student' CHECK (role IN ('student', 'tutor', 'teacher', 'parent', 'admin')),
   account_status VARCHAR(20) DEFAULT 'active' CHECK (account_status IN ('active', 'suspended', 'pending')),
-  parent_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -89,7 +88,6 @@ CREATE TABLE resources (
 -- Indexes for performance
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_users_parent_id ON users(parent_id);
 CREATE INDEX idx_tutors_user_id ON tutors(user_id);
 CREATE INDEX idx_tutors_approval_status ON tutors(approval_status);
 CREATE INDEX idx_tutors_is_active ON tutors(is_active);

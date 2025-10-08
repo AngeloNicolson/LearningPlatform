@@ -1,0 +1,127 @@
+// Database Schema for Tutoring Platform
+// Paste this into https://dbdiagram.io to visualize
+//
+// 8 Tables:
+// - User Management: users, tutors, bookings, user_relationships
+// - Resource Organization: grade_levels, topics, subject_resources
+// - File Storage: documents
+
+Table users {
+  id integer [primary key]
+  email varchar [unique, not null]
+  password_hash varchar [not null]
+  first_name varchar
+  last_name varchar
+  role varchar [not null, note: 'student, tutor, teacher, parent, admin, personal']
+  account_status varchar [note: 'active, suspended, pending']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table user_relationships {
+  id integer [primary key]
+  parent_user_id integer [not null]
+  child_user_id integer [not null]
+  relationship_type varchar [note: 'parent, guardian']
+  created_at timestamp
+}
+
+Table tutors {
+  id integer [primary key]
+  user_id integer [not null, unique]
+  display_name varchar [not null]
+  bio text
+  subjects jsonb [note: 'JSON object, default {}']
+  grades text [note: 'Array of grade levels']
+  hourly_rate decimal
+  accepts_group_sessions boolean [note: 'default false']
+  min_group_size integer
+  max_group_size integer
+  group_pricing jsonb
+  availability jsonb [note: 'default {}']
+  approval_status varchar [note: 'pending, approved, rejected']
+  is_active boolean [note: 'default true']
+  rating decimal [note: 'default 0.0']
+  total_sessions integer [note: 'default 0']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table bookings {
+  id integer [primary key]
+  tutor_id integer [not null]
+  student_id integer [not null]
+  session_date date [not null]
+  start_time time [not null]
+  end_time time [not null]
+  status varchar [note: 'pending, confirmed, cancelled, completed']
+  notes text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table grade_levels {
+  id varchar [primary key]
+  name varchar [not null]
+  subject varchar [not null, note: 'math, science, history']
+  grade_range varchar [note: 'e.g., K-5, 6-8, 9-12']
+  description text
+  display_order integer
+  created_at timestamp
+}
+
+Table topics {
+  id varchar [primary key]
+  name varchar [not null]
+  grade_level_id varchar
+  icon varchar
+  description text
+  display_order integer
+  created_at timestamp
+}
+
+Table subject_resources {
+  id varchar [primary key]
+  subject varchar [not null, note: 'math, science, history']
+  topic_id varchar
+  topic_name varchar
+  topic_icon varchar
+  resource_type varchar [not null, note: 'worksheet, video, quiz, game, lesson, article, experiment, simulation']
+  title varchar [not null]
+  description text
+  url text
+  content text
+  era varchar [note: 'For history resources']
+  grade_level varchar
+  document_id integer
+  visible boolean
+  display_order integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table documents {
+  id integer [primary key]
+  title varchar [not null]
+  description text
+  filename varchar [not null]
+  original_name varchar [not null]
+  mime_type varchar [not null]
+  file_size integer [not null]
+  file_path varchar [not null]
+  uploaded_by integer
+  download_count integer [note: 'default 0']
+  created_at timestamp
+  updated_at timestamp
+}
+
+// Relationships
+Ref: user_relationships.parent_user_id > users.id // many-to-one
+Ref: user_relationships.child_user_id > users.id // many-to-one
+Ref: tutors.user_id - users.id // one-to-one
+Ref: bookings.tutor_id > tutors.id // many-to-one
+Ref: bookings.student_id > users.id // many-to-one
+Ref: topics.grade_level_id > grade_levels.id // many-to-one
+Ref: subject_resources.topic_id > topics.id // many-to-one
+Ref: subject_resources.document_id > documents.id // many-to-one
+Ref: documents.uploaded_by > users.id // many-to-one

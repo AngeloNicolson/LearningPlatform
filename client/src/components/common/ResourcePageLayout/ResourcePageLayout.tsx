@@ -97,7 +97,7 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
 
   // Filter resources
   const filteredResources = resources.filter(resource => {
-    const gradeMatch = selectedGrade === 'all' || resource.gradeLevel.toLowerCase().includes(selectedGrade);
+    const gradeMatch = selectedGrade === 'all' || (resource.gradeLevel && resource.gradeLevel.toLowerCase().includes(selectedGrade));
     const typeMatch = activeResourceType === 'all' || resource.type === activeResourceType;
     const searchMatch = searchQuery === '' ||
       resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -160,6 +160,7 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
   };
 
   const handleResourceClick = (resource: Resource) => {
+    // Save to history
     const resourceWithTimestamp = { ...resource, viewedAt: new Date().toISOString() };
     const savedHistory = localStorage.getItem(historyStorageKey);
     let history = [];
@@ -172,6 +173,22 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
     }
     const newHistory = [resourceWithTimestamp, ...history.filter((r: any) => r.id !== resource.id)].slice(0, 50);
     localStorage.setItem(historyStorageKey, JSON.stringify(newHistory));
+
+    // Handle download for worksheets
+    if (resource.type === 'worksheet') {
+      const downloadUrl = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/subject-resources/download/${resource.id}`;
+
+      // Create a temporary link and trigger download
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = resource.title;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (resource.url) {
+      // For other types with URLs, open in new tab
+      window.open(resource.url, '_blank');
+    }
   };
 
   return (
@@ -302,7 +319,7 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
                 <h3>{resource.title}</h3>
                 <p className="resource-description">{resource.description}</p>
                 <div className="resource-meta">
-                  <span className="grade-level">{resource.gradeLevel}</span>
+                  <span className="grade-level">{resource.gradeLevel || 'All Levels'}</span>
                 </div>
                 <button
                   className="resource-button"

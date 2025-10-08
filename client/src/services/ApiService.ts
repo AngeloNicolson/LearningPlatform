@@ -1,19 +1,20 @@
 import { TopicMetadata } from '../types/storage';
+import { authFetch } from '../utils/authFetch';
 
 class ApiService {
   private baseUrl: string;
   private currentUserId: string = 'default-user';
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_URL || 'https://localhost:3001/api';
+    this.baseUrl = import.meta.env.VITE_API_URL || 'https://localhost:3777/api';
   }
 
   private async request<T>(
-    endpoint: string, 
+    endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
@@ -23,7 +24,7 @@ class ApiService {
     };
 
     try {
-      const response = await fetch(url, config);
+      const response = await authFetch(url, config);
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
@@ -138,12 +139,12 @@ class ApiService {
     const formData = new FormData();
     formData.append('topicId', topicId);
     formData.append('userId', this.currentUserId);
-    
+
     for (const file of files) {
       formData.append('files', file);
     }
 
-    const response = await fetch(`${this.baseUrl}/files/upload`, {
+    const response = await authFetch(`${this.baseUrl}/files/upload`, {
       method: 'POST',
       body: formData,
     });
@@ -157,7 +158,7 @@ class ApiService {
   }
 
   async exportTopic(topicId: string): Promise<Blob> {
-    const response = await fetch(
+    const response = await authFetch(
       `${this.baseUrl}/files/${this.currentUserId}/${topicId}/export`
     );
 

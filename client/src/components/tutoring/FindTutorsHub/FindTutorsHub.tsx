@@ -1,3 +1,4 @@
+import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { UnifiedTutorCard } from '../UnifiedTutorCard/UnifiedTutorCard';
 import './FindTutorsHub.css';
@@ -43,7 +44,7 @@ export const FindTutorsHub: React.FC<FindTutorsHubProps> = ({
   const fetchTutors = async () => {
     try {
       setLoading(true);
-      let url = `${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/tutors`;
+      let url = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors`;
       
       // Add filter parameters if needed
       if (filter === 'math') {
@@ -52,7 +53,7 @@ export const FindTutorsHub: React.FC<FindTutorsHubProps> = ({
         url += '?subject_type=science';
       }
       
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         credentials: 'include'
       });
       

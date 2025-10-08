@@ -5,6 +5,7 @@ import { ParentDashboard } from '../ParentDashboard/ParentDashboard';
 // import { Topic } from '../../../types/wasm';
 // import { TopicMetadata } from '../../../types/storage';
 // import { useTopics } from '../../../hooks/useTopics';
+import { authFetch } from '../../../utils/authFetch';
 import './Dashboard.css';
 
 interface DashboardProps {
@@ -127,7 +128,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   const fetchTeacherData = async () => {
     try {
       // Fetch bookings
-      const bookingsRes = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings`, {
+      const bookingsRes = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/bookings/teacher/bookings`, {
         credentials: 'include',
       });
       if (bookingsRes.ok) {
@@ -142,7 +143,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
       }
       
       // Fetch profile
-      const profileRes = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/teachers/profile`, {
+      const profileRes = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/teachers/profile`, {
         credentials: 'include',
       });
       if (profileRes.ok) {
@@ -156,7 +157,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   
   const handleBookingConfirm = async (bookingId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/confirm`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/bookings/teacher/bookings/${bookingId}/confirm`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -170,7 +171,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
   
   const handleBookingDecline = async (bookingId: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3001/api'}/bookings/teacher/bookings/${bookingId}/decline`, {
+      const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/bookings/teacher/bookings/${bookingId}/decline`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -409,8 +410,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTopicSelect, onOpenWorks
       
       <div className="dashboard-header">
         <div className="welcome-section">
-          <h1>Your Personal Dashboard</h1>
-          <p className="tagline">Track your upcoming sessions and monitor progress</p>
+          <h1>Principia Academy</h1>
+          <p className="tagline">Study the foundations, shape the future</p>
         </div>
         
         <div className="quick-stats">

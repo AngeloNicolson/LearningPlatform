@@ -12,7 +12,6 @@ import tutorRoutes from './routes/tutors';
 import bookingRoutes from './routes/bookings';
 import teacherRoutes from './routes/teachers';
 import userRoutes from './routes/users';
-import resourcesRoutes from './routes/resources';
 import subjectResourcesRoutes from './routes/subjectResources';
 import topicsRoutes from './routes/topics';
 import uploadsRoutes from './routes/uploads';
@@ -20,7 +19,7 @@ import uploadsRoutes from './routes/uploads';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3777;
 const USE_HTTPS = process.env.USE_HTTPS === 'true';
 
 // Security middleware
@@ -33,10 +32,10 @@ app.use(helmet({
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'http://localhost:5173',
-      'https://localhost:5173',
-      'http://127.0.0.1:5173',
-      'https://127.0.0.1:5173'
+      'http://localhost:5777',
+      'https://localhost:5777',
+      'http://127.0.0.1:5777',
+      'https://127.0.0.1:5777'
     ];
     
     // Allow requests with no origin (like mobile apps or Postman)
@@ -76,8 +75,7 @@ app.use('/api/tutors', tutorRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/resources', resourcesRoutes);
-app.use('/api/subject-resources', subjectResourcesRoutes);
+app.use('/api/resources', subjectResourcesRoutes); // Use new subject resources router
 app.use('/api/topics', topicsRoutes);
 app.use('/api/uploads', uploadsRoutes);
 
