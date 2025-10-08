@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CassetteButton } from '../CassetteButton/CassetteButton';
+import { ResourceSkeletonLoader } from '../skeletons';
 import './ResourcePageLayout.css';
 
 export interface Resource {
@@ -291,17 +292,7 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
 
       <div className="resources-grid">
         {isLoading ? (
-          Array.from({ length: 8 }).map((_, index) => (
-            <div key={`skeleton-${index}`} className="resource-card skeleton">
-              <div className="skeleton-type"></div>
-              <div className="skeleton-title"></div>
-              <div className="skeleton-description"></div>
-              <div className="skeleton-meta">
-                <div className="skeleton-grade"></div>
-                <div className="skeleton-button"></div>
-              </div>
-            </div>
-          ))
+          <ResourceSkeletonLoader count={4} />
         ) : filteredResources.length > 0 ? (
           <>
             {visibleResources.map(resource => (
