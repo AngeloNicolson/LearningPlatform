@@ -3,7 +3,7 @@
 /* Resource Page Layout - Tofu Famicom Theme */
 .resource-page-layout {
   min-height: 100vh;
-  padding: 32px;
+  padding: 16px 32px 32px;
   background: var(--theme-background-main);
   font-family: 'Share Tech Mono', 'Courier New', monospace;
 }

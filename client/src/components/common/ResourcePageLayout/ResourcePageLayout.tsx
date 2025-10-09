@@ -177,15 +177,10 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
 
     // Handle download for worksheets
     if (resource.type === 'worksheet') {
-      const downloadUrl = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/subject-resources/download/${resource.id}`;
+      const downloadUrl = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/download/${resource.id}`;
 
-      // Create a temporary link and trigger download
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = resource.title;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Open download in new window
+      window.open(downloadUrl, '_blank');
     } else if (resource.url) {
       // For other types with URLs, open in new tab
       window.open(resource.url, '_blank');
