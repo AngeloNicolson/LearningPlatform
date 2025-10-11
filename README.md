@@ -6,20 +6,19 @@ A modern platform for mathematical tutoring and debating with secure authenticat
 
 - **Client**: React + TypeScript + Vite (HTTPS enabled)
 - **API**: Express.js REST API with JWT authentication
-- **Server**: Backend services with SQLite database
+- **Database**: PostgreSQL with automated migrations
 - **Shared**: Common TypeScript types and interfaces
 - **Security**: HTTPS, JWT tokens, secure cookies, rate limiting
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Recommended: Docker)
 
 ### Prerequisites
 
-- Node.js 18+ and npm 9+
-- Docker and Docker Compose (optional)
-- mkcert (for HTTPS setup)
+- Docker and Docker Compose
+- mkcert (for HTTPS certificates)
 - Git
 
-### Setup
+### Setup with Docker (Easiest)
 
 1. **Clone and navigate to project**:
    ```bash
@@ -27,47 +26,111 @@ A modern platform for mathematical tutoring and debating with secure authenticat
    cd Debating-platform
    ```
 
-2. **Install dependencies**:
+2. **Install mkcert** (one-time setup):
+   ```bash
+   # macOS
+   brew install mkcert
+
+   # Linux (Ubuntu/Debian)
+   sudo apt install libnss3-tools
+   wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64
+   chmod +x mkcert-v1.4.4-linux-amd64
+   sudo mv mkcert-v1.4.4-linux-amd64 /usr/local/bin/mkcert
+   ```
+
+3. **Generate HTTPS certificates** (Required for secure authentication):
+   ```bash
+   npm run setup:https
+   ```
+   This creates certificates in the `certs/` directory.
+
+4. **Start all services with Docker**:
+   ```bash
+   docker compose up
+   ```
+
+   This will:
+   - Build the client and API containers
+   - Start PostgreSQL database
+   - **Automatically run all database migrations**
+   - Start Redis for session management
+   - Mount HTTPS certificates
+
+5. **Access the application**:
+   - Frontend: https://localhost:5777
+   - API: https://localhost:3777
+   - Database: PostgreSQL on localhost:5432
+
+   **Test Accounts**:
+   - Owner: owner@example.com / Owner123!
+   - Admin: admin@example.com / Admin123!
+   - Teacher: teacher@example.com / Teacher123!
+   - Student: student@example.com / Student123!
+
+### Docker Commands
+
+```bash
+# Start services (builds if needed)
+npm run docker:up
+# or
+docker compose up
+
+# Start in detached mode
+docker compose up -d
+
+# View logs
+docker compose logs -f
+docker compose logs -f api      # API logs only
+docker compose logs -f client   # Client logs only
+
+# Stop services (keeps data)
+docker compose down
+
+# Stop and remove all data
+docker compose down -v
+
+# Rebuild from scratch
+npm run docker:rebuild
+# or
+docker compose down -v && docker compose build --no-cache && docker compose up
+
+# Check status
+npm run docker:status
+```
+
+## 🛠️ Local Development (Without Docker)
+
+### Prerequisites
+
+- Node.js 18+ and npm 9+
+- PostgreSQL 15+
+- mkcert (for HTTPS setup)
+
+### Setup
+
+1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-3. **Set up HTTPS** (Required for secure authentication):
+2. **Generate HTTPS certificates**:
    ```bash
-   # Install mkcert
-   # macOS: brew install mkcert
-   # Linux: Follow https://github.com/FiloSottile/mkcert#installation
-   
-   # Generate certificates
-   cd client
    npm run setup:https
-   cd ..
    ```
 
-4. **Initialize database**:
-   ```bash
-   npm run db:init
-   ```
+3. **Set up PostgreSQL database**:
+   - Create a database named `tutoring_platform`
+   - Run migrations from `api/src/database/migrations/` in order (001_schema.sql, 002_seed_tutors.sql, etc.)
 
-5. **Start development servers**:
+4. **Start development servers**:
    ```bash
    npm run dev
    ```
+   This runs both the client and API concurrently.
 
-6. **Access the application**:
-   - Frontend: https://localhost:5173 (HTTPS)
-   - API: http://localhost:3001/api
-   - Owner login: owner@example.com / Owner123!
-   - Admin login: admin@example.com / Admin123!
-   - Teacher login: teacher@example.com / Teacher123!
-   - Student login: student@example.com / Student123!
-
-### Development
-
-- **View logs**: `docker-compose logs -f [service-name]`
-- **Stop services**: `docker-compose down`
-- **Rebuild**: `docker-compose up --build`
-- **Database reset**: `docker-compose down -v && docker-compose up --build`
+5. **Access the application**:
+   - Frontend: https://localhost:5777
+   - API: https://localhost:3777
 
 ## 📁 Project Structure
 
@@ -76,23 +139,25 @@ A modern platform for mathematical tutoring and debating with secure authenticat
 │   ├── src/
 │   │   ├── components/     # UI components
 │   │   ├── contexts/       # React contexts
+│   │   ├── pages/          # Page components
 │   │   └── services/       # API client
-│   ├── certs/             # HTTPS certificates (generated)
-│   └── public/
-├── api/                    # Express REST API
-│   ├── src/
-│   │   ├── routes/        # API endpoints
-│   │   └── middleware/    # Auth & security
 │   └── Dockerfile
-├── server/                 # Backend services
+├── api/                     # Express REST API
 │   ├── src/
-│   │   ├── database/      # SQLite setup
-│   │   └── services/      # Business logic
+│   │   ├── routes/         # API endpoints
+│   │   ├── middleware/     # Auth & security
+│   │   └── database/
+│   │       └── migrations/ # SQL migration files (auto-run in Docker)
 │   └── Dockerfile
-├── shared/                 # Shared types
+├── shared/                  # Shared TypeScript types
 │   └── src/types/
-├── package.json           # Root workspace config
-└── docker-compose.yml     # Service orchestration
+├── certs/                   # HTTPS certificates (generated by setup script)
+│   ├── localhost.pem
+│   └── localhost-key.pem
+├── scripts/                 # Setup and utility scripts
+│   └── setup-https.sh      # Certificate generation script
+├── package.json            # Root workspace config
+└── docker-compose.yml      # Service orchestration
 ```
 
 ## 🔧 Features
@@ -136,71 +201,65 @@ A modern platform for mathematical tutoring and debating with secure authenticat
 - `DELETE /api/bookings/:id` - Cancel booking
 - `POST /api/bookings/:id/confirm` - Confirm payment
 
-## 🛠️ Development
-
-### Start All Services
+### Individual Services (Local Development)
 ```bash
-npm run dev
-```
-
-### Individual Services
-```bash
-npm run dev:client   # Frontend (https://localhost:5173)
-npm run dev:api      # API (http://localhost:3001)
-npm run dev:server   # Backend services
-```
-
-### Database Operations
-```bash
-# Initialize database
-npm run db:init
-
-# Access SQLite database
-sqlite3 server/database.db
+npm run dev          # Both client and API
+npm run dev:client   # Frontend only (https://localhost:5777)
+npm run dev:api      # API only (https://localhost:3777)
 ```
 
 ### Build for Production
 ```bash
-npm run build
+npm run build        # Build all workspaces
+npm run build:client # Build client only
+npm run build:api    # Build API only
 ```
 
 ## 🔒 Environment Variables
 
-### API (.env)
-```
+### API (.env in `api/` directory)
+```env
 NODE_ENV=development
-PORT=3001
-CLIENT_URL=https://localhost:5173
-JWT_ACCESS_SECRET=your-access-secret
-JWT_REFRESH_SECRET=your-refresh-secret
-DATABASE_PATH=/data/database.db
+PORT=3777
+USE_HTTPS=true
+CLIENT_URL=https://localhost:5777
+
+# JWT Secrets (change in production!)
+JWT_SECRET=your-jwt-secret-key-here
+JWT_EXPIRES_IN=7d
+
+# Session
+SESSION_SECRET=your-session-secret-key-here
+
+# Database (for Docker)
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=tutoring_platform
+DB_USER=postgres
+DB_PASSWORD=development
 ```
 
-### Client (.env)
-```
-VITE_API_URL=https://localhost:3001/api
+### Client (.env in `client/` directory - if needed)
+```env
+VITE_API_URL=https://localhost:3777/api
 VITE_STRIPE_PUBLIC_KEY=pk_test_...
 ```
 
 ## 🐳 Docker Services
 
-- **client**: React frontend with HTTPS support
-- **api**: Express REST API with JWT auth
-- **server**: Backend services with SQLite database
-- **redis**: Session management (optional)
+The `docker-compose.yml` includes:
 
-## 🚢 Using Docker
+- **postgres**: PostgreSQL 15 database with automatic migration execution
+- **api**: Express REST API with HTTPS and JWT authentication
+- **client**: React frontend with Vite and HTTPS support
+- **redis**: Redis for session management (optional)
 
-```bash
-# Start all services
-docker-compose up
-
-# Build and start
-docker-compose up --build
-
-# Stop services
-docker-compose down
-```
+### Key Features:
+- ✅ Automatic database migrations on first startup
+- ✅ HTTPS certificates mounted from `certs/` directory
+- ✅ Hot reloading enabled for development
+- ✅ Persistent database volumes
+- ✅ Health checks for PostgreSQL
 
 ## 🔐 Authentication Flow
 
@@ -211,8 +270,66 @@ docker-compose down
 5. Refresh token (7days) for renewal
 6. Automatic token rotation
 
+## 🐛 Troubleshooting
+
+### Certificate Issues
+If you see certificate warnings in the browser:
+```bash
+# Install the local CA (one-time)
+mkcert -install
+
+# Regenerate certificates
+npm run setup:https
+```
+
+### Vite Cache Permission Issues (Local Dev)
+If you get `EACCES: permission denied` errors when starting the client:
+```bash
+# Remove Vite cache owned by root
+sudo rm -rf client/node_modules/.vite
+npm run dev
+```
+
+### Port Already in Use
+If ports 3777 or 5777 are already in use:
+```bash
+# Kill processes on those ports
+lsof -ti:3777 | xargs kill -9
+lsof -ti:5777 | xargs kill -9
+```
+
+### Docker Permission Issues
+If you encounter permission errors with Docker:
+```bash
+# Reset and rebuild
+docker compose down -v
+docker compose build --no-cache
+docker compose up
+```
+
+### Database Migration Issues
+Migrations run automatically on first Docker startup. To reset:
+```bash
+# Remove all volumes (deletes data!)
+docker compose down -v
+docker compose up
+```
+
 ---
 
-**Ready to start?** 🎯
+## 🎯 Ready to Start?
 
-Run `npm run dev` and visit https://localhost:5173
+**With Docker (Recommended):**
+```bash
+npm run setup:https
+docker compose up
+```
+
+**Local Development:**
+```bash
+npm run setup:https
+npm install
+npm run dev
+```
+
+Then visit **https://localhost:5777** 🚀
