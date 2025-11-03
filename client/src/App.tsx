@@ -8,7 +8,7 @@ import { SciencePage } from './pages/SciencePage/SciencePage';
 import { HistoryPage } from './pages/HistoryPage/HistoryPage';
 import { MathHub } from './components/math/MathHub/MathHub';
 import { ScienceHub } from './components/science/ScienceHub/ScienceHub';
-import { DebatePage } from './components/debate/DebatePage/DebatePage';
+// import { DebatePage } from './components/debate/DebatePage/DebatePage'; // Moved to debating branch
 import { TopicWorkspace } from './components/resources/TopicWorkspace/TopicWorkspace';
 import { MathGradeSelector } from './components/math/MathGradeSelector/MathGradeSelector';
 import { TutorCards } from './components/tutoring/TutorCards/TutorCards';
@@ -178,13 +178,15 @@ function AppContent() {
             <span className="nav-icon">⌂</span>
             <span className="nav-label">HOME</span>
           </button>
-          <button 
+          {/* Debate feature moved to debating branch
+          <button
             className={currentView === 'debate' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'debate' })}
           >
             <span className="nav-icon">💬</span>
             <span className="nav-label">DEBATE</span>
           </button>
+          */}
           <button 
             className={currentView === 'math' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'math' })}
@@ -329,9 +331,11 @@ function AppContent() {
           )
         )}
         
+        {/* Debate page moved to debating branch
         {currentView === 'debate' && (
           <DebatePage />
         )}
+        */}
         
         {currentView === 'math' && (
           <MathHub 
