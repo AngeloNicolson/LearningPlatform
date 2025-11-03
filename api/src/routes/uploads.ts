@@ -11,11 +11,21 @@
 import { Router, Request, Response } from 'express';
 import { uploadWorksheet, uploadImage, handleUploadError } from '../middleware/upload';
 import { query } from '../database/connection';
-import { requireAuth, requireRole } from '../middleware/auth';
+import { requireAuth, requireRole, optionalAuth } from '../middleware/auth';
+import rateLimit from 'express-rate-limit';
 import path from 'path';
 import fs from 'fs';
 
 const router = Router();
+
+// Download-specific rate limiter (10 downloads per hour per IP)
+const downloadLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10, // limit each IP to 10 downloads per hour
+  message: 'Download limit reached. You can download up to 10 worksheets per hour.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Upload a worksheet (PDF) and create resource in one transaction
 router.post('/worksheet',
@@ -152,8 +162,8 @@ router.post('/image',
   }
 );
 
-// Download a document - requires authentication
-router.get('/download/:id', requireAuth, async (req: Request, res: Response) => {
+// Download a document - rate limited but no authentication required
+router.get('/download/:id', downloadLimiter, optionalAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     

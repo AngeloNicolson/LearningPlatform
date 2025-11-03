@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react';
 import { LessonViewer } from '../LessonViewer/LessonViewer';
+import { downloadWorksheet } from '../../../services/downloadService';
 import './ResourceCard.css';
 
 interface ResourceCardProps {
@@ -56,8 +57,16 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
     if (action === 'view_lesson' || contentFormat === 'markdown') {
       // Show lesson viewer modal
       setShowLesson(true);
+    } else if (action === 'download' && type === 'worksheet') {
+      // Use authenticated download service for worksheets
+      try {
+        await downloadWorksheet(id, `${title}.pdf`);
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+      }
     } else if (action === 'download' && actionUrl) {
-      // Download the document
+      // Fallback for other download types
       const link = document.createElement('a');
       link.href = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}${actionUrl}`;
       link.download = title;

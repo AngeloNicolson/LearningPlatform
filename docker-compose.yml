@@ -66,6 +66,7 @@ services:
       - ./api:/app
       - /app/node_modules
       - ./certs:/app/certs:ro  # Mount certificates read-only
+      - uploads_data:/app/uploads  # Persistent uploads storage
     depends_on:
       postgres:
         condition: service_healthy
@@ -90,3 +91,4 @@ networks:
 volumes:
   postgres_data:
   redis_data:
+  uploads_data:

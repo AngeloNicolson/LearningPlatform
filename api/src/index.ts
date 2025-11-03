@@ -24,6 +24,7 @@ import userRoutes from './routes/users';
 import subjectResourcesRoutes from './routes/subjectResources';
 import topicsRoutes from './routes/topics';
 import uploadsRoutes from './routes/uploads';
+import downloadsRoutes from './routes/downloads';
 
 dotenv.config();
 
@@ -101,6 +102,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tutors', tutorRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/teachers', teacherRoutes);
+app.use('/api/downloads', downloadsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/resources', subjectResourcesRoutes); // Use new subject resources router
 app.use('/api/topics', topicsRoutes);

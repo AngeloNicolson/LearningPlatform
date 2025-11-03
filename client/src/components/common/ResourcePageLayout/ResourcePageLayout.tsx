@@ -8,6 +8,9 @@
 import React, { useState, useEffect } from 'react';
 import { CassetteButton } from '../CassetteButton/CassetteButton';
 import { ResourceSkeletonLoader } from '../skeletons';
+import { DownloadProgress } from '../DownloadProgress/DownloadProgress';
+import { downloadWithRetry, isMobileDevice, canShare, shareWorksheet } from '../../../services/downloadService';
+import type { DownloadProgress as DownloadProgressType } from '../../../services/downloadService';
 import './ResourcePageLayout.css';
 
 export interface Resource {
@@ -95,6 +98,16 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
   const [topicPage, setTopicPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [visibleCount, setVisibleCount] = useState<number>(8);
+
+  // Download state
+  const [activeDownload, setActiveDownload] = useState<{
+    resourceId: string;
+    filename: string;
+    progress: DownloadProgressType;
+    status: 'downloading' | 'success' | 'error';
+    error?: string;
+    abortController?: AbortController;
+  } | null>(null);
 
   // Sync external topic changes
   useEffect(() => {
@@ -184,13 +197,78 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
 
     // Handle download for worksheets
     if (resource.type === 'worksheet') {
-      const downloadUrl = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/download/${resource.id}`;
-
-      // Open download in new window
-      window.open(downloadUrl, '_blank');
+      handleDownload(resource);
     } else if (resource.url) {
       // For other types with URLs, open in new tab
       window.open(resource.url, '_blank');
+    }
+  };
+
+  const handleDownload = async (resource: Resource) => {
+    // Check if user wants to share on mobile
+    if (isMobileDevice() && canShare()) {
+      try {
+        await shareWorksheet(resource.id, resource.title);
+        return;
+      } catch (error) {
+        // Fall back to download if share fails
+        console.log('Share failed, falling back to download');
+      }
+    }
+
+    // Create abort controller for cancellation
+    const abortController = new AbortController();
+
+    // Initialize download state
+    setActiveDownload({
+      resourceId: resource.id,
+      filename: `${resource.title}.pdf`,
+      progress: { loaded: 0, total: 0, percentage: 0 },
+      status: 'downloading',
+      abortController
+    });
+
+    try {
+      await downloadWithRetry(
+        resource.id,
+        `${resource.title}.pdf`,
+        {
+          onProgress: (progress) => {
+            setActiveDownload(prev => prev ? { ...prev, progress } : null);
+          },
+          signal: abortController.signal
+        }
+      );
+
+      // Success
+      setActiveDownload(prev => prev ? { ...prev, status: 'success' } : null);
+
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        setActiveDownload(null);
+      }, 3000);
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Download failed';
+
+      // Show error
+      setActiveDownload(prev => prev ? {
+        ...prev,
+        status: 'error',
+        error: errorMessage
+      } : null);
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        setActiveDownload(null);
+      }, 5000);
+    }
+  };
+
+  const handleCancelDownload = () => {
+    if (activeDownload?.abortController) {
+      activeDownload.abortController.abort();
+      setActiveDownload(null);
     }
   };
 
@@ -213,6 +291,19 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
           <span className="search-icon">🔍</span>
         </div>
       </div>
+
+      {/* Download Progress Indicator */}
+      {activeDownload && (
+        <DownloadProgress
+          filename={activeDownload.filename}
+          loaded={activeDownload.progress.loaded}
+          total={activeDownload.progress.total}
+          percentage={activeDownload.progress.percentage}
+          status={activeDownload.status}
+          error={activeDownload.error}
+          onCancel={activeDownload.status === 'downloading' ? handleCancelDownload : undefined}
+        />
+      )}
 
       <div className="filters-section">
         <div className="carousel-dots">
