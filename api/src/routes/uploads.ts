@@ -142,8 +142,8 @@ router.post('/image',
   }
 );
 
-// Download a document
-router.get('/download/:id', async (req: Request, res: Response) => {
+// Download a document - requires authentication
+router.get('/download/:id', requireAuth, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     
@@ -185,8 +185,8 @@ router.get('/download/:id', async (req: Request, res: Response) => {
   return;
 });
 
-// Get list of documents
-router.get('/list', async (req: Request, res: Response) => {
+// Get list of documents - requires authentication
+router.get('/list', requireAuth, async (req: Request, res: Response) => {
   try {
     const { category, resource_type, grade_level } = req.query;
     

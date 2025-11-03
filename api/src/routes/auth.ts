@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 import rateLimit from 'express-rate-limit';
 import { query } from '../database/connection';
 
@@ -63,8 +64,14 @@ router.post('/register',
         `, [userId, `${firstName} ${lastName}`]);
         
         // Auto-login tutor to complete profile
+        const accessTokenJti = randomUUID();
         const accessToken = jwt.sign(
-          { userId, email, role: 'tutor' },
+          {
+            userId,
+            email,
+            role: 'tutor',
+            jti: accessTokenJti
+          },
           JWT_ACCESS_SECRET,
           { expiresIn: '15m' }
         );
@@ -143,15 +150,26 @@ router.post('/login',
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      // Generate tokens with role and account status
+      // Generate tokens with role, account status, and JTI for revocation
+      const accessTokenJti = randomUUID();
       const accessToken = jwt.sign(
-        { userId: user.id, email: user.email, role: user.role, accountStatus: user.account_status },
+        {
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          accountStatus: user.account_status,
+          jti: accessTokenJti
+        },
         process.env.JWT_ACCESS_SECRET || 'access-secret',
         { expiresIn: '15m' }
       );
 
+      const refreshTokenJti = randomUUID();
       const refreshToken = jwt.sign(
-        { userId: user.id },
+        {
+          userId: user.id,
+          jti: refreshTokenJti
+        },
         process.env.JWT_REFRESH_SECRET || 'refresh-secret',
         { expiresIn: '7d' }
       );
@@ -190,11 +208,60 @@ router.post('/login',
   }
 );
 
-// Logout endpoint
-router.post('/logout', (_req: Request, res: Response) => {
-  res.clearCookie('access-token');
-  res.clearCookie('refresh-token');
-  return res.json({ message: 'Logged out successfully' });
+// Logout endpoint with token revocation
+router.post('/logout', async (req: Request, res: Response) => {
+  try {
+    const accessToken = req.cookies?.['access-token'];
+    const refreshToken = req.cookies?.['refresh-token'];
+
+    // Revoke both tokens if they exist
+    if (accessToken) {
+      try {
+        const decoded = jwt.decode(accessToken) as any;
+        if (decoded?.jti && decoded?.exp) {
+          const expiresAt = new Date(decoded.exp * 1000);
+          await query(
+            `INSERT INTO token_blacklist (token_jti, user_id, expires_at, reason)
+             VALUES ($1, $2, $3, 'logout')
+             ON CONFLICT (token_jti) DO NOTHING`,
+            [decoded.jti, decoded.userId, expiresAt]
+          );
+        }
+      } catch (err) {
+        // Token might be invalid, continue with logout
+        console.error('Error revoking access token:', err);
+      }
+    }
+
+    if (refreshToken) {
+      try {
+        const decoded = jwt.decode(refreshToken) as any;
+        if (decoded?.jti && decoded?.exp) {
+          const expiresAt = new Date(decoded.exp * 1000);
+          await query(
+            `INSERT INTO token_blacklist (token_jti, user_id, expires_at, reason)
+             VALUES ($1, $2, $3, 'logout')
+             ON CONFLICT (token_jti) DO NOTHING`,
+            [decoded.jti, decoded.userId, expiresAt]
+          );
+        }
+      } catch (err) {
+        // Token might be invalid, continue with logout
+        console.error('Error revoking refresh token:', err);
+      }
+    }
+
+    // Clear cookies
+    res.clearCookie('access-token');
+    res.clearCookie('refresh-token');
+    return res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    // Even if blacklisting fails, clear cookies
+    res.clearCookie('access-token');
+    res.clearCookie('refresh-token');
+    return res.json({ message: 'Logged out successfully' });
+  }
 });
 
 // Refresh token endpoint
@@ -221,9 +288,16 @@ router.post('/refresh', async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'User not found' });
     }
 
-    // Generate new access token
+    // Generate new access token with JTI
+    const accessTokenJti = randomUUID();
     const accessToken = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role, accountStatus: user.account_status },
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        accountStatus: user.account_status,
+        jti: accessTokenJti
+      },
       process.env.JWT_ACCESS_SECRET || 'access-secret',
       { expiresIn: '15m' }
     );

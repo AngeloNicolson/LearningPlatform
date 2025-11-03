@@ -24,8 +24,21 @@ const USE_HTTPS = process.env.USE_HTTPS === 'true';
 
 // Security middleware
 app.use(helmet({
-  contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for React
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://localhost:*", "http://localhost:*"],
+      fontSrc: ["'self'", "data:"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
 // CORS configuration - supports both HTTP and HTTPS
@@ -37,13 +50,18 @@ app.use(cors({
       'http://127.0.0.1:5777',
       'https://127.0.0.1:5777'
     ];
-    
-    // Allow requests with no origin (like mobile apps or Postman)
-    if (!origin || allowedOrigins.includes(origin)) {
+
+    // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.warn(`CORS blocked origin: ${origin}`);
-      callback(null, true); // For development, allow all origins
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,

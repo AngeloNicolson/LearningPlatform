@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { query } from '../database/connection';
 
 const JWT_SECRET = process.env.JWT_ACCESS_SECRET || 'access-secret';
 
@@ -7,23 +8,37 @@ export interface AuthRequest extends Request {
   user?: any;
 }
 
-export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const requireAuth = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Check for token in cookies (matching what auth.ts sets)
     const token = req.cookies?.['access-token'];
-    
+
     console.log('Auth check - Cookies:', req.cookies);
     console.log('Auth check - Token present:', !!token);
-    
+
     if (!token) {
       res.status(401).json({ error: 'Authentication required' });
       return;
     }
-    
+
     // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as any;
+
+    // Check if token is blacklisted
+    if (decoded.jti) {
+      const blacklistCheck = await query(
+        'SELECT 1 FROM token_blacklist WHERE token_jti = $1 LIMIT 1',
+        [decoded.jti]
+      );
+
+      if (blacklistCheck.rows.length > 0) {
+        res.status(401).json({ error: 'Token has been revoked' });
+        return;
+      }
+    }
+
     req.user = decoded;
-    
+
     next();
   } catch (error) {
     res.status(401).json({ error: 'Invalid or expired token' });
@@ -31,15 +46,31 @@ export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction)
   }
 };
 
-export const optionalAuth = (req: AuthRequest, _res: Response, next: NextFunction): void => {
+export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextFunction): Promise<void> => {
   try {
-    const token = req.cookies?.token;
-    
+    // Fix: Use same cookie name as requireAuth
+    const token = req.cookies?.['access-token'];
+
     if (token) {
       const decoded = jwt.verify(token, JWT_SECRET) as any;
-      req.user = decoded;
+
+      // Check if token is blacklisted
+      if (decoded.jti) {
+        const blacklistCheck = await query(
+          'SELECT 1 FROM token_blacklist WHERE token_jti = $1 LIMIT 1',
+          [decoded.jti]
+        );
+
+        if (blacklistCheck.rows.length === 0) {
+          // Only set user if token is not blacklisted
+          req.user = decoded;
+        }
+      } else {
+        // Old token without JTI, allow it for backward compatibility
+        req.user = decoded;
+      }
     }
-    
+
     next();
   } catch (error) {
     // Token is invalid but we continue anyway since auth is optional

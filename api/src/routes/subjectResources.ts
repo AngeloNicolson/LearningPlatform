@@ -75,8 +75,8 @@ router.get('/:subject/resources', async (req, res) => {
   }
 });
 
-// Download a worksheet resource
-router.get('/download/:id', async (req, res) => {
+// Download a worksheet resource - requires authentication
+router.get('/download/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     console.log('Download request for resource ID:', id);

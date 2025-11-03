@@ -123,60 +123,54 @@ router.post('/',
   }
 );
 
-// Get user's bookings
-router.get('/my-bookings', (_req: Request, res: Response) => {
-  // TODO: Get user from auth token
-  // For now, return mock data
-  const userBookings = [
-    {
-      id: '1',
-      tutorName: 'Dr. Sarah Johnson',
-      date: '2024-01-15',
-      time: '14:00',
-      duration: 60,
-      subject: 'Calculus',
-      status: 'confirmed',
-      price: 35
-    },
-    {
-      id: '2',
-      tutorName: 'Emily Rodriguez',
-      date: '2024-01-18',
-      time: '16:00',
-      duration: 45,
-      subject: 'Geometry',
-      status: 'pending',
-      price: 25
-    }
-  ];
-  
+// Get user's bookings - requires authentication
+router.get('/my-bookings', requireAuth, (req: Request, res: Response) => {
+  const user = (req as any).user;
+
+  // Filter bookings for the authenticated user
+  const userBookings = bookings.filter(
+    b => b.bookedBy === user.userId || b.studentId === user.userId
+  );
+
   return res.json(userBookings);
 });
 
-// Cancel a booking
-router.delete('/:id', (req: Request, res: Response) => {
-  const index = bookings.findIndex(b => b.id === req.params.id);
-  
-  if (index === -1) {
-    return res.status(404).json({ message: 'Booking not found' });
-  }
-  
-  bookings[index].status = 'cancelled';
-  
-  return res.json({ message: 'Booking cancelled successfully' });
-});
-
-// Confirm a booking (for payment confirmation)
-router.post('/:id/confirm', (req: Request, res: Response) => {
+// Cancel a booking - requires authentication and ownership
+router.delete('/:id', requireAuth, (req: Request, res: Response) => {
+  const user = (req as any).user;
   const booking = bookings.find(b => b.id === req.params.id);
-  
+
   if (!booking) {
     return res.status(404).json({ message: 'Booking not found' });
   }
-  
+
+  // Verify user owns this booking or is admin
+  if (booking.bookedBy !== user.userId && user.role !== 'admin' && user.role !== 'owner') {
+    return res.status(403).json({ error: 'You can only cancel your own bookings' });
+  }
+
+  booking.status = 'cancelled';
+
+  return res.json({ message: 'Booking cancelled successfully' });
+});
+
+// Confirm a booking (for payment confirmation) - requires authentication
+router.post('/:id/confirm', requireAuth, (req: Request, res: Response) => {
+  const user = (req as any).user;
+  const booking = bookings.find(b => b.id === req.params.id);
+
+  if (!booking) {
+    return res.status(404).json({ message: 'Booking not found' });
+  }
+
+  // Verify user owns this booking or is admin
+  if (booking.bookedBy !== user.userId && user.role !== 'admin' && user.role !== 'owner') {
+    return res.status(403).json({ error: 'Unauthorized to confirm this booking' });
+  }
+
   booking.status = 'confirmed';
   booking.paymentId = req.body.paymentIntentId;
-  
+
   return res.json({
     message: 'Booking confirmed successfully',
     booking

@@ -398,6 +398,22 @@ router.put('/:tutorId/availability', requireAuth, async (req: Request, res: Resp
   try {
     const { tutorId } = req.params;
     const { availability } = req.body;
+    const user = (req as any).user;
+
+    // Verify ownership: user must be the tutor or an admin/owner
+    const tutorCheck = await query(
+      'SELECT user_id FROM tutors WHERE id = $1',
+      [tutorId]
+    );
+
+    if (tutorCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Tutor not found' });
+    }
+
+    const tutorUserId = tutorCheck.rows[0].user_id;
+    if (tutorUserId !== user.userId && user.role !== 'admin' && user.role !== 'owner') {
+      return res.status(403).json({ error: 'You can only modify your own availability' });
+    }
 
     // Begin transaction
     await query('BEGIN');
@@ -415,14 +431,14 @@ router.put('/:tutorId/availability', requireAuth, async (req: Request, res: Resp
       }
 
       await query('COMMIT');
-      res.json({ success: true, message: 'Availability updated successfully' });
+      return res.json({ success: true, message: 'Availability updated successfully' });
     } catch (error) {
       await query('ROLLBACK');
       throw error;
     }
   } catch (error) {
     console.error('Error updating tutor availability:', error);
-    res.status(500).json({ error: 'Failed to update availability' });
+    return res.status(500).json({ error: 'Failed to update availability' });
   }
 });
 
@@ -431,23 +447,39 @@ router.post('/:tutorId/availability/override', requireAuth, async (req: Request,
   try {
     const { tutorId } = req.params;
     const { date, isAvailable, reason, allDay, startTime, endTime } = req.body;
+    const user = (req as any).user;
+
+    // Verify ownership: user must be the tutor or an admin/owner
+    const tutorCheck = await query(
+      'SELECT user_id FROM tutors WHERE id = $1',
+      [tutorId]
+    );
+
+    if (tutorCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Tutor not found' });
+    }
+
+    const tutorUserId = tutorCheck.rows[0].user_id;
+    if (tutorUserId !== user.userId && user.role !== 'admin' && user.role !== 'owner') {
+      return res.status(403).json({ error: 'You can only modify your own availability' });
+    }
 
     await query(`
-      INSERT INTO tutor_availability_overrides 
+      INSERT INTO tutor_availability_overrides
       (tutor_id, override_date, is_available, reason, all_day, start_time, end_time)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      ON CONFLICT (tutor_id, override_date, start_time) 
-      DO UPDATE SET 
+      ON CONFLICT (tutor_id, override_date, start_time)
+      DO UPDATE SET
         is_available = $3,
         reason = $4,
         all_day = $5,
         end_time = $7
     `, [tutorId, date, isAvailable, reason, allDay, startTime, endTime]);
 
-    res.json({ success: true, message: 'Override added successfully' });
+    return res.json({ success: true, message: 'Override added successfully' });
   } catch (error) {
     console.error('Error adding availability override:', error);
-    res.status(500).json({ error: 'Failed to add override' });
+    return res.status(500).json({ error: 'Failed to add override' });
   }
 });
 
