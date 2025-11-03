@@ -1,3 +1,10 @@
+/**
+ * @file useTopics.ts
+ * @author Angelo Nicolson
+ * @brief Custom React hook for topic management
+ * @description Provides React hook for managing educational topics with CRUD operations, storage integration, and state management. Implements topic creation, retrieval, updating, and deletion with StorageService integration.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { TopicMetadata } from '../types/storage';
 import apiService from '../services/ApiService';

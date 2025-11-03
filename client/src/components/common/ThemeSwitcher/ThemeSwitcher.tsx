@@ -1,3 +1,10 @@
+/**
+ * @file ThemeSwitcher.tsx
+ * @author Angelo Nicolson
+ * @brief Theme selection and switching component
+ * @description Provides UI for switching between application themes (Classic, Dark, etc.) with visual theme preview and persistent theme selection.
+ */
+
 import React, { useState } from 'react';
 import { useTheme } from '../../../contexts/ThemeContext';
 import './ThemeSwitcher.css';

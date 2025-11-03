@@ -1,3 +1,13 @@
+/**
+ * @file AdminPanel.tsx
+ * @author Angelo Nicolson
+ * @brief Comprehensive administration interface with multi-tab management
+ * @description Administrative control panel providing tabbed interface for platform management including overview statistics,
+ * tutor approval/rejection workflow, article/content management, user administration with role-based impersonation, and resource
+ * upload functionality. Implements role-based permissions (owner/admin) and integrates with backend APIs for CRUD operations on
+ * tutors, articles, and users. Supports navigation state persistence and real-time data fetching.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { authFetch } from '../../../utils/authFetch';

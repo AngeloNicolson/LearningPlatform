@@ -1,3 +1,10 @@
+/**
+ * @file useNavigationHistory.ts
+ * @author Angelo Nicolson
+ * @brief Custom React hook for navigation history
+ * @description Provides React hook implementing browser-like navigation history with back/forward functionality, state merging, and history management. Used by NavigationContext for client-side routing.
+ */
+
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { NavigationState, NavigationHistoryEntry, NavigationOptions } from '../types/navigation';
 

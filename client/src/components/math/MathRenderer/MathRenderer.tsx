@@ -1,3 +1,10 @@
+/**
+ * @file MathRenderer.tsx
+ * @author Angelo Nicolson
+ * @brief LaTeX mathematical notation renderer
+ * @description Renders mathematical expressions using MathJax with LaTeX syntax support. Provides component for displaying formatted mathematical notation throughout the application.
+ */
+
 import React, { useEffect, useRef } from 'react';
 import { renderMath } from '../../../utils/mathjax';
 

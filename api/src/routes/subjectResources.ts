@@ -1,3 +1,13 @@
+/**
+ * @file subjectResources.ts
+ * @author Angelo Nicolson
+ * @brief Subject-specific resource management and retrieval endpoints
+ * @description Manages educational resources across subjects (math, science, history) with comprehensive CRUD operations.
+ * Provides public endpoints for resource discovery with advanced filtering by topic, type, grade, and era, document download
+ * functionality with authentication, topic browsing, and admin-only endpoints for creating, updating, deleting resources,
+ * and bulk importing. Supports linking resources to downloadable documents stored in the filesystem.
+ */
+
 import express from 'express';
 import { Pool } from 'pg';
 import { requireAuth, requireRole } from '../middleware/auth';

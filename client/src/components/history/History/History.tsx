@@ -1,3 +1,10 @@
+/**
+ * @file History.tsx
+ * @author Angelo Nicolson
+ * @brief Historical content browser
+ * @description General history content browser component providing access to historical resources, timelines, and educational materials across different periods and regions.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { AmericanHistory } from '../AmericanHistory/AmericanHistory';
 import { useNavigation } from '../../../contexts/NavigationContext';

@@ -1,4 +1,11 @@
 /**
+ * @file authFetch.ts
+ * @author Angelo Nicolson
+ * @brief Authentication-aware fetch wrapper with automatic token refresh
+ * @description Provides a fetch wrapper that automatically handles authentication tokens, implements automatic logout on 401 errors, supports token refresh on expiration, and integrates with global logout callback for session management. Wraps standard fetch API with credential inclusion and error handling for authenticated API requests.
+ */
+
+/**
  * Authenticated fetch wrapper that automatically handles token expiration
  *
  * Usage:

@@ -1,3 +1,10 @@
+/**
+ * @file ProofBuilder.tsx
+ * @author Angelo Nicolson
+ * @brief Interactive mathematical proof construction tool
+ * @description Provides interface for building mathematical proofs step-by-step with validation, logical structure guidance, and support for various proof techniques.
+ */
+
 import React, { useState, useCallback } from 'react';
 import { MathRenderer } from '../MathRenderer/MathRenderer';
 import { EquationEditor } from '../EquationEditor/EquationEditor';

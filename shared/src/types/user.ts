@@ -1,3 +1,12 @@
+/**
+ * @file user.ts
+ * @author Angelo Nicolson
+ * @brief User-related TypeScript type definitions for shared API contracts
+ * @description Defines TypeScript interfaces for user entities, authentication requests/responses, and JWT payload structure.
+ * Shared between client and server for type-safe user management including User profile, UserRegistration, UserLogin,
+ * AuthResponse, and JWTPayload interfaces ensuring consistent type definitions across the full stack.
+ */
+
 export interface User {
   id: string;
   email: string;

@@ -1,3 +1,10 @@
+/**
+ * @file FindTutorsHub.tsx
+ * @author Angelo Nicolson
+ * @brief Tutor discovery hub interface
+ * @description Central hub for finding tutors with options to browse by subject (math, science, all), view featured tutors, and access tutor search functionality.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { UnifiedTutorCard } from '../UnifiedTutorCard/UnifiedTutorCard';

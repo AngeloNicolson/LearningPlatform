@@ -1,3 +1,13 @@
+/**
+ * @file bookings.ts
+ * @author Angelo Nicolson
+ * @brief Tutoring session booking and management endpoints
+ * @description Manages tutoring session bookings including creation, confirmation, cancellation, and retrieval. Implements
+ * parent-child relationship validation ensuring child accounts cannot book directly, supports parent booking on behalf of children,
+ * provides teacher-specific endpoints for viewing and managing their bookings, and includes mock booking data for development.
+ * Handles booking status transitions (pending, confirmed, cancelled) and payment integration.
+ */
+
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { requireAuth } from '../middleware/auth';

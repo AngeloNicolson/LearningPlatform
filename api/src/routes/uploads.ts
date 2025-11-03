@@ -1,3 +1,13 @@
+/**
+ * @file uploads.ts
+ * @author Angelo Nicolson
+ * @brief File upload and document management endpoints
+ * @description Handles file uploads for educational materials including worksheets (PDFs) and lesson images. Provides authenticated
+ * endpoints for uploading files with automatic database record creation, linking uploaded documents to subject resources, file download
+ * with access control, document listing with filtering, and admin-only file deletion. Implements transaction-based uploads ensuring
+ * database and filesystem consistency, and includes comprehensive error handling with automatic cleanup on failures.
+ */
+
 import { Router, Request, Response } from 'express';
 import { uploadWorksheet, uploadImage, handleUploadError } from '../middleware/upload';
 import { query } from '../database/connection';

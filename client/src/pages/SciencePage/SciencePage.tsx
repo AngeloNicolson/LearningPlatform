@@ -1,3 +1,13 @@
+/**
+ * @file SciencePage.tsx
+ * @author Angelo Nicolson
+ * @brief Science resources page with subject-based organization
+ * @description Science learning page providing access to resources across Physics, Chemistry, Biology, and Earth Science.
+ * Implements topic-based filtering, displays simulations, experiments, videos, and worksheets organized by subject and grade level.
+ * Uses ResourcePageLayout for consistent presentation and includes mock data for various science topics with educational materials
+ * suitable for elementary through high school students.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { ResourcePageLayout, Resource, Topic } from '../../components/common/ResourcePageLayout/ResourcePageLayout';
 

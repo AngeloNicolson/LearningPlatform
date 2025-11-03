@@ -1,3 +1,10 @@
+/**
+ * @file TutorProfile.tsx
+ * @author Angelo Nicolson
+ * @brief Detailed tutor profile page
+ * @description Comprehensive tutor profile displaying full bio, credentials, subject expertise, availability calendar, reviews, pricing details, and booking interface for session scheduling.
+ */
+
 import React, { useState, useEffect } from 'react';
 import './TutorProfile.css';
 

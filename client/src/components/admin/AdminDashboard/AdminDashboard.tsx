@@ -1,3 +1,10 @@
+/**
+ * @file AdminDashboard.tsx
+ * @author Angelo Nicolson
+ * @brief Administrative dashboard overview
+ * @description Displays platform statistics overview, pending tutor applications, recent user registrations, and system health metrics. Provides quick access to admin functions and real-time platform monitoring.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../../../utils/authFetch';
 import { MathResourceUpload } from '../MathResourceUpload/MathResourceUpload';

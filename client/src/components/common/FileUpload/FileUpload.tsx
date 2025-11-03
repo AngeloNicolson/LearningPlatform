@@ -1,3 +1,10 @@
+/**
+ * @file FileUpload.tsx
+ * @author Angelo Nicolson
+ * @brief File upload component with drag-and-drop
+ * @description Reusable file upload component supporting drag-and-drop, file type validation, size limits, and upload progress indication for various file types.
+ */
+
 import React, { useState, useRef } from 'react';
 import './FileUpload.css';
 

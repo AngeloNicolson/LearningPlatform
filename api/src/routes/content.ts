@@ -1,3 +1,13 @@
+/**
+ * @file content.ts
+ * @author Angelo Nicolson
+ * @brief Markdown lesson content management endpoints
+ * @description Manages educational lesson content stored in Markdown format with HTML conversion and sanitization. Provides
+ * authenticated endpoints for creating and updating lessons with sanitized Markdown content, retrieving lesson content with
+ * automatic HTML conversion for preview, browsing resources by type and category, and linking documents to resources. Uses
+ * marked for Markdown-to-HTML conversion and DOMPurify for XSS protection on user-generated content.
+ */
+
 import { Router, Request, Response } from 'express';
 import { query } from '../database/connection';
 import { requireAuth, requireRole } from '../middleware/auth';

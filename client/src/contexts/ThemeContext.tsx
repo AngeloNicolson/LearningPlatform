@@ -1,3 +1,13 @@
+/**
+ * @file ThemeContext.tsx
+ * @author Angelo Nicolson
+ * @brief Theme management context with CSS variable injection
+ * @description Provides global theme management using React Context API. Supports multiple themes (classic, dark, etc.),
+ * persists theme selection to localStorage, detects system dark mode preferences, dynamically applies CSS variables to
+ * document root for theme colors, and provides dark mode toggle functionality. Exports useTheme hook for consuming components
+ * to access and modify theme state.
+ */
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Theme, getTheme, getAvailableThemes } from '../styles/themes';
 

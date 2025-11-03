@@ -1,3 +1,10 @@
+/**
+ * @file Leaderboard.tsx
+ * @author Angelo Nicolson
+ * @brief Ranking leaderboard display
+ * @description Displays ranked list of users with scores, rankings, stats, and achievements. Used on homepage and in competitive features.
+ */
+
 import React from 'react';
 import './Leaderboard.css';
 

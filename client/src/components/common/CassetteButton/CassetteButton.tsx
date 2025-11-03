@@ -1,3 +1,10 @@
+/**
+ * @file CassetteButton.tsx
+ * @author Angelo Nicolson
+ * @brief Retro cassette tape-styled button
+ * @description Themed button component with retro cassette tape aesthetics matching the overall retro terminal design of the application.
+ */
+
 import React from 'react';
 import './CassetteButton.css';
 

@@ -1,3 +1,10 @@
+/**
+ * @file MarkdownEditor.tsx
+ * @author Angelo Nicolson
+ * @brief Rich markdown editor with preview
+ * @description Provides markdown editing interface with live preview, formatting toolbar, and support for educational content creation. Used by tutors and admins for lesson content.
+ */
+
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

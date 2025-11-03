@@ -1,3 +1,12 @@
+/**
+ * @file auth.ts
+ * @author Angelo Nicolson
+ * @brief JWT-based authentication and authorization middleware
+ * @description Provides authentication and authorization middleware for protecting API routes. Implements JWT token
+ * verification with blacklist checking for revoked tokens, optional authentication for public endpoints, and role-based
+ * access control. Extends Express Request with user information from decoded JWT tokens for downstream route handlers.
+ */
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { query } from '../database/connection';

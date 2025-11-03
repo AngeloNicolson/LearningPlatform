@@ -1,3 +1,12 @@
+/**
+ * @file booking.ts
+ * @author Angelo Nicolson
+ * @brief Booking-related TypeScript type definitions for shared API contracts
+ * @description Defines TypeScript interfaces for tutoring session bookings, booking creation requests, and API responses.
+ * Shared between client and server providing Booking interface with status tracking (pending, confirmed, cancelled, completed),
+ * CreateBookingRequest for session scheduling, and BookingResponse for API communication ensuring type-safe booking operations.
+ */
+
 export interface Booking {
   id: string;
   tutorId: string;

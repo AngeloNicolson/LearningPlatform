@@ -1,3 +1,10 @@
+/**
+ * @file DirectoryPicker.tsx
+ * @author Angelo Nicolson
+ * @brief File system directory picker for storage
+ * @description Allows users to select a directory for persistent storage using File System Access API. Provides UI for directory selection and permission management.
+ */
+
 import React, { useState } from 'react';
 import storageService from '../../../services/StorageService';
 import './DirectoryPicker.css';

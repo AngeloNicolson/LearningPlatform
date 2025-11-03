@@ -1,3 +1,10 @@
+/**
+ * @file MathGradeSelector.tsx
+ * @author Angelo Nicolson
+ * @brief Math grade level selection interface
+ * @description Allows students to select their grade level for math resources and tutor matching. Displays grade ranges from elementary through high school with appropriate math topics.
+ */
+
 import React from 'react';
 import './MathGradeSelector.css';
 

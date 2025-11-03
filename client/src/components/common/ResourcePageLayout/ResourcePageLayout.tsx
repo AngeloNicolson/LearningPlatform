@@ -1,3 +1,10 @@
+/**
+ * @file ResourcePageLayout.tsx
+ * @author Angelo Nicolson
+ * @brief Reusable layout for resource pages
+ * @description Provides consistent layout template for subject resource pages (Math, Science, History) with topic filtering, resource grid display, and search functionality.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { CassetteButton } from '../CassetteButton/CassetteButton';
 import { ResourceSkeletonLoader } from '../skeletons';

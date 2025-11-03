@@ -1,3 +1,14 @@
+/**
+ * @file resources.ts
+ * @author Angelo Nicolson
+ * @brief Educational resource CRUD and hierarchy management endpoints
+ * @description Comprehensive resource management API supporting the grade_levels > topics > subtopics > resources hierarchy.
+ * Provides endpoints for fetching nested grade/topic/subtopic structures, retrieving math-specific topics and resources,
+ * fetching resources by subtopic including quizzes with questions and practice problems with solutions, and admin endpoints
+ * for creating, updating, and deleting resources. Supports multiple resource types (worksheets, videos, practice, quizzes)
+ * with specialized handling for each type.
+ */
+
 import { Router, Request, Response } from 'express';
 import { query } from '../database/connection';
 

@@ -1,3 +1,12 @@
+/**
+ * @file upload.ts
+ * @author Angelo Nicolson
+ * @brief File upload middleware with type-specific validation and storage
+ * @description Configures Multer middleware for handling file uploads with separate storage configurations for worksheets
+ * (PDF files) and images (JPEG, PNG, GIF, WebP). Implements file type validation, secure filename generation using crypto,
+ * file size limits (10MB for PDFs, 2MB for images), and comprehensive error handling for upload-related issues.
+ */
+
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';

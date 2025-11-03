@@ -1,3 +1,10 @@
+/**
+ * @file FileSystemStorageAdapter.ts
+ * @author Angelo Nicolson
+ * @brief File System Access API storage adapter
+ * @description Implements storage adapter using the File System Access API for persistent file-based storage. Enables users to select a directory for storing educational content with full file system access on supported browsers.
+ */
+
 import { StorageAdapter, TopicMetadata, TOPIC_TEMPLATES } from '../types/storage';
 
 // File System Access API adapter for creating real files

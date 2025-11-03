@@ -1,3 +1,10 @@
+/**
+ * @file ScienceTutorCards.tsx
+ * @author Angelo Nicolson
+ * @brief Science tutor discovery cards
+ * @description Displays science tutors in card format with filtering by subject (Physics, Chemistry, Biology). Shows tutor expertise, ratings, pricing, and availability for science subjects.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import '../../tutoring/TutorCards/TutorCards.css'; // Reuse the same styles

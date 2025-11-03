@@ -1,3 +1,10 @@
+/**
+ * @file wasm.ts
+ * @author Angelo Nicolson
+ * @brief TypeScript type definitions for WebAssembly debate core
+ * @description Defines TypeScript interfaces for WebAssembly debate core integration including Topic, Argument, Position types, and debate-related data structures.
+ */
+
 // TypeScript definitions for our WASM module
 
 export interface Topic {

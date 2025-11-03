@@ -1,3 +1,10 @@
+/**
+ * @file ResourceSkeletonLoader.tsx
+ * @author Angelo Nicolson
+ * @brief Loading skeleton for resource cards
+ * @description Provides animated loading skeleton matching resource card layout. Displays during data fetching to improve perceived performance and user experience.
+ */
+
 import React from 'react';
 import './ResourceSkeletonLoader.css';
 

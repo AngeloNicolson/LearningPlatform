@@ -1,3 +1,10 @@
+/**
+ * @file PaymentSuccess.tsx
+ * @author Angelo Nicolson
+ * @brief Payment confirmation page
+ * @description Displays payment success confirmation with booking details, payment receipt, session information, and next steps for students after successful tutoring session booking.
+ */
+
 import React from 'react';
 import './PaymentSuccess.css';
 

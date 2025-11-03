@@ -1,3 +1,10 @@
+/**
+ * @file TutorSchedule.tsx
+ * @author Angelo Nicolson
+ * @brief Tutor's session schedule manager
+ * @description Displays tutor's upcoming and past sessions with student information, session details, meeting links, and schedule management tools for active tutors.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, Video, MapPin } from 'lucide-react';

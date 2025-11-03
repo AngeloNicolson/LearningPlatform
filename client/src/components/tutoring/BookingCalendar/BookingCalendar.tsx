@@ -1,3 +1,10 @@
+/**
+ * @file BookingCalendar.tsx
+ * @author Angelo Nicolson
+ * @brief Session booking calendar interface
+ * @description Calendar interface for selecting tutoring session dates and times based on tutor availability. Displays available slots, handles booking confirmation, and integrates with payment flow.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { PaymentForm } from '../../payments/PaymentForm/PaymentForm';

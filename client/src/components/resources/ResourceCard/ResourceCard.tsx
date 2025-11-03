@@ -1,3 +1,10 @@
+/**
+ * @file ResourceCard.tsx
+ * @author Angelo Nicolson
+ * @brief Educational resource card display
+ * @description Displays individual educational resources (worksheets, videos, lessons) in card format with title, description, type icon, grade level, and action buttons for viewing or downloading.
+ */
+
 import React, { useState } from 'react';
 import { LessonViewer } from '../LessonViewer/LessonViewer';
 import './ResourceCard.css';

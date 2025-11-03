@@ -1,3 +1,10 @@
+/**
+ * @file PaymentForm.tsx
+ * @author Angelo Nicolson
+ * @brief Stripe payment form integration
+ * @description Integrates Stripe Elements for secure payment processing during tutor booking. Handles credit card input, payment validation, submission, and error handling with PCI-compliant payment collection.
+ */
+
 import React, { useState } from 'react';
 import {
   CardElement,

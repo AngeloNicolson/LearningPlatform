@@ -1,3 +1,13 @@
+/**
+ * @file HistoryPage.tsx
+ * @author Angelo Nicolson
+ * @brief History resources page with country-based selection
+ * @description History learning page providing access to historical resources organized by country. Currently features comprehensive
+ * American History content with era-based timeline navigation. Implements country selection interface with availability indicators,
+ * supports future expansion to other countries (UK, Canada, etc.), and integrates with AmericanHistory component for detailed
+ * historical exploration. Tracks navigation state for seamless browsing experience.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { AmericanHistory } from '../../components/history/AmericanHistory/AmericanHistory';
 import { useNavigation } from '../../contexts/NavigationContext';

@@ -1,3 +1,10 @@
+/**
+ * @file AdminUpload.tsx
+ * @author Angelo Nicolson
+ * @brief General resource upload interface
+ * @description Administrative interface for uploading various educational resources with file selection, metadata entry, categorization by subject/topic, and upload progress tracking.
+ */
+
 import React, { useState } from 'react';
 import { authFetch } from '../../../utils/authFetch';
 import { FileUpload } from '../../common/FileUpload/FileUpload';

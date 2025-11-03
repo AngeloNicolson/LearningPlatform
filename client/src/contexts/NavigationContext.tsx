@@ -1,3 +1,13 @@
+/**
+ * @file NavigationContext.tsx
+ * @author Angelo Nicolson
+ * @brief Navigation state management with history support
+ * @description Provides global navigation context using React Context API and custom useNavigationHistory hook.
+ * Manages client-side routing with browser-like history navigation (back/forward), supports complex navigation
+ * states including view selection, tutor filtering, grade/subject selection, and provides navigation methods
+ * (navigate, goBack, goForward, replace, clearHistory) for seamless state transitions across the application.
+ */
+
 import React, { createContext, useContext, ReactNode } from 'react';
 import { NavigationContextValue, NavigationState } from '../types/navigation';
 import { useNavigationHistory } from '../hooks/useNavigationHistory';

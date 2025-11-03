@@ -1,3 +1,10 @@
+/**
+ * @file storage.ts
+ * @author Angelo Nicolson
+ * @brief TypeScript type definitions for storage layer
+ * @description Defines TypeScript interfaces and types for the storage layer including TopicMetadata, StorageAdapter interface, and related types for topic persistence and content management.
+ */
+
 export interface TopicMetadata {
   id: string;
   title: string;

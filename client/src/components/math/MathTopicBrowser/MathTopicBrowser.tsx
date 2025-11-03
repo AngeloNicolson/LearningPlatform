@@ -1,3 +1,10 @@
+/**
+ * @file MathTopicBrowser.tsx
+ * @author Angelo Nicolson
+ * @brief Mathematics topic exploration interface
+ * @description Allows browsing of mathematical topics organized by grade level and subject area. Provides topic cards with icons, descriptions, and resource counts.
+ */
+
 import React, { useState } from 'react';
 import { MathRenderer } from '../MathRenderer/MathRenderer';
 import { mathTemplates, MathTemplate, getAllMathCategories } from '../../../utils/mathTemplates';

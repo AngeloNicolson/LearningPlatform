@@ -1,3 +1,10 @@
+/**
+ * @file TopicBrowser.tsx
+ * @author Angelo Nicolson
+ * @brief Topic browsing interface with filtering
+ * @description Provides interface for browsing educational topics with filtering, search, and categorization. Displays topics in organized grid with icons and descriptions.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useDebateCore } from '../../../hooks/useDebateCore';
 import { Topic, UserBelief } from '../../../types/wasm';

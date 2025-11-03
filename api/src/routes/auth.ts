@@ -1,3 +1,13 @@
+/**
+ * @file auth.ts
+ * @author Angelo Nicolson
+ * @brief Authentication and user registration endpoints
+ * @description Provides comprehensive authentication functionality including user registration, login, logout, and token refresh.
+ * Implements secure password hashing with bcrypt, JWT-based authentication with access and refresh tokens, token blacklisting for
+ * logout, rate limiting for brute-force protection, and special handling for tutor onboarding. Supports multiple user roles
+ * (personal, parent, tutor) with appropriate account status management and email validation.
+ */
+
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';

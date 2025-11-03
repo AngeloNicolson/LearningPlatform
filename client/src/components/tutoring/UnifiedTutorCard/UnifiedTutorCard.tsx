@@ -1,3 +1,10 @@
+/**
+ * @file UnifiedTutorCard.tsx
+ * @author Angelo Nicolson
+ * @brief Tutor profile card component
+ * @description Displays tutor information in card format including avatar, name, subjects, rating, price, experience, and booking button. Reusable across tutor discovery interfaces.
+ */
+
 import React from 'react';
 import './UnifiedTutorCard.css';
 

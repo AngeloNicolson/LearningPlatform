@@ -1,3 +1,10 @@
+/**
+ * @file TutorCards.tsx
+ * @author Angelo Nicolson
+ * @brief Grid of tutor cards with filtering
+ * @description Displays grid of tutor cards with filtering by subject, grade level, rating, and price. Supports tutor search and discovery workflow.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import './TutorCards.css';

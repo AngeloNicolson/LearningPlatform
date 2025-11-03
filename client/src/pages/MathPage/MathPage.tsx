@@ -1,3 +1,13 @@
+/**
+ * @file MathPage.tsx
+ * @author Angelo Nicolson
+ * @brief Mathematics resources page with topic-based filtering
+ * @description Mathematics learning page providing access to math resources organized by topics (Algebra, Geometry, Calculus, etc.).
+ * Fetches topics and resources from backend API, implements topic-based filtering with navigation state persistence, displays resources
+ * in categorized layout, and integrates with ResourcePageLayout for consistent UI. Supports worksheets, videos, and interactive lessons
+ * across multiple grade levels.
+ */
+
 import { authFetch } from '../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../contexts/NavigationContext';

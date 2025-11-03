@@ -1,3 +1,10 @@
+/**
+ * @file themes.ts
+ * @author Angelo Nicolson
+ * @brief Theme definitions and color schemes
+ * @description Defines application themes (Classic, Dark, etc.) with color palettes, provides theme getter functions, and exports theme configuration for the ThemeContext. Supports extensible theme system with TypeScript type safety.
+ */
+
 export interface ThemeColors {
   // Primary colors
   primary: string;

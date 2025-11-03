@@ -1,3 +1,10 @@
+/**
+ * @file NavigationBar.tsx
+ * @author Angelo Nicolson
+ * @brief Application navigation bar
+ * @description Top navigation bar component with branding, menu items, user profile access, and theme switching. Provides consistent navigation across all pages.
+ */
+
 import React, { useState } from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import './NavigationBar.css';

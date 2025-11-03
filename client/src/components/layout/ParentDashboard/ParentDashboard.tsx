@@ -1,3 +1,10 @@
+/**
+ * @file ParentDashboard.tsx
+ * @author Angelo Nicolson
+ * @brief Parent account management dashboard
+ * @description Provides interface for parents to manage child accounts, view children's learning progress, manage tutoring bookings, and monitor educational activities.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import './ParentDashboard.css';

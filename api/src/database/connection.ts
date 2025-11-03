@@ -1,3 +1,12 @@
+/**
+ * @file connection.ts
+ * @author Angelo Nicolson
+ * @brief PostgreSQL database connection pool and query utilities
+ * @description Establishes and manages a PostgreSQL connection pool for the tutoring platform API.
+ * Provides helper functions for executing queries with logging, obtaining clients for transactions,
+ * and monitoring connection health. Includes automatic error handling and performance tracking for all database operations.
+ */
+
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 

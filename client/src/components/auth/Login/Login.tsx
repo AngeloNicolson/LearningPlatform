@@ -1,3 +1,13 @@
+/**
+ * @file Login.tsx
+ * @author Angelo Nicolson
+ * @brief Authentication form with login and registration
+ * @description Dual-purpose authentication component providing login and user registration functionality with role selection
+ * (personal, parent, tutor). Implements form validation, password strength requirements, quick login shortcuts for development,
+ * secure credential handling with httpOnly cookies, comprehensive error messaging, and special handling for tutor onboarding flow.
+ * Integrates with backend authentication API and manages local storage for session persistence.
+ */
+
 import React, { useState } from 'react';
 import './Login.css';
 

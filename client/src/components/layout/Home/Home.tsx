@@ -1,3 +1,12 @@
+/**
+ * @file Home.tsx
+ * @author Angelo Nicolson
+ * @brief Homepage with leaderboards and featured content
+ * @description Main landing page component displaying platform statistics, leaderboards showing top debaters with rankings and ELO scores,
+ * featured debates with complexity ratings and participant counts, trending topics, and recent activity highlights. Provides an engaging
+ * overview of the DebateRank platform with mock data for demonstration purposes.
+ */
+
 import React from 'react';
 import { Leaderboard } from '../../common/Leaderboard/Leaderboard';
 import './Home.css';

@@ -1,3 +1,13 @@
+/**
+ * @file App.tsx
+ * @author Angelo Nicolson
+ * @brief Main application component with routing and state management
+ * @description Root component managing the entire application state and navigation. Orchestrates view routing,
+ * authentication flow, tutor booking workflow, educational resource navigation (math/science/history), admin panel access,
+ * user impersonation, and workspace management. Provides a retro-styled sidebar navigation with role-based menu items
+ * and integrates ThemeProvider, NavigationProvider, and AuthProvider contexts for global state management.
+ */
+
 import { useState, useEffect } from 'react';
 import { Login } from './components/auth/Login/Login';
 import { Home } from './components/layout/Home/Home';

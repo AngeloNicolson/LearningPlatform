@@ -1,3 +1,10 @@
+/**
+ * @file FlippableTopicBrowser.tsx
+ * @author Angelo Nicolson
+ * @brief Topic browser with flippable cards
+ * @description Combines topic browsing with flippable card UI for engaging topic exploration. Provides grid of 3D flippable cards for visual topic discovery.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useDebateCore } from '../../../hooks/useDebateCore';
 import { Topic, UserBelief } from '../../../types/wasm';

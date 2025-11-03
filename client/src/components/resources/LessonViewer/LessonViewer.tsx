@@ -1,3 +1,10 @@
+/**
+ * @file LessonViewer.tsx
+ * @author Angelo Nicolson
+ * @brief Lesson content viewer with markdown rendering
+ * @description Renders lesson content with markdown support, MathJax integration for mathematical notation, and formatted educational material display with syntax highlighting.
+ */
+
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

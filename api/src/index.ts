@@ -1,3 +1,12 @@
+/**
+ * @file index.ts
+ * @author Angelo Nicolson
+ * @brief Express API server entry point with HTTPS support and security middleware
+ * @description Main entry point for the tutoring platform API server. Configures Express with security middleware (Helmet, CORS),
+ * rate limiting, cookie parsing, and mounts all application routes. Supports both HTTP and HTTPS modes with automatic certificate
+ * detection for local development and containerized deployments. Includes comprehensive error handling and health check endpoints.
+ */
+
 import express from 'express';
 import https from 'https';
 import fs from 'fs';

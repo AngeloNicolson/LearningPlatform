@@ -1,3 +1,13 @@
+/**
+ * @file AuthContext.tsx
+ * @author Angelo Nicolson
+ * @brief Authentication context provider and hooks
+ * @description Provides global authentication state management using React Context API. Manages user login/logout,
+ * session persistence via localStorage, automatic session restoration on mount, token-based authentication with the backend,
+ * user role and account status tracking, parent-child relationships, and tutor onboarding flow. Integrates with authFetch
+ * utility for automatic logout on token expiration and provides useAuth hook for consuming components.
+ */
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigation } from './NavigationContext';
 import { setGlobalLogoutCallback } from '../utils/authFetch';

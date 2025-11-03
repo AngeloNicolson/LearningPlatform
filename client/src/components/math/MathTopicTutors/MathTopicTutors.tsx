@@ -1,3 +1,10 @@
+/**
+ * @file MathTopicTutors.tsx
+ * @author Angelo Nicolson
+ * @brief Math tutors filtered by topic
+ * @description Displays available math tutors filtered by specific mathematical topics. Shows tutor cards with expertise, ratings, and booking options for topic-specific tutoring.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import './MathTopicTutors.css';

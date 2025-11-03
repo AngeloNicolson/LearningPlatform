@@ -1,3 +1,10 @@
+/**
+ * @file FlippableTopicCard.tsx
+ * @author Angelo Nicolson
+ * @brief 3D flippable topic card component
+ * @description Interactive topic card with 3D flip animation showing topic information on front and detailed description on back. Provides engaging UI for topic exploration.
+ */
+
 import React, { useState } from 'react';
 import { Topic } from '../../../types/wasm';
 import './FlippableTopicCard.css';

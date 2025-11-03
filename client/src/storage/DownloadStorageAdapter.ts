@@ -1,3 +1,10 @@
+/**
+ * @file DownloadStorageAdapter.ts
+ * @author Angelo Nicolson
+ * @brief Download-based storage adapter for unsupported browsers
+ * @description Implements storage adapter that uses browser downloads as a fallback storage mechanism. Automatically downloads topic data as JSON files and provides instructions for manual file management on browsers without modern storage APIs.
+ */
+
 import { StorageAdapter, TopicMetadata, TOPIC_TEMPLATES } from '../types/storage';
 
 // Download-based storage adapter for browsers without File System Access API

@@ -1,3 +1,10 @@
+/**
+ * @file MathWorksheetUpload.tsx
+ * @author Angelo Nicolson
+ * @brief Math worksheet upload interface for admins
+ * @description Provides administrative interface for uploading math worksheets (PDF files) with metadata including title, description, topic selection, and grade level assignment. Integrates with upload API and displays upload status.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../../../utils/authFetch';
 import './MathWorksheetUpload.css';

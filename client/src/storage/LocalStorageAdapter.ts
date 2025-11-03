@@ -1,3 +1,10 @@
+/**
+ * @file LocalStorageAdapter.ts
+ * @author Angelo Nicolson
+ * @brief LocalStorage-based storage adapter implementation
+ * @description Implements storage adapter using browser's localStorage API. Provides methods for reading, writing, and listing topics with JSON serialization and error handling for browser storage limitations.
+ */
+
 import { StorageAdapter, TopicMetadata, TOPIC_TEMPLATES } from '../types/storage';
 
 // Browser-based file system using IndexedDB for local storage

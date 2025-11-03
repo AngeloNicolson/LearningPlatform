@@ -1,3 +1,10 @@
+/**
+ * @file ApiService.ts
+ * @author Angelo Nicolson
+ * @brief Centralized API client service
+ * @description Provides centralized API client for backend communication with methods for fetching topics, resources, tutors, and managing bookings. Implements error handling, request/response transformation, and base URL configuration.
+ */
+
 import { TopicMetadata } from '../types/storage';
 import { authFetch } from '../utils/authFetch';
 

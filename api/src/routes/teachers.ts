@@ -1,3 +1,12 @@
+/**
+ * @file teachers.ts
+ * @author Angelo Nicolson
+ * @brief Teacher profile management endpoints
+ * @description Provides endpoints for teachers to manage their professional profiles including bio, specializations,
+ * hourly rates, and weekly availability schedules. Implements role-based access control restricting access to teacher,
+ * admin, and owner roles. Uses in-memory storage for profile data with mock data for development purposes.
+ */
+
 import { Router, Request, Response } from 'express';
 import { requireAuth } from '../middleware/auth';
 

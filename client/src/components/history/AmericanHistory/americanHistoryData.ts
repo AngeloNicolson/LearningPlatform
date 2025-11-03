@@ -1,3 +1,10 @@
+/**
+ * @file americanHistoryData.ts
+ * @author Angelo Nicolson
+ * @brief American history data and content
+ * @description Contains structured data for American history content including eras, events, resources, and timeline information used by AmericanHistory component.
+ */
+
 // American History Topics and Resources Data
 export const americanHistoryTopics = [
   { id: 'colonial', name: 'Colonial America', icon: '⛵' },

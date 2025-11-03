@@ -1,3 +1,12 @@
+/**
+ * @file topics.ts
+ * @author Angelo Nicolson
+ * @brief Topic and resource retrieval endpoints
+ * @description Provides endpoints for retrieving educational topics organized by subject and grade level, with associated resources.
+ * Includes endpoints for fetching all topics, filtering topics by subject (math, science, history), retrieving resources for specific
+ * topics with optional filtering by grade level and type, and generating topic statistics including resource counts and grade level coverage.
+ */
+
 import { Router, Request, Response } from 'express';
 import { query } from '../database/connection';
 

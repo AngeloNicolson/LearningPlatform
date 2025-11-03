@@ -1,3 +1,10 @@
+/**
+ * @file MathMarkdownEditor.tsx
+ * @author Angelo Nicolson
+ * @brief Markdown editor with LaTeX math support
+ * @description Enhanced markdown editor with integrated LaTeX support for mathematical notation. Provides toolbar with math symbols and live preview of rendered mathematics.
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

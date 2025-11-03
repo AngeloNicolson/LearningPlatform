@@ -1,3 +1,10 @@
+/**
+ * @file mathTemplates.ts
+ * @author Angelo Nicolson
+ * @brief Mathematical topic templates and LaTeX utilities
+ * @description Provides pre-defined mathematical topic templates organized by category (Algebra, Geometry, Calculus, etc.) with LaTeX notation support. Includes complexity levels, descriptions, and sample LaTeX expressions for educational content creation.
+ */
+
 export interface MathTemplate {
   id: string;
   title: string;

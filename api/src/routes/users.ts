@@ -1,3 +1,13 @@
+/**
+ * @file users.ts
+ * @author Angelo Nicolson
+ * @brief User management and parent-child account endpoints
+ * @description Handles user profile management and parent-child account relationships. Provides endpoints for creating child accounts
+ * (parent-only), managing user profiles, password updates, viewing parent information, and managing parent-child relationships.
+ * Implements role-based access control ensuring parents can only manage their own children's accounts and includes comprehensive
+ * validation for all user operations.
+ */
+
 import { Router, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';

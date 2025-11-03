@@ -1,3 +1,10 @@
+/**
+ * @file StorageService.ts
+ * @author Angelo Nicolson
+ * @brief Abstracted storage service with multiple backend adapters
+ * @description Provides storage abstraction layer supporting multiple storage backends (localStorage, FileSystem API, downloads). Implements topic and content persistence with adapter pattern for flexible storage strategies across different browser capabilities.
+ */
+
 import { StorageAdapter, TopicMetadata } from '../types/storage';
 import FileSystemStorageAdapter from '../storage/FileSystemStorageAdapter';
 import DownloadStorageAdapter from '../storage/DownloadStorageAdapter';

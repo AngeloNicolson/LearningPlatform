@@ -1,3 +1,10 @@
+/**
+ * @file navigation.ts
+ * @author Angelo Nicolson
+ * @brief TypeScript type definitions for navigation state
+ * @description Defines TypeScript interfaces for navigation state management including NavigationState, NavigationContextValue, and view/tab selection types for client-side routing.
+ */
+
 export type MainView = 
   | 'home' 
   | 'debate' 

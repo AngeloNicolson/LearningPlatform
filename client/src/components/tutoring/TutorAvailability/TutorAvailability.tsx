@@ -1,3 +1,10 @@
+/**
+ * @file TutorAvailability.tsx
+ * @author Angelo Nicolson
+ * @brief Tutor availability calendar management
+ * @description Interface for tutors to set their weekly availability schedule, block dates, set special hours, and manage calendar settings for student bookings.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, Save, X, Plus } from 'lucide-react';

@@ -1,3 +1,10 @@
+/**
+ * @file EquationEditor.tsx
+ * @author Angelo Nicolson
+ * @brief Interactive equation editor with LaTeX
+ * @description Provides WYSIWYG-style equation editing with LaTeX output. Offers symbol palette, template selection, and live preview for mathematical expression creation.
+ */
+
 import React, { useState, useCallback } from 'react';
 import { MathRenderer } from '../MathRenderer/MathRenderer';
 import './EquationEditor.css';

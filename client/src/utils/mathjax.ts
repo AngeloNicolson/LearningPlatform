@@ -1,3 +1,10 @@
+/**
+ * @file mathjax.ts
+ * @author Angelo Nicolson
+ * @brief MathJax initialization and configuration
+ * @description Initializes and configures MathJax library for rendering mathematical notation in the browser. Sets up SVG output, TeX input support, and configures MathJax options for optimal mathematical expression rendering.
+ */
+
 declare global {
   interface Window {
     MathJax: any;

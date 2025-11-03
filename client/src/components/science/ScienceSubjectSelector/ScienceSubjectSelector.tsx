@@ -1,3 +1,10 @@
+/**
+ * @file ScienceSubjectSelector.tsx
+ * @author Angelo Nicolson
+ * @brief Science subject selection interface
+ * @description Allows students to select specific science subjects (Physics, Chemistry, Biology, Earth Science) to view relevant resources and find specialized tutors.
+ */
+
 import React from 'react';
 import './ScienceSubjectSelector.css';
 

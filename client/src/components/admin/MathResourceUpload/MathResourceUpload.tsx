@@ -1,3 +1,10 @@
+/**
+ * @file MathResourceUpload.tsx
+ * @author Angelo Nicolson
+ * @brief Comprehensive math resource upload tool
+ * @description Administrative tool for uploading various math resources including lessons, worksheets, and practice problems. Supports topic/subtopic selection, grade level assignment, and multiple resource types with form validation.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../../../utils/authFetch';
 import './MathResourceUpload.css';

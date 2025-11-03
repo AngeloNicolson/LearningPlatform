@@ -1,3 +1,10 @@
+/**
+ * @file AmericanHistory.tsx
+ * @author Angelo Nicolson
+ * @brief American history timeline explorer
+ * @description Interactive American history component with era-based navigation (Colonial, Revolutionary, Civil War, etc.), timeline visualization, and historical resource access organized chronologically.
+ */
+
 import React, { useState } from 'react';
 import { ResourcePageLayout } from '../../common/ResourcePageLayout/ResourcePageLayout';
 import { americanHistoryTopics, americanHistoryResources } from './americanHistoryData';

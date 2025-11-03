@@ -1,3 +1,13 @@
+/**
+ * @file Dashboard.tsx
+ * @author Angelo Nicolson
+ * @brief Role-based user dashboard with session management
+ * @description Multi-role dashboard component providing role-specific views for students, parents, teachers, and tutors.
+ * Displays upcoming tutoring and debate sessions, teacher booking statistics with earnings tracking, parent dashboard for
+ * managing children's accounts and bookings, personalized stats and learning progress, and quick access to educational resources.
+ * Integrates with backend API for real-time session data and supports account impersonation for admin users.
+ */
+
 import React, { useState, useEffect } from 'react';
 // import { Leaderboard } from './Leaderboard';
 // import { FlippableTopicBrowser } from './FlippableTopicBrowser';

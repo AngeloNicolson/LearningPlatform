@@ -1,3 +1,13 @@
+/**
+ * @file tutors.ts
+ * @author Angelo Nicolson
+ * @brief Tutor discovery, availability, and administration endpoints
+ * @description Comprehensive tutor management API providing endpoints for tutor discovery with filtering by topic/subject/grade,
+ * availability management (weekly schedules and date-specific overrides), tutor profile retrieval, booking schedule access,
+ * and admin functions for tutor approval/rejection. Includes specialized endpoints for math topics and science subjects with
+ * support for both individual and group tutoring sessions.
+ */
+
 import { Router, Request, Response } from 'express';
 import { query } from '../database/connection';
 import { requireAuth, requireRole } from '../middleware/auth';

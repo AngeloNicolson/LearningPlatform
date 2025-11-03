@@ -1,3 +1,12 @@
+/**
+ * @file migrate.ts
+ * @author Angelo Nicolson
+ * @brief Database migration script runner
+ * @description Executes database migration scripts to update the schema by adding subject and grade_level columns
+ * to existing tables. Reads SQL migration files, splits them into individual statements, and executes them sequentially
+ * against the PostgreSQL database. Provides console logging for migration progress and error reporting.
+ */
+
 import { query } from './connection';
 import { readFileSync } from 'fs';
 import { join } from 'path';

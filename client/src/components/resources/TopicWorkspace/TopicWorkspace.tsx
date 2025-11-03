@@ -1,3 +1,10 @@
+/**
+ * @file TopicWorkspace.tsx
+ * @author Angelo Nicolson
+ * @brief Interactive topic workspace for learning
+ * @description Provides dedicated workspace for exploring educational topics with resource viewing, note-taking, and interactive learning tools. Modal-based interface for focused learning sessions.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { TopicMetadata } from '../../../types/storage';
 import { MarkdownEditor } from '../../editors/MarkdownEditor/MarkdownEditor';

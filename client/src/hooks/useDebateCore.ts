@@ -1,3 +1,10 @@
+/**
+ * @file useDebateCore.ts
+ * @author Angelo Nicolson
+ * @brief Custom React hook for WebAssembly debate core
+ * @description Provides React hook for loading and interfacing with WebAssembly debate core module. Manages WASM module lifecycle, debate state, and provides methods for debate operations.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { DebatePlatformModule, Topic, Note, UserBelief, Drawing, DrawingPoint } from '../types/wasm';
 

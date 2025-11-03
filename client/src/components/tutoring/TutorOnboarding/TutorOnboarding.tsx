@@ -1,3 +1,10 @@
+/**
+ * @file TutorOnboarding.tsx
+ * @author Angelo Nicolson
+ * @brief Multi-step tutor onboarding flow
+ * @description Guides new tutors through profile setup including bio, subjects, qualifications, pricing, availability, and profile verification. Multi-step wizard with progress tracking.
+ */
+
 import { authFetch } from '../../../utils/authFetch';
 import React, { useState } from 'react';
 import './TutorOnboarding.css';

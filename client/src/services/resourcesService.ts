@@ -1,3 +1,10 @@
+/**
+ * @file resourcesService.ts
+ * @author Angelo Nicolson
+ * @brief Educational resources API service
+ * @description Provides API methods for fetching and managing educational resources across subjects (math, science, history). Implements topic filtering, resource downloading, and content retrieval with error handling and type safety.
+ */
+
 import { authFetch } from '../utils/authFetch';
 const API_URL = import.meta.env.VITE_API_URL || 'https://localhost:3777/api';
 

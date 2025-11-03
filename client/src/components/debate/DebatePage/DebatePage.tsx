@@ -1,3 +1,10 @@
+/**
+ * @file DebatePage.tsx
+ * @author Angelo Nicolson
+ * @brief Main debate interface and topic selection
+ * @description Interactive debate platform for selecting topics, viewing debate matchups, and engaging in structured argumentative discourse. Integrates with WebAssembly debate core.
+ */
+
 import React, { useState } from 'react';
 import './DebatePage.css';
 
