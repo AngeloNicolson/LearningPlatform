@@ -43,7 +43,7 @@ export const Home: React.FC = () => {
       <div className="home-main">
         <div className="subjects-section">
           <div className="section-header">
-            <h2>📚 Subject Areas</h2>
+            <h2>📚 Core Subjects</h2>
             <p>Explore our collection of educational materials</p>
           </div>
 
@@ -71,7 +71,16 @@ export const Home: React.FC = () => {
               <h3>Biblical Studies</h3>
               <p>Ancient Texts, History & Cultural Impact</p>
             </div>
+          </div>
+        </div>
 
+        <div className="subjects-section">
+          <div className="section-header">
+            <h2>👨‍🏫 Learning Support</h2>
+            <p>Get personalized help from expert educators</p>
+          </div>
+
+          <div className="subjects-grid">
             <div className="subject-card tutor-card" onClick={() => navigation.navigate({ view: 'tutors', tutorType: 'all', tutorView: 'hub' })}>
               <div className="subject-icon">👨‍🏫</div>
               <h3>Find a Tutor</h3>
