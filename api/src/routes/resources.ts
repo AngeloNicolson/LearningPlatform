@@ -91,12 +91,12 @@ router.get('/math/topics', async (_req: Request, res: Response) => {
 router.get('/math', async (req: Request, res: Response) => {
   try {
     const { topic } = req.query;
-    
+
     let queryText = `
-      SELECT 
-        r.id, r.title, r.description, 
-        r.resource_type as type, 
-        r.grade_level as "gradeLevel", 
+      SELECT
+        r.id, r.title, r.description,
+        r.resource_type as type,
+        r.grade_level as "gradeLevel",
         r.url, r.content, r.topic_id,
         t.name as "topicName",
         t.icon as "topicIcon"
@@ -105,20 +105,73 @@ router.get('/math', async (req: Request, res: Response) => {
       WHERE r.subject = 'math' AND r.visible = true
     `;
     const params: any[] = [];
-    
+
     if (topic && topic !== 'all') {
       queryText += ` AND LOWER(r.topic_id) = LOWER($1)`;
       params.push(topic);
     }
-    
+
     queryText += ` ORDER BY r.display_order, r.created_at DESC`;
-    
+
     const result = await query(queryText, params);
-    
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching math resources:', error);
     res.status(500).json({ error: 'Failed to fetch math resources' });
+  }
+});
+
+// Get bible topics (using grade_levels structure like math/science)
+router.get('/bible/topics', async (_req: Request, res: Response) => {
+  try {
+    const result = await query(`
+      SELECT t.id, t.name, t.icon, gl.name as grade_level, gl.display_order as gl_order, t.display_order as t_order
+      FROM topics t
+      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      WHERE gl.subject = 'bible'
+      ORDER BY gl.display_order, t.display_order
+    `);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching bible topics:', error);
+    res.status(500).json({ error: 'Failed to fetch bible topics' });
+  }
+});
+
+// Get bible resources by topic
+router.get('/bible', async (req: Request, res: Response) => {
+  try {
+    const { topic } = req.query;
+
+    let queryText = `
+      SELECT
+        r.id, r.title, r.description,
+        r.resource_type as type,
+        r.grade_level as "gradeLevel",
+        r.url, r.content, r.topic_id,
+        t.name as "topicName",
+        t.icon as "topicIcon"
+      FROM resources r
+      LEFT JOIN topics t ON r.topic_id = t.id
+      WHERE r.subject = 'bible' AND r.visible = true
+    `;
+    const params: any[] = [];
+
+    if (topic && topic !== 'all') {
+      queryText += ` AND LOWER(r.topic_id) = LOWER($1)`;
+      params.push(topic);
+    }
+
+    queryText += ` ORDER BY r.display_order, r.created_at DESC`;
+
+    const result = await query(queryText, params);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching bible resources:', error);
+    res.status(500).json({ error: 'Failed to fetch bible resources' });
   }
 });
 

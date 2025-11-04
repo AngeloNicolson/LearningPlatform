@@ -5,16 +5,17 @@
  * @description Defines TypeScript interfaces for navigation state management including NavigationState, NavigationContextValue, and view/tab selection types for client-side routing.
  */
 
-export type MainView = 
-  | 'home' 
-  | 'debate' 
-  | 'math' 
-  | 'science' 
-  | 'history' 
-  | 'tutors' 
-  | 'dashboard' 
-  | 'login' 
-  | 'admin' 
+export type MainView =
+  | 'home'
+  | 'debate'
+  | 'math'
+  | 'science'
+  | 'history'
+  | 'bible'
+  | 'tutors'
+  | 'dashboard'
+  | 'login'
+  | 'admin'
   | 'onboarding';
 
 export type TutorView = 
@@ -42,6 +43,7 @@ export interface NavigationState {
   mathTab?: string;
   scienceTab?: string;
   historyCountry?: string;
+  bibleTab?: string;
   workspaceTab?: string;
 }
 

@@ -66,6 +66,12 @@ export const Home: React.FC = () => {
               <p>Primary Sources & Historical Content</p>
             </div>
 
+            <div className="subject-card" onClick={() => navigation.navigate({ view: 'bible' })}>
+              <div className="subject-icon">📖</div>
+              <h3>Biblical Studies</h3>
+              <p>Ancient Texts, History & Cultural Impact</p>
+            </div>
+
             <div className="subject-card tutor-card" onClick={() => navigation.navigate({ view: 'tutors', tutorType: 'all', tutorView: 'hub' })}>
               <div className="subject-icon">👨‍🏫</div>
               <h3>Find a Tutor</h3>

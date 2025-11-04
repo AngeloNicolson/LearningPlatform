@@ -16,6 +16,7 @@ import { AdminPanel } from './components/admin/AdminPanel/AdminPanel';
 import { MathPage } from './pages/MathPage/MathPage';
 import { SciencePage } from './pages/SciencePage/SciencePage';
 import { HistoryPage } from './pages/HistoryPage/HistoryPage';
+import { BiblePage } from './pages/BiblePage/BiblePage';
 import { MathHub } from './components/math/MathHub/MathHub';
 import { ScienceHub } from './components/science/ScienceHub/ScienceHub';
 // import { DebatePage } from './components/debate/DebatePage/DebatePage'; // Moved to debating branch
@@ -211,17 +212,24 @@ function AppContent() {
             <span className="nav-icon">🔬</span>
             <span className="nav-label">SCIENCE</span>
           </button>
-          <button 
+          <button
             className={currentView === 'history' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'history' })}
           >
             <span className="nav-icon">📜</span>
             <span className="nav-label">HISTORY</span>
           </button>
-          <button 
+          <button
+            className={currentView === 'bible' ? 'nav-item active' : 'nav-item'}
+            onClick={() => navigation.navigate({ view: 'bible' })}
+          >
+            <span className="nav-icon">📖</span>
+            <span className="nav-label">BIBLE</span>
+          </button>
+          <button
             className={currentView === 'tutors' ? 'nav-item active' : 'nav-item'}
             onClick={() => {
-              navigation.navigate({ 
+              navigation.navigate({
                 view: 'tutors',
                 tutorType: 'all',
                 tutorView: 'hub',
@@ -379,7 +387,11 @@ function AppContent() {
         {currentView === 'history' && (
           <HistoryPage />
         )}
-        
+
+        {currentView === 'bible' && (
+          <BiblePage />
+        )}
+
         {currentView === 'admin' && isAuthenticated && (
           <AdminPanel 
             userRole={userRole}

@@ -42,7 +42,7 @@ router.get('/:subject/resources', async (req, res) => {
     const { topic, type, grade, era, search } = req.query;
 
     // Validate subject
-    if (!['math', 'science', 'history'].includes(subject)) {
+    if (!['math', 'science', 'history', 'bible'].includes(subject)) {
       return res.status(400).json({ error: 'Invalid subject' });
     }
 
@@ -167,8 +167,8 @@ router.get('/:subject/topics', async (req, res) => {
   try {
     const { subject } = req.params;
     
-    // For math and science, get from grade_levels -> topics structure
-    if (subject === 'math' || subject === 'science') {
+    // For math, science, and bible, get from grade_levels -> topics structure
+    if (subject === 'math' || subject === 'science' || subject === 'bible') {
       const query = `
         SELECT t.id, t.name, t.icon, gl.name as grade_level, gl.display_order as gl_order, t.display_order as t_order
         FROM topics t
@@ -204,7 +204,7 @@ router.get('/:subject', async (req, res) => {
     const { topic, type, grade, era, search } = req.query;
 
     // Validate subject
-    if (!['math', 'science', 'history'].includes(subject)) {
+    if (!['math', 'science', 'history', 'bible'].includes(subject)) {
       return res.status(400).json({ error: 'Invalid subject' });
     }
 
