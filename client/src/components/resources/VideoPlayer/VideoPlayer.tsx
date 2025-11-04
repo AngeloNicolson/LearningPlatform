@@ -153,12 +153,24 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             </div>
           )}
 
-          {/* Ad blocker notice - don't load iframe if this is shown */}
           {showAdBlockerNotice && embedUrl ? (
-            <div className="video-player-adblocker-notice">
-              <strong>⚠ Video Blocked</strong>
-              Please disable your ad blocker (uBlock Origin, AdBlock, etc.) for this site to watch embedded videos.
-            </div>
+            // Show placeholder with ad blocker notice - don't load iframe
+            <>
+              <div style={{
+                width: '100%',
+                height: '70vh',
+                maxHeight: '70vh',
+                background: '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div className="video-player-adblocker-notice" style={{ position: 'static', transform: 'none' }}>
+                  <strong>⚠ Video Blocked</strong>
+                  Please disable your ad blocker (uBlock Origin, AdBlock, etc.) for this site to watch embedded videos.
+                </div>
+              </div>
+            </>
           ) : isExternalVideo && embedUrl ? (
             // YouTube/Vimeo embedded player
             <iframe
