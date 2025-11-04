@@ -66,40 +66,24 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [videoId, videoUrl, isExternalVideo, embedUrl, streamUrl]);
 
   useEffect(() => {
-    // Set a timeout to hide loading spinner after 3 seconds regardless
-    // If iframe is blocked by ad blocker, it won't fire onLoad
+    // Set a timeout to hide loading spinner after 2 seconds
     loadingTimeoutRef.current = setTimeout(() => {
       console.log('Loading timeout reached, hiding spinner');
       setLoading(false);
 
-      // If we have an embed URL and still loading after timeout, might be blocked
+      // Show ad blocker notice for external embeds
       if (embedUrl) {
-        console.warn('Video iframe may be blocked by ad blocker (uBlock Origin, etc.)');
-        // Check if iframe actually loaded
-        if (iframeRef.current) {
-          try {
-            // Try to access iframe - if blocked, this might fail
-            const iframeDoc = iframeRef.current.contentDocument;
-            if (!iframeDoc) {
-              setShowAdBlockerNotice(true);
-            }
-          } catch (e) {
-            // Cross-origin, but that's expected - iframe is loading
-            console.log('Iframe is loading (cross-origin)');
-          }
-        } else {
-          // Iframe element doesn't exist - likely blocked
-          setShowAdBlockerNotice(true);
-        }
+        console.warn('If video is blank, it may be blocked by ad blocker');
+        setShowAdBlockerNotice(true);
       }
-    }, 3000);
+    }, 2000);
 
     return () => {
       if (loadingTimeoutRef.current) {
         clearTimeout(loadingTimeoutRef.current);
       }
     };
-  }, [embedUrl]);
+  }, []); // Only run once on mount
 
   useEffect(() => {
     // Handle ESC key to close
