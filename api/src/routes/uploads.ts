@@ -9,7 +9,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { uploadWorksheet, uploadImage, handleUploadError } from '../middleware/upload';
+import { uploadWorksheet, uploadImage, uploadVideo, handleUploadError } from '../middleware/upload';
 import { query } from '../database/connection';
 import { requireAuth, requireRole, optionalAuth } from '../middleware/auth';
 import rateLimit from 'express-rate-limit';
@@ -144,7 +144,7 @@ router.post('/image',
 
       // Return the image URL for use in markdown
       const imageUrl = `/api/uploads/images/${req.file.filename}`;
-      
+
       res.json({
         success: true,
         url: imageUrl,
@@ -161,6 +161,169 @@ router.post('/image',
     return;
   }
 );
+
+// Upload a video and create resource in one transaction
+router.post('/video',
+  requireAuth,
+  requireRole('admin', 'owner', 'tutor'),
+  uploadVideo.single('file'),
+  handleUploadError,
+  async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const { title, description, grade_level, topic_id, subject } = req.body;
+      const user = (req as any).user;
+
+      // Save document to database (file metadata only)
+      const documentResult = await query(
+        `INSERT INTO documents (
+          title, description, filename, original_name,
+          mime_type, file_size, file_path, uploaded_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING *`,
+        [
+          title || req.file.originalname,
+          description || '',
+          req.file.filename,
+          req.file.originalname,
+          req.file.mimetype,
+          req.file.size,
+          req.file.path,
+          user.id
+        ]
+      );
+
+      const document = documentResult.rows[0];
+      const videoUrl = `/api/uploads/stream/${document.id}`;
+
+      // Get topic metadata for subject_resources
+      let topicName = null;
+      let topicIcon = null;
+      if (topic_id) {
+        const topicResult = await query(
+          'SELECT name, icon FROM topics WHERE id = $1',
+          [topic_id]
+        );
+        if (topicResult.rows.length > 0) {
+          topicName = topicResult.rows[0].name;
+          topicIcon = topicResult.rows[0].icon;
+        }
+      }
+
+      // Create resource entry in subject_resources table
+      const resourceId = `${subject || 'math'}-video-${Date.now()}`;
+      const resourceResult = await query(
+        `INSERT INTO subject_resources (
+          id, subject, topic_id, topic_name, topic_icon, resource_type,
+          title, description, url, grade_level, document_id, visible, display_order
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        RETURNING *`,
+        [
+          resourceId,
+          subject || 'math',
+          topic_id,
+          topicName,
+          topicIcon,
+          'video',
+          title || req.file.originalname,
+          description || '',
+          videoUrl,
+          grade_level,
+          document.id,
+          true,
+          0
+        ]
+      );
+
+      console.log('=== VIDEO UPLOAD SUCCESS ===');
+      console.log('Resource ID:', resourceId);
+      console.log('Subject:', subject || 'math');
+      console.log('Topic ID:', topic_id);
+      console.log('Topic Name:', topicName);
+      console.log('Grade Level:', grade_level);
+      console.log('Video URL:', videoUrl);
+      console.log('Resource saved:', resourceResult.rows[0]);
+      console.log('===========================');
+
+      res.json({
+        success: true,
+        document: document,
+        resource: resourceResult.rows[0]
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      // Clean up uploaded file on database error
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+      res.status(500).json({ error: 'Failed to save video' });
+    }
+    return;
+  }
+);
+
+// Stream a video - supports HTTP range requests for seeking
+router.get('/stream/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    // Get document info from database
+    const result = await query(
+      'SELECT * FROM documents WHERE id = $1',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Video not found' });
+    }
+
+    const document = result.rows[0];
+    const filePath = document.file_path;
+
+    // Check if file exists
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'Video file not found on server' });
+    }
+
+    const stat = fs.statSync(filePath);
+    const fileSize = stat.size;
+    const range = req.headers.range;
+
+    if (range) {
+      // Parse range header
+      const parts = range.replace(/bytes=/, '').split('-');
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+      const chunksize = (end - start) + 1;
+      const file = fs.createReadStream(filePath, { start, end });
+
+      const head = {
+        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunksize,
+        'Content-Type': document.mime_type,
+      };
+
+      res.writeHead(206, head);
+      file.pipe(res);
+    } else {
+      // No range header, send entire file
+      const head = {
+        'Content-Length': fileSize,
+        'Content-Type': document.mime_type,
+      };
+      res.writeHead(200, head);
+      fs.createReadStream(filePath).pipe(res);
+    }
+  } catch (error) {
+    console.error('Stream error:', error);
+    res.status(500).json({ error: 'Failed to stream video' });
+  }
+  return;
+});
 
 // Download a document - rate limited but no authentication required
 router.get('/download/:id', downloadLimiter, optionalAuth, async (req: Request, res: Response) => {

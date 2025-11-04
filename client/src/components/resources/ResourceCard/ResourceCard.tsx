@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react';
 import { LessonViewer } from '../LessonViewer/LessonViewer';
+import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import { downloadWorksheet } from '../../../services/downloadService';
 import './ResourceCard.css';
 
@@ -22,6 +23,7 @@ interface ResourceCardProps {
   action?: 'view_lesson' | 'download' | 'external' | 'view';
   actionUrl?: string;
   showTopicBadge?: boolean;
+  documentId?: number;
 }
 
 export const ResourceCard: React.FC<ResourceCardProps> = ({
@@ -35,9 +37,11 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
   contentFormat,
   action,
   actionUrl,
-  showTopicBadge = false
+  showTopicBadge = false,
+  documentId
 }) => {
   const [showLesson, setShowLesson] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   const getTypeIcon = (resourceType: string): string => {
     switch(resourceType) {
@@ -57,6 +61,9 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
     if (action === 'view_lesson' || contentFormat === 'markdown') {
       // Show lesson viewer modal
       setShowLesson(true);
+    } else if (type === 'video') {
+      // Show video player modal
+      setShowVideo(true);
     } else if (action === 'download' && type === 'worksheet') {
       // Use authenticated download service for worksheets
       try {
@@ -160,6 +167,16 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           lessonId={id}
           title={title}
           onClose={() => setShowLesson(false)}
+        />
+      )}
+
+      {showVideo && (
+        <VideoPlayer
+          videoId={documentId?.toString() || id}
+          title={title}
+          description={description}
+          gradeLevel={gradeLevel}
+          onClose={() => setShowVideo(false)}
         />
       )}
     </>

@@ -35,6 +35,18 @@ const imageStorage = multer.diskStorage({
   }
 });
 
+// Configure storage for videos
+const videoStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, path.join(__dirname, '../../uploads/videos'));
+  },
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = crypto.randomBytes(16).toString('hex');
+    const ext = path.extname(file.originalname);
+    cb(null, `video-${Date.now()}-${uniqueSuffix}${ext}`);
+  }
+});
+
 // File filter for worksheets (PDF only)
 const worksheetFileFilter = (_req: any, file: any, cb: any) => {
   if (file.mimetype === 'application/pdf') {
@@ -54,6 +66,16 @@ const imageFileFilter = (_req: any, file: any, cb: any) => {
   }
 };
 
+// File filter for videos
+const videoFileFilter = (_req: any, file: any, cb: any) => {
+  const allowedMimeTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only video files (MP4, WebM, OGG, MOV) are allowed'), false);
+  }
+};
+
 // Create multer instances
 export const uploadWorksheet = multer({
   storage: worksheetStorage,
@@ -68,6 +90,14 @@ export const uploadImage = multer({
   fileFilter: imageFileFilter,
   limits: {
     fileSize: 2 * 1024 * 1024 // 2MB limit for images
+  }
+});
+
+export const uploadVideo = multer({
+  storage: videoStorage,
+  fileFilter: videoFileFilter,
+  limits: {
+    fileSize: 500 * 1024 * 1024 // 500MB limit for videos
   }
 });
 

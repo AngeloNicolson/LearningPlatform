@@ -22,6 +22,7 @@ interface Topic {
 
 export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose }) => {
   const [resourceType, setResourceType] = useState<'worksheet' | 'video' | 'lesson'>('worksheet');
+  const [videoUploadType, setVideoUploadType] = useState<'url' | 'file'>('file');
   const [topics, setTopics] = useState<Topic[]>([]);
   const [formData, setFormData] = useState({
     title: '',
@@ -58,13 +59,25 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type !== 'application/pdf') {
-        setMessage({ type: 'error', text: 'Only PDF files are allowed' });
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        setMessage({ type: 'error', text: 'File size must be less than 10MB' });
-        return;
+      if (resourceType === 'worksheet') {
+        if (file.type !== 'application/pdf') {
+          setMessage({ type: 'error', text: 'Only PDF files are allowed' });
+          return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          setMessage({ type: 'error', text: 'File size must be less than 10MB' });
+          return;
+        }
+      } else if (resourceType === 'video') {
+        const validTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+        if (!validTypes.includes(file.type)) {
+          setMessage({ type: 'error', text: 'Only video files (MP4, WebM, OGG, MOV) are allowed' });
+          return;
+        }
+        if (file.size > 500 * 1024 * 1024) {
+          setMessage({ type: 'error', text: 'Video file size must be less than 500MB' });
+          return;
+        }
       }
       setSelectedFile(file);
       setMessage(null);
@@ -84,7 +97,12 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
         setSaving(false);
         return;
       }
-      if (resourceType === 'video' && !formData.videoUrl) {
+      if (resourceType === 'video' && videoUploadType === 'file' && !selectedFile) {
+        setMessage({ type: 'error', text: 'Please select a video file' });
+        setSaving(false);
+        return;
+      }
+      if (resourceType === 'video' && videoUploadType === 'url' && !formData.videoUrl) {
         setMessage({ type: 'error', text: 'Please provide a video URL' });
         setSaving(false);
         return;
@@ -95,8 +113,8 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
         return;
       }
 
-      // For worksheets, upload file and create resource in one step
-      if (resourceType === 'worksheet') {
+      // For worksheets and video files, upload file and create resource in one step
+      if (resourceType === 'worksheet' || (resourceType === 'video' && videoUploadType === 'file')) {
         const uploadFormData = new FormData();
         uploadFormData.append('file', selectedFile!);
         uploadFormData.append('title', formData.title);
@@ -105,8 +123,9 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
         uploadFormData.append('grade_level', formData.gradeLevel);
         uploadFormData.append('subject', 'math');
 
+        const endpoint = resourceType === 'worksheet' ? 'worksheet' : 'video';
         const response = await authFetch(
-          `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/worksheet`,
+          `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/${endpoint}`,
           {
             method: 'POST',
             credentials: 'include',
@@ -116,10 +135,10 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to upload worksheet');
+          throw new Error(errorData.error || `Failed to upload ${resourceType}`);
         }
 
-        setMessage({ type: 'success', text: 'Worksheet uploaded successfully! Refresh the page to see it.' });
+        setMessage({ type: 'success', text: `${resourceType === 'worksheet' ? 'Worksheet' : 'Video'} uploaded successfully! Refresh the page to see it.` });
       } else {
         // For videos and lessons, just create resource entry
         const selectedTopic = topics.find(t => t.id === formData.topicId);
@@ -199,7 +218,7 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
             className={`type-btn ${resourceType === 'video' ? 'active' : ''}`}
             onClick={() => setResourceType('video')}
           >
-            🎬 Video URL
+            🎥 Video
           </button>
           <button
             className={`type-btn ${resourceType === 'lesson' ? 'active' : ''}`}
@@ -294,18 +313,61 @@ export const MathResourceUpload: React.FC<MathResourceUploadProps> = ({ onClose 
           )}
 
           {resourceType === 'video' && (
-            <div className="form-group">
-              <label htmlFor="videoUrl">Video URL *</label>
-              <input
-                type="url"
-                id="videoUrl"
-                value={formData.videoUrl}
-                onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
-                placeholder="https://youtube.com/watch?v=..."
-                required
-              />
-              <small className="field-hint">YouTube, Vimeo, or any video link</small>
-            </div>
+            <>
+              <div className="form-group">
+                <label>Video Source *</label>
+                <div className="video-upload-type-selector" style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                  <button
+                    type="button"
+                    className={`type-btn ${videoUploadType === 'file' ? 'active' : ''}`}
+                    onClick={() => setVideoUploadType('file')}
+                    style={{ flex: 1, padding: '8px' }}
+                  >
+                    📁 Upload Video File
+                  </button>
+                  <button
+                    type="button"
+                    className={`type-btn ${videoUploadType === 'url' ? 'active' : ''}`}
+                    onClick={() => setVideoUploadType('url')}
+                    style={{ flex: 1, padding: '8px' }}
+                  >
+                    🔗 External URL
+                  </button>
+                </div>
+              </div>
+
+              {videoUploadType === 'file' ? (
+                <div className="form-group">
+                  <label htmlFor="video-file">Upload Video File *</label>
+                  <input
+                    type="file"
+                    id="video-file"
+                    accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                    onChange={handleFileChange}
+                    required
+                  />
+                  {selectedFile && (
+                    <div className="uploaded-file-info">
+                      ✅ {selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
+                    </div>
+                  )}
+                  <small className="field-hint">MP4, WebM, OGG, or MOV files, max 500MB</small>
+                </div>
+              ) : (
+                <div className="form-group">
+                  <label htmlFor="videoUrl">Video URL *</label>
+                  <input
+                    type="url"
+                    id="videoUrl"
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
+                    placeholder="https://youtube.com/watch?v=..."
+                    required
+                  />
+                  <small className="field-hint">YouTube, Vimeo, or any video link</small>
+                </div>
+              )}
+            </>
           )}
 
           {resourceType === 'lesson' && (
