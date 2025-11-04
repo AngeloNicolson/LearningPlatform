@@ -35,7 +35,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Helper function to convert YouTube/Vimeo URLs to embed format
   const getEmbedUrl = (url: string): string | null => {
@@ -60,29 +59,18 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
   const streamUrl = videoId ? `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/stream/${videoId}` : null;
 
-  // Debug logging
-  useEffect(() => {
-    console.log('VideoPlayer props:', { videoId, videoUrl, isExternalVideo, embedUrl, streamUrl });
-  }, [videoId, videoUrl, isExternalVideo, embedUrl, streamUrl]);
-
   useEffect(() => {
     // Set a timeout to hide loading spinner after 2 seconds
-    loadingTimeoutRef.current = setTimeout(() => {
-      console.log('Loading timeout reached, hiding spinner');
+    const timeout = setTimeout(() => {
       setLoading(false);
 
       // Show ad blocker notice for external embeds
       if (embedUrl) {
-        console.warn('If video is blank, it may be blocked by ad blocker');
         setShowAdBlockerNotice(true);
       }
     }, 2000);
 
-    return () => {
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current);
-      }
-    };
+    return () => clearTimeout(timeout);
   }, []); // Only run once on mount
 
   useEffect(() => {
@@ -112,19 +100,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleVideoLoaded = () => {
-    console.log('Video loaded successfully');
-    if (loadingTimeoutRef.current) {
-      clearTimeout(loadingTimeoutRef.current);
-    }
     setLoading(false);
     setError(null);
   };
 
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error('Video error:', e);
-    if (loadingTimeoutRef.current) {
-      clearTimeout(loadingTimeoutRef.current);
-    }
     setLoading(false);
     setError('Failed to load video. The file may be corrupted or in an unsupported format.');
   };
@@ -172,7 +153,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             </div>
           )}
 
-          {isExternalVideo && embedUrl ? (
+          {/* Ad blocker notice - don't load iframe if this is shown */}
+          {showAdBlockerNotice && embedUrl ? (
+            <div className="video-player-adblocker-notice">
+              <strong>⚠ Video Blocked</strong>
+              Please disable your ad blocker (uBlock Origin, AdBlock, etc.) for this site to watch embedded videos.
+            </div>
+          ) : isExternalVideo && embedUrl ? (
             // YouTube/Vimeo embedded player
             <iframe
               ref={iframeRef}
@@ -217,14 +204,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               Your browser does not support the video tag.
             </video>
           ) : null}
-
-          {/* Ad blocker notice */}
-          {showAdBlockerNotice && embedUrl && (
-            <div className="video-player-adblocker-notice">
-              <strong>⚠ Video Blocked</strong>
-              Please disable your ad blocker (uBlock Origin, AdBlock, etc.) for this site to watch embedded videos.
-            </div>
-          )}
         </div>
 
         {(description || subject || gradeLevel) && (
