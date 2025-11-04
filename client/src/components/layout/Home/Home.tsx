@@ -8,11 +8,11 @@
  */
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigation } from '../../../contexts/NavigationContext';
 import './Home.css';
 
 export const Home: React.FC = () => {
-  const navigate = useNavigate();
+  const navigation = useNavigation();
 
   return (
     <div className="home">
@@ -43,113 +43,29 @@ export const Home: React.FC = () => {
       </div>
 
       <div className="home-main">
-        <div className="featured-section">
+        <div className="subjects-section">
           <div className="section-header">
             <h2>📚 Subject Areas</h2>
             <p>Explore our collection of educational materials</p>
           </div>
 
-          <div className="featured-debates">
-            <div className="debate-card featured" onClick={() => navigate('/math')}>
-              <div className="debate-header">
-                <h3>🔢 Mathematics</h3>
-                <div className="debate-meta">
-                  <span className="complexity">Worksheets • Videos • Lessons</span>
-                </div>
-              </div>
-              <div className="resource-preview">
-                <div className="resource-type-grid">
-                  <div className="resource-type-item">
-                    <span className="icon">📝</span>
-                    <span className="label">Algebra Worksheets</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">📐</span>
-                    <span className="label">Geometry Practice</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">🎥</span>
-                    <span className="label">Tutorial Videos</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">📊</span>
-                    <span className="label">Statistics & Data</span>
-                  </div>
-                </div>
-              </div>
-              <div className="debate-actions">
-                <button className="btn btn-primary" onClick={() => navigate('/math')}>
-                  Browse Math Resources
-                </button>
-              </div>
+          <div className="subjects-grid">
+            <div className="subject-card" onClick={() => navigation.navigate({ view: 'math' })}>
+              <div className="subject-icon">🔢</div>
+              <h3>Mathematics</h3>
+              <p>Worksheets, Videos & Practice Problems</p>
             </div>
 
-            <div className="debate-card" onClick={() => navigate('/science')}>
-              <div className="debate-header">
-                <h3>🔬 Science</h3>
-                <div className="debate-meta">
-                  <span className="complexity">Experiments • Simulations • Videos</span>
-                </div>
-              </div>
-              <div className="resource-preview">
-                <div className="resource-type-grid">
-                  <div className="resource-type-item">
-                    <span className="icon">🧪</span>
-                    <span className="label">Lab Experiments</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">🧬</span>
-                    <span className="label">Biology Resources</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">⚗️</span>
-                    <span className="label">Chemistry Guides</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">🌍</span>
-                    <span className="label">Earth Science</span>
-                  </div>
-                </div>
-              </div>
-              <div className="debate-actions">
-                <button className="btn btn-primary" onClick={() => navigate('/science')}>
-                  Browse Science Resources
-                </button>
-              </div>
+            <div className="subject-card" onClick={() => navigation.navigate({ view: 'science' })}>
+              <div className="subject-icon">🔬</div>
+              <h3>Science</h3>
+              <p>Experiments, Simulations & Lessons</p>
             </div>
 
-            <div className="debate-card" onClick={() => navigate('/history')}>
-              <div className="debate-header">
-                <h3>📜 History</h3>
-                <div className="debate-meta">
-                  <span className="complexity">Primary Sources • Lessons • Timelines</span>
-                </div>
-              </div>
-              <div className="resource-preview">
-                <div className="resource-type-grid">
-                  <div className="resource-type-item">
-                    <span className="icon">🏛️</span>
-                    <span className="label">Ancient Civilizations</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">🗽</span>
-                    <span className="label">US History</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">🌎</span>
-                    <span className="label">World History</span>
-                  </div>
-                  <div className="resource-type-item">
-                    <span className="icon">📖</span>
-                    <span className="label">Historical Documents</span>
-                  </div>
-                </div>
-              </div>
-              <div className="debate-actions">
-                <button className="btn btn-primary" onClick={() => navigate('/history')}>
-                  Browse History Resources
-                </button>
-              </div>
+            <div className="subject-card" onClick={() => navigation.navigate({ view: 'history' })}>
+              <div className="subject-icon">📜</div>
+              <h3>History</h3>
+              <p>Primary Sources & Historical Content</p>
             </div>
           </div>
         </div>
