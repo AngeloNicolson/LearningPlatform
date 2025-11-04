@@ -236,6 +236,31 @@
   }
 }
 
+/* Ad blocker notice */
+.video-player-adblocker-notice {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--theme-background-paper, #0a0a0a);
+  border: 1px solid var(--theme-warning, #ffa500);
+  color: var(--theme-warning, #ffa500);
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  text-align: center;
+  max-width: 90%;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.video-player-adblocker-notice strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--theme-primary, #00ff41);
+}
+
 /* Keyboard focus styles */
 .video-player-close:focus,
 .video-player-container video:focus,

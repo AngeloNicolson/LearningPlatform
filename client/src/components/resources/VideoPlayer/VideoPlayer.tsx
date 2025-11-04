@@ -31,8 +31,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAdBlockerNotice, setShowAdBlockerNotice] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Helper function to convert YouTube/Vimeo URLs to embed format
@@ -65,9 +67,31 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     // Set a timeout to hide loading spinner after 3 seconds regardless
+    // If iframe is blocked by ad blocker, it won't fire onLoad
     loadingTimeoutRef.current = setTimeout(() => {
       console.log('Loading timeout reached, hiding spinner');
       setLoading(false);
+
+      // If we have an embed URL and still loading after timeout, might be blocked
+      if (embedUrl) {
+        console.warn('Video iframe may be blocked by ad blocker (uBlock Origin, etc.)');
+        // Check if iframe actually loaded
+        if (iframeRef.current) {
+          try {
+            // Try to access iframe - if blocked, this might fail
+            const iframeDoc = iframeRef.current.contentDocument;
+            if (!iframeDoc) {
+              setShowAdBlockerNotice(true);
+            }
+          } catch (e) {
+            // Cross-origin, but that's expected - iframe is loading
+            console.log('Iframe is loading (cross-origin)');
+          }
+        } else {
+          // Iframe element doesn't exist - likely blocked
+          setShowAdBlockerNotice(true);
+        }
+      }
     }, 3000);
 
     return () => {
@@ -75,7 +99,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         clearTimeout(loadingTimeoutRef.current);
       }
     };
-  }, []);
+  }, [embedUrl]);
 
   useEffect(() => {
     // Handle ESC key to close
@@ -167,6 +191,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           {isExternalVideo && embedUrl ? (
             // YouTube/Vimeo embedded player
             <iframe
+              ref={iframeRef}
               src={embedUrl}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -208,6 +233,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               Your browser does not support the video tag.
             </video>
           ) : null}
+
+          {/* Ad blocker notice */}
+          {showAdBlockerNotice && embedUrl && (
+            <div className="video-player-adblocker-notice">
+              <strong>⚠ Video Blocked</strong>
+              Please disable your ad blocker (uBlock Origin, AdBlock, etc.) for this site to watch embedded videos.
+            </div>
+          )}
         </div>
 
         {(description || subject || gradeLevel) && (
