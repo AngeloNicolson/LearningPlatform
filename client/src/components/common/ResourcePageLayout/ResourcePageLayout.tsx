@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { CassetteButton } from '../CassetteButton/CassetteButton';
 import { ResourceSkeletonLoader } from '../skeletons';
 import { DownloadProgress } from '../DownloadProgress/DownloadProgress';
+import { VideoPlayer } from '../../resources/VideoPlayer/VideoPlayer';
 import { downloadWithRetry, isMobileDevice, canShare, shareWorksheet } from '../../../services/downloadService';
 import type { DownloadProgress as DownloadProgressType } from '../../../services/downloadService';
 import './ResourcePageLayout.css';
@@ -22,6 +23,7 @@ export interface Resource {
   gradeLevel: string;
   topicName?: string;
   topicIcon?: string;
+  document_id?: number;
 }
 
 export interface Topic {
@@ -108,6 +110,9 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
     error?: string;
     abortController?: AbortController;
   } | null>(null);
+
+  // Video player state
+  const [activeVideo, setActiveVideo] = useState<Resource | null>(null);
 
   // Sync external topic changes
   useEffect(() => {
@@ -198,6 +203,9 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
     // Handle download for worksheets
     if (resource.type === 'worksheet') {
       handleDownload(resource);
+    } else if (resource.type === 'video') {
+      // Show video player modal
+      setActiveVideo(resource);
     } else if (resource.url) {
       // For other types with URLs, open in new tab
       window.open(resource.url, '_blank');
@@ -442,6 +450,18 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Video Player Modal */}
+      {activeVideo && (
+        <VideoPlayer
+          videoId={activeVideo.document_id ? activeVideo.document_id.toString() : undefined}
+          videoUrl={!activeVideo.document_id && activeVideo.url ? activeVideo.url : undefined}
+          title={activeVideo.title}
+          description={activeVideo.description}
+          gradeLevel={activeVideo.gradeLevel}
+          onClose={() => setActiveVideo(null)}
+        />
+      )}
     </div>
   );
 };

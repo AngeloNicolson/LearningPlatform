@@ -11,7 +11,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './VideoPlayer.css';
 
 interface VideoPlayerProps {
-  videoId: string;
+  videoId?: string;
+  videoUrl?: string;
   title: string;
   onClose: () => void;
   description?: string;
@@ -21,6 +22,7 @@ interface VideoPlayerProps {
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoId,
+  videoUrl,
   title,
   onClose,
   description,
@@ -32,7 +34,28 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  const videoUrl = `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/stream/${videoId}`;
+  // Helper function to convert YouTube/Vimeo URLs to embed format
+  const getEmbedUrl = (url: string): string | null => {
+    // YouTube
+    const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/;
+    const youtubeMatch = url.match(youtubeRegex);
+    if (youtubeMatch) {
+      return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+    }
+
+    // Vimeo
+    const vimeoRegex = /vimeo\.com\/(\d+)/;
+    const vimeoMatch = url.match(vimeoRegex);
+    if (vimeoMatch) {
+      return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
+
+    return null;
+  };
+
+  const isExternalVideo = !!videoUrl;
+  const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
+  const streamUrl = videoId ? `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/stream/${videoId}` : null;
 
   useEffect(() => {
     // Handle ESC key to close
@@ -114,19 +137,50 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             </div>
           )}
 
-          <video
-            ref={videoRef}
-            controls
-            controlsList="nodownload"
-            onLoadedData={handleVideoLoaded}
-            onError={handleVideoError}
-            style={{ display: loading ? 'none' : 'block' }}
-          >
-            <source src={videoUrl} type="video/mp4" />
-            <source src={videoUrl} type="video/webm" />
-            <source src={videoUrl} type="video/ogg" />
-            Your browser does not support the video tag.
-          </video>
+          {isExternalVideo && embedUrl ? (
+            // YouTube/Vimeo embedded player
+            <iframe
+              src={embedUrl}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              onLoad={handleVideoLoaded}
+              style={{
+                width: '100%',
+                height: '70vh',
+                maxHeight: '70vh',
+                border: 'none',
+                display: loading ? 'none' : 'block'
+              }}
+            />
+          ) : isExternalVideo && videoUrl ? (
+            // Direct video URL (not YouTube/Vimeo)
+            <video
+              ref={videoRef}
+              controls
+              controlsList="nodownload"
+              onLoadedData={handleVideoLoaded}
+              onError={handleVideoError}
+              style={{ display: loading ? 'none' : 'block' }}
+            >
+              <source src={videoUrl} />
+              Your browser does not support the video tag.
+            </video>
+          ) : streamUrl ? (
+            // Uploaded video from our server
+            <video
+              ref={videoRef}
+              controls
+              controlsList="nodownload"
+              onLoadedData={handleVideoLoaded}
+              onError={handleVideoError}
+              style={{ display: loading ? 'none' : 'block' }}
+            >
+              <source src={streamUrl} type="video/mp4" />
+              <source src={streamUrl} type="video/webm" />
+              <source src={streamUrl} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
+          ) : null}
         </div>
 
         {description && (

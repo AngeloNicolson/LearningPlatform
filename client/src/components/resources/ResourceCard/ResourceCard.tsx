@@ -172,7 +172,8 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 
       {showVideo && (
         <VideoPlayer
-          videoId={documentId?.toString() || id}
+          videoId={documentId ? documentId.toString() : undefined}
+          videoUrl={!documentId && actionUrl ? actionUrl : undefined}
           title={title}
           description={description}
           gradeLevel={gradeLevel}
