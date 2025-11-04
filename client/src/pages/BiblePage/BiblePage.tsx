@@ -105,7 +105,7 @@ export const BiblePage: React.FC = () => {
 
   const gradeFilters = [
     { id: 'all', label: 'All Levels' },
-    { id: 'general', label: 'General Audience' },
+    { id: 'general', label: 'Introduction' },
     { id: 'youth', label: 'Youth Study' },
     { id: 'adult', label: 'Adult Study' },
     { id: 'academic', label: 'Academic Study' }

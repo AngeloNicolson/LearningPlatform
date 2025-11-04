@@ -7,7 +7,7 @@ DELETE FROM grade_levels WHERE id = 'bible-general';
 
 -- Create audience-based grade levels for Bible Studies
 INSERT INTO grade_levels (id, name, subject, grade_range, description, display_order) VALUES
-  ('bible-general', 'General Audience', 'bible', 'All Ages', 'Overview of Biblical texts for all ages', 5),
+  ('bible-general', 'Introduction', 'bible', 'Beginner', 'Overview of Biblical texts for all ages', 5),
   ('bible-youth', 'Youth Study', 'bible', 'Ages 12-18', 'Age-appropriate Biblical content and themes', 6),
   ('bible-adult', 'Adult Study', 'bible', 'Adult', 'In-depth exploration for adult learners', 7),
   ('bible-academic', 'Academic Study', 'bible', 'University+', 'Scholarly research and critical analysis', 8)
