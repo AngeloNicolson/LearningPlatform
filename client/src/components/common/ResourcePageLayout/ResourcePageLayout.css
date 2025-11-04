@@ -270,13 +270,15 @@
   display: flex;
   gap: 12px;
   overflow: visible;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 2px 0;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .topic-filter {
-  width: 180px;
-  flex-shrink: 0;
+  min-width: 180px;
+  flex: 0 0 auto;
 }
 
 /* Carousel Dots */
