@@ -15,6 +15,7 @@ import { requireAuth, requireRole, optionalAuth } from '../middleware/auth';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import fs from 'fs';
+import { incrementSiteData, decrementSiteData } from '../utils/siteData';
 
 const router = Router();
 
@@ -102,6 +103,9 @@ router.post('/worksheet',
           0
         ]
       );
+
+      // Increment site_data counter
+      await incrementSiteData('total_resources');
 
       console.log('=== WORKSHEET UPLOAD SUCCESS ===');
       console.log('Resource ID:', resourceId);
@@ -237,6 +241,9 @@ router.post('/video',
           0
         ]
       );
+
+      // Increment site_data counter
+      await incrementSiteData('total_resources');
 
       console.log('=== VIDEO UPLOAD SUCCESS ===');
       console.log('Resource ID:', resourceId);
@@ -437,6 +444,15 @@ router.delete('/:id',
 
       // Delete from database
       await query('DELETE FROM documents WHERE id = $1', [id]);
+
+      // Decrement site_data counter (if this document was a visible resource)
+      const resourceCheck = await query(
+        'SELECT id FROM subject_resources WHERE document_id = $1 AND visible = true',
+        [id]
+      );
+      if (resourceCheck.rows.length > 0) {
+        await decrementSiteData('total_resources');
+      }
 
       res.json({
         success: true,

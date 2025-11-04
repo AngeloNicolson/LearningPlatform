@@ -34,17 +34,17 @@
 
 .platform-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .platform-stats .stat-card {
   background: var(--theme-background-paper);
   border: 1px solid var(--theme-border-light);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 8px;
+  padding: 16px 12px;
   text-align: center;
   transition: all 0.3s ease;
   position: relative;
@@ -73,9 +73,9 @@
 .platform-stats .stat-number {
   color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   font-weight: 900;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   text-shadow: 0 1px 2px var(--theme-border-light);
   position: relative;
   z-index: 1;
@@ -83,9 +83,9 @@
 
 .platform-stats .stat-label {
   color: var(--theme-secondary);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   position: relative;
   z-index: 1;
 }
@@ -199,6 +199,15 @@
   z-index: 1;
 }
 
+.subject-card.tutor-card {
+  border-color: var(--theme-border-medium);
+}
+
+.subject-card.tutor-card:hover {
+  border-color: var(--theme-primary);
+  box-shadow: 0 8px 20px var(--theme-border-medium);
+}
+
 /* Features Section */
 .features-section {
   margin-top: 20px;
@@ -294,8 +303,20 @@
   }
 
   .platform-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .platform-stats .stat-card {
+    padding: 12px 8px;
+  }
+
+  .platform-stats .stat-number {
+    font-size: 1.3rem;
+  }
+
+  .platform-stats .stat-label {
+    font-size: 0.6rem;
   }
 
   .subjects-grid {

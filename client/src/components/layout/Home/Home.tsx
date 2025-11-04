@@ -9,10 +9,12 @@
 
 import React from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
+import { useSiteData } from '../../../hooks/useSiteData';
 import './Home.css';
 
 export const Home: React.FC = () => {
   const navigation = useNavigation();
+  const { siteData, loading } = useSiteData();
 
   return (
     <div className="home">
@@ -24,20 +26,16 @@ export const Home: React.FC = () => {
 
         <div className="platform-stats">
           <div className="stat-card">
-            <div className="stat-number">500+</div>
-            <div className="stat-label">Free Resources</div>
+            <div className="stat-number">{loading ? '...' : siteData.totalResources}</div>
+            <div className="stat-label">Resources</div>
           </div>
           <div className="stat-card">
-            <div className="stat-number">10/hr</div>
-            <div className="stat-label">Download Limit</div>
+            <div className="stat-number">{loading ? '...' : siteData.totalTutors}</div>
+            <div className="stat-label">Tutors</div>
           </div>
           <div className="stat-card">
-            <div className="stat-number">3</div>
-            <div className="stat-label">Subject Areas</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">K-12</div>
-            <div className="stat-label">Grade Levels</div>
+            <div className="stat-number">{loading ? '...' : siteData.totalUsers}</div>
+            <div className="stat-label">Users</div>
           </div>
         </div>
       </div>
@@ -66,6 +64,12 @@ export const Home: React.FC = () => {
               <div className="subject-icon">📜</div>
               <h3>History</h3>
               <p>Primary Sources & Historical Content</p>
+            </div>
+
+            <div className="subject-card tutor-card" onClick={() => navigation.navigate({ view: 'tutors', tutorType: 'all', tutorView: 'hub' })}>
+              <div className="subject-icon">👨‍🏫</div>
+              <h3>Find a Tutor</h3>
+              <p>Connect with Expert Educators</p>
             </div>
           </div>
         </div>
