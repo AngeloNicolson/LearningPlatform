@@ -33,6 +33,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [error, setError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Helper function to convert YouTube/Vimeo URLs to embed format
   const getEmbedUrl = (url: string): string | null => {
@@ -56,6 +57,25 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const isExternalVideo = !!videoUrl;
   const embedUrl = videoUrl ? getEmbedUrl(videoUrl) : null;
   const streamUrl = videoId ? `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/uploads/stream/${videoId}` : null;
+
+  // Debug logging
+  useEffect(() => {
+    console.log('VideoPlayer props:', { videoId, videoUrl, isExternalVideo, embedUrl, streamUrl });
+  }, [videoId, videoUrl, isExternalVideo, embedUrl, streamUrl]);
+
+  useEffect(() => {
+    // Set a timeout to hide loading spinner after 3 seconds regardless
+    loadingTimeoutRef.current = setTimeout(() => {
+      console.log('Loading timeout reached, hiding spinner');
+      setLoading(false);
+    }, 3000);
+
+    return () => {
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Handle ESC key to close
@@ -84,12 +104,19 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleVideoLoaded = () => {
+    console.log('Video loaded successfully');
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+    }
     setLoading(false);
     setError(null);
   };
 
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     console.error('Video error:', e);
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+    }
     setLoading(false);
     setError('Failed to load video. The file may be corrupted or in an unsupported format.');
   };
