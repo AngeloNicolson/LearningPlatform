@@ -133,7 +133,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onClick={onClose}
             aria-label="Close video player"
           >
-            ✕ Close
+            ✕
           </button>
         </div>
 

@@ -8,10 +8,8 @@
 import React, { useState, useEffect } from 'react';
 import { CassetteButton } from '../CassetteButton/CassetteButton';
 import { ResourceSkeletonLoader } from '../skeletons';
-import { DownloadProgress } from '../DownloadProgress/DownloadProgress';
 import { VideoPlayer } from '../../resources/VideoPlayer/VideoPlayer';
 import { downloadWithRetry, isMobileDevice, canShare, shareWorksheet } from '../../../services/downloadService';
-import type { DownloadProgress as DownloadProgressType } from '../../../services/downloadService';
 import './ResourcePageLayout.css';
 
 export interface Resource {
@@ -100,16 +98,6 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
   const [topicPage, setTopicPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [visibleCount, setVisibleCount] = useState<number>(8);
-
-  // Download state
-  const [activeDownload, setActiveDownload] = useState<{
-    resourceId: string;
-    filename: string;
-    progress: DownloadProgressType;
-    status: 'downloading' | 'success' | 'error';
-    error?: string;
-    abortController?: AbortController;
-  } | null>(null);
 
   // Video player state
   const [activeVideo, setActiveVideo] = useState<Resource | null>(null);
@@ -224,59 +212,10 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
       }
     }
 
-    // Create abort controller for cancellation
-    const abortController = new AbortController();
-
-    // Initialize download state
-    setActiveDownload({
-      resourceId: resource.id,
-      filename: `${resource.title}.pdf`,
-      progress: { loaded: 0, total: 0, percentage: 0 },
-      status: 'downloading',
-      abortController
-    });
-
     try {
-      await downloadWithRetry(
-        resource.id,
-        `${resource.title}.pdf`,
-        {
-          onProgress: (progress) => {
-            setActiveDownload(prev => prev ? { ...prev, progress } : null);
-          },
-          signal: abortController.signal
-        }
-      );
-
-      // Success
-      setActiveDownload(prev => prev ? { ...prev, status: 'success' } : null);
-
-      // Auto-hide after 3 seconds
-      setTimeout(() => {
-        setActiveDownload(null);
-      }, 3000);
-
+      await downloadWithRetry(resource.id, `${resource.title}.pdf`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Download failed';
-
-      // Show error
-      setActiveDownload(prev => prev ? {
-        ...prev,
-        status: 'error',
-        error: errorMessage
-      } : null);
-
-      // Auto-hide after 5 seconds
-      setTimeout(() => {
-        setActiveDownload(null);
-      }, 5000);
-    }
-  };
-
-  const handleCancelDownload = () => {
-    if (activeDownload?.abortController) {
-      activeDownload.abortController.abort();
-      setActiveDownload(null);
+      console.error('Download failed:', error);
     }
   };
 
@@ -299,19 +238,6 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
           <span className="search-icon">🔍</span>
         </div>
       </div>
-
-      {/* Download Progress Indicator */}
-      {activeDownload && (
-        <DownloadProgress
-          filename={activeDownload.filename}
-          loaded={activeDownload.progress.loaded}
-          total={activeDownload.progress.total}
-          percentage={activeDownload.progress.percentage}
-          status={activeDownload.status}
-          error={activeDownload.error}
-          onCancel={activeDownload.status === 'downloading' ? handleCancelDownload : undefined}
-        />
-      )}
 
       <div className="filters-section">
         <div className="carousel-dots">
