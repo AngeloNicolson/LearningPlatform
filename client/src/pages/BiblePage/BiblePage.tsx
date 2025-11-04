@@ -136,7 +136,7 @@ export const BiblePage: React.FC = () => {
       resources={apiResources}
       resourceTypes={resourceTypes}
       gradeFilters={gradeFilters}
-      topicsPerPage={5}
+      topicsPerPage={4}
       searchPlaceholder="Search biblical resources..."
       historyStorageKey="bibleResourcesHistory"
       comingSoonFeatures={comingSoonFeatures}

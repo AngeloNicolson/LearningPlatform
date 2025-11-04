@@ -95,7 +95,7 @@ export const SciencePage: React.FC = () => {
       resources={filteredResources}
       resourceTypes={resourceTypes}
       gradeFilters={gradeFilters}
-      topicsPerPage={5}
+      topicsPerPage={4}
       searchPlaceholder="Search science resources..."
       historyStorageKey="scienceResourcesHistory"
       comingSoonFeatures={comingSoonFeatures}

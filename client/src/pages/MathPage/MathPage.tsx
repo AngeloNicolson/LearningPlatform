@@ -136,7 +136,7 @@ export const MathPage: React.FC = () => {
       resources={apiResources}
       resourceTypes={resourceTypes}
       gradeFilters={gradeFilters}
-      topicsPerPage={5}
+      topicsPerPage={4}
       searchPlaceholder="Search math resources..."
       historyStorageKey="mathResourcesHistory"
       comingSoonFeatures={comingSoonFeatures}
