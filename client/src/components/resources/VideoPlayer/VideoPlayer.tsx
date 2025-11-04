@@ -111,7 +111,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     >
       <div className="video-player-modal">
         <div className="video-player-header">
-          <h2 className="video-player-title">🎥 {title}</h2>
+          <h2 className="video-player-title">▶ {title}</h2>
           <button
             className="video-player-close"
             onClick={onClose}
@@ -124,7 +124,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <div className="video-player-container">
           {loading && (
             <div className="video-player-loading">
-              <div className="video-player-loading-spinner">⏳</div>
+              <div className="video-player-loading-spinner"></div>
               <div className="video-player-loading-text">Loading video...</div>
             </div>
           )}
@@ -183,25 +183,29 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           ) : null}
         </div>
 
-        {description && (
+        {(description || subject || gradeLevel) && (
           <div className="video-player-info">
-            <div style={{ marginBottom: '8px', color: 'var(--text-primary, #e0e0e0)' }}>
-              {description}
-            </div>
-            <div className="video-player-meta">
-              {subject && (
-                <div className="video-player-meta-item">
-                  <span className="video-player-meta-label">Subject:</span>
-                  <span className="video-player-meta-value">{subject}</span>
-                </div>
-              )}
-              {gradeLevel && (
-                <div className="video-player-meta-item">
-                  <span className="video-player-meta-label">Grade:</span>
-                  <span className="video-player-meta-value">{gradeLevel}</span>
-                </div>
-              )}
-            </div>
+            {description && (
+              <div style={{ marginBottom: '8px', color: 'var(--theme-text-primary, #e0e0e0)', lineHeight: '1.6' }}>
+                {description}
+              </div>
+            )}
+            {(subject || gradeLevel) && (
+              <div className="video-player-meta">
+                {subject && (
+                  <div className="video-player-meta-item">
+                    <span className="video-player-meta-label">Subject:</span>
+                    <span className="video-player-meta-value">{subject}</span>
+                  </div>
+                )}
+                {gradeLevel && (
+                  <div className="video-player-meta-item">
+                    <span className="video-player-meta-label">Grade Level:</span>
+                    <span className="video-player-meta-value">{gradeLevel}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

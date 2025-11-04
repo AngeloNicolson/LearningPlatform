@@ -4,12 +4,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 1000;
+  background: var(--theme-background-overlay, rgba(0, 0, 0, 0.95));
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.2s ease-out;
+  padding: 20px;
 }
 
 @keyframes fadeIn {
@@ -23,13 +24,16 @@
 
 .video-player-modal {
   position: relative;
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
   max-height: 90vh;
-  background: var(--bg-darker, #0a0a0a);
-  border: 2px solid var(--primary, #00ff41);
-  border-radius: 4px;
-  padding: 24px;
+  background: var(--theme-background-paper, #0a0a0a);
+  border: 2px solid var(--theme-primary, #00ff41);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px var(--theme-shadow-dark, rgba(0, 0, 0, 0.5));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   animation: slideUp 0.3s ease-out;
 }
 
@@ -48,34 +52,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--primary, #00ff41);
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--theme-border-light, rgba(0, 255, 65, 0.2));
+  background: var(--theme-background-main, #0f0f0f);
 }
 
 .video-player-title {
-  color: var(--primary, #00ff41);
-  font-size: 20px;
+  color: var(--theme-primary, #00ff41);
+  font-size: 1.5rem;
   font-weight: bold;
   font-family: 'Courier New', monospace;
   text-transform: uppercase;
   margin: 0;
+  letter-spacing: 0.05em;
 }
 
 .video-player-close {
-  background: transparent;
-  border: 1px solid var(--primary, #00ff41);
-  color: var(--primary, #00ff41);
+  background: var(--theme-background-paper, transparent);
+  border: 1px solid var(--theme-border-light, #00ff41);
+  color: var(--theme-text-primary, #00ff41);
   padding: 8px 16px;
   cursor: pointer;
   font-family: 'Courier New', monospace;
   font-size: 14px;
-  border-radius: 2px;
+  border-radius: 6px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .video-player-close:hover {
-  background: var(--primary, #00ff41);
+  background: var(--theme-background-hover, #00ff41);
+  border-color: var(--theme-border-medium, #00ff41);
   color: #000;
 }
 
@@ -83,11 +92,15 @@
   position: relative;
   width: 100%;
   background: #000;
-  border-radius: 4px;
   overflow: hidden;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.video-player-container video {
+.video-player-container video,
+.video-player-container iframe {
   width: 100%;
   height: auto;
   max-height: 70vh;
@@ -97,8 +110,7 @@
 .video-player-error {
   padding: 40px;
   text-align: center;
-  color: var(--danger, #ff4444);
-  font-family: 'Courier New', monospace;
+  background: var(--theme-background-paper, #0a0a0a);
 }
 
 .video-player-error-icon {
@@ -109,30 +121,34 @@
 .video-player-error-message {
   font-size: 16px;
   margin-bottom: 8px;
+  color: var(--theme-error, #ff4444);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
 }
 
 .video-player-error-details {
   font-size: 13px;
-  color: var(--text-secondary, #888);
+  color: var(--theme-text-muted, #888);
+  font-family: 'Courier New', monospace;
 }
 
 .video-player-loading {
   padding: 60px;
   text-align: center;
-  color: var(--primary, #00ff41);
-  font-family: 'Courier New', monospace;
+  background: var(--theme-background-paper, #0a0a0a);
 }
 
 .video-player-loading-spinner {
-  font-size: 32px;
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--theme-border-light, rgba(0, 255, 65, 0.2));
+  border-top-color: var(--theme-primary, #00ff41);
+  border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  margin: 0 auto 20px;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
   to {
     transform: rotate(360deg);
   }
@@ -140,23 +156,24 @@
 
 .video-player-loading-text {
   font-size: 14px;
+  color: var(--theme-primary, #00ff41);
+  font-family: 'Courier New', monospace;
 }
 
 .video-player-info {
-  margin-top: 16px;
-  padding: 12px;
-  background: rgba(0, 255, 65, 0.05);
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  border-radius: 2px;
-  color: var(--text-secondary, #888);
+  padding: 15px 30px;
+  background: var(--theme-background-main, #0f0f0f);
+  border-top: 1px solid var(--theme-border-light, rgba(0, 255, 65, 0.2));
+  color: var(--theme-text-muted, #888);
   font-family: 'Courier New', monospace;
-  font-size: 12px;
+  font-size: 0.9em;
 }
 
 .video-player-meta {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 .video-player-meta-item {
@@ -166,41 +183,63 @@
 }
 
 .video-player-meta-label {
-  color: var(--primary, #00ff41);
+  color: var(--theme-primary, #00ff41);
+  font-weight: 600;
 }
 
 .video-player-meta-value {
-  color: var(--text-primary, #e0e0e0);
+  color: var(--theme-text-primary, #e0e0e0);
+  text-transform: capitalize;
 }
 
 /* Mobile responsive */
 @media (max-width: 768px) {
+  .video-player-overlay {
+    padding: 10px;
+  }
+
   .video-player-modal {
-    width: 95%;
-    padding: 16px;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .video-player-header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
   }
 
   .video-player-title {
-    font-size: 16px;
+    font-size: 1.2rem;
   }
 
   .video-player-close {
+    align-self: flex-end;
     padding: 6px 12px;
     font-size: 12px;
   }
 
-  .video-player-container video {
+  .video-player-container video,
+  .video-player-container iframe {
     max-height: 50vh;
   }
 
   .video-player-info {
-    font-size: 11px;
+    padding: 12px 20px;
+    font-size: 0.8em;
+  }
+
+  .video-player-meta {
+    gap: 12px;
   }
 }
 
 /* Keyboard focus styles */
 .video-player-close:focus,
-.video-player-container video:focus {
-  outline: 2px solid var(--primary, #00ff41);
+.video-player-container video:focus,
+.video-player-container iframe:focus {
+  outline: 2px solid var(--theme-primary, #00ff41);
   outline-offset: 2px;
 }
