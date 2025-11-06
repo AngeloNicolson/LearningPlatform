@@ -19,7 +19,7 @@ router.get('/', async (_req: Request, res: Response) => {
       SELECT t.id, t.name, t.icon, t.description, t.display_order,
              gl.subject, gl.name as grade_level
       FROM topics t
-      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      JOIN subject_levels gl ON t.grade_level_id = gl.id
       ORDER BY gl.subject, gl.display_order, t.display_order
     `);
 
@@ -39,7 +39,7 @@ router.get('/:subject', async (req: Request, res: Response) => {
       SELECT t.id, t.name, t.icon, t.description, t.display_order,
              gl.subject, gl.name as grade_level
       FROM topics t
-      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      JOIN subject_levels gl ON t.grade_level_id = gl.id
       WHERE gl.subject = $1
       ORDER BY gl.display_order, t.display_order
     `, [subject]);
@@ -63,7 +63,7 @@ router.get('/:subject/:topicId/resources', async (req: Request, res: Response) =
              t.name as "topicName", t.icon as "topicIcon"
       FROM resources r
       INNER JOIN topics t ON r.topic_id = t.id
-      INNER JOIN grade_levels gl ON t.grade_level_id = gl.id
+      INNER JOIN subject_levels gl ON t.grade_level_id = gl.id
       WHERE gl.subject = $1 AND r.topic_id = $2 AND r.visible = true
     `;
     const params: any[] = [subject, topicId];
@@ -98,9 +98,9 @@ router.get('/:subject/stats', async (req: Request, res: Response) => {
       SELECT
         t.id, t.name, t.icon,
         COUNT(r.id) as resource_count,
-        COUNT(DISTINCT r.grade_level) as grade_levels_count
+        COUNT(DISTINCT r.grade_level) as subject_levels_count
       FROM topics t
-      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      JOIN subject_levels gl ON t.grade_level_id = gl.id
       LEFT JOIN resources r ON t.id = r.topic_id AND r.visible = true
       WHERE gl.subject = $1
       GROUP BY t.id, t.name, t.icon, t.display_order

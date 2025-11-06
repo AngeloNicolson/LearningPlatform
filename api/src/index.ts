@@ -22,6 +22,8 @@ import bookingRoutes from './routes/bookings';
 import teacherRoutes from './routes/teachers';
 import userRoutes from './routes/users';
 import subjectResourcesRoutes from './routes/subjectResources';
+import subjectsRoutes from './routes/subjects';
+import adminSubjectsRoutes from './routes/admin/subjects';
 import topicsRoutes from './routes/topics';
 import uploadsRoutes from './routes/uploads';
 import downloadsRoutes from './routes/downloads';
@@ -105,6 +107,8 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/downloads', downloadsRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/subjects', subjectsRoutes); // Subjects and subject levels
+app.use('/api/admin/subjects', adminSubjectsRoutes); // Admin CRUD for subjects, levels, topics
 app.use('/api/resources', subjectResourcesRoutes); // Use new subject resources router
 app.use('/api/topics', topicsRoutes);
 app.use('/api/uploads', uploadsRoutes);

@@ -50,6 +50,17 @@ function AppContent() {
   const { getTopic, createTopic } = useTopics();
   const [workspaceTopic, setWorkspaceTopic] = useState<TopicMetadata | null>(null);
   const [impersonatingAs, setImpersonatingAs] = useState<{ role: string; name: string; } | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    const saved = localStorage.getItem('sidebarCollapsed');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  // Toggle sidebar and persist preference
+  const toggleSidebar = () => {
+    const newState = !sidebarCollapsed;
+    setSidebarCollapsed(newState);
+    localStorage.setItem('sidebarCollapsed', JSON.stringify(newState));
+  };
 
   // Extract navigation state
   const currentView = currentState.view;
@@ -171,9 +182,12 @@ function AppContent() {
 
 
   return (
-    <div className="app">
+    <div className={`app ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <ThemeSwitcher />
-      <aside className="sidebar">
+      <button className="sidebar-toggle" onClick={toggleSidebar} title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+        <span>{sidebarCollapsed ? '»' : '«'}</span>
+      </button>
+      <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
           <div className="logo">
             <h1>DebateRank</h1>
@@ -182,9 +196,10 @@ function AppContent() {
         </div>
         
         <nav className="sidebar-nav">
-          <button 
+          <button
             className={currentView === 'home' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'home' })}
+            title="Home"
           >
             <span className="nav-icon">⌂</span>
             <span className="nav-label">HOME</span>
@@ -193,21 +208,24 @@ function AppContent() {
           <button
             className={currentView === 'debate' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'debate' })}
+            title="Debate"
           >
             <span className="nav-icon">💬</span>
             <span className="nav-label">DEBATE</span>
           </button>
           */}
-          <button 
+          <button
             className={currentView === 'math' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'math' })}
+            title="Math"
           >
             <span className="nav-icon">📐</span>
             <span className="nav-label">MATH</span>
           </button>
-          <button 
+          <button
             className={currentView === 'science' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'science' })}
+            title="Science"
           >
             <span className="nav-icon">🔬</span>
             <span className="nav-label">SCIENCE</span>
@@ -215,6 +233,7 @@ function AppContent() {
           <button
             className={currentView === 'history' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'history' })}
+            title="History"
           >
             <span className="nav-icon">📜</span>
             <span className="nav-label">HISTORY</span>
@@ -222,6 +241,7 @@ function AppContent() {
           <button
             className={currentView === 'bible' ? 'nav-item active' : 'nav-item'}
             onClick={() => navigation.navigate({ view: 'bible' })}
+            title="Bible Studies"
           >
             <span className="nav-icon">📖</span>
             <span className="nav-label">BIBLE</span>
@@ -239,11 +259,12 @@ function AppContent() {
                 selectedSessionType: ''
               });
             }}
+            title="Find Tutors"
           >
             <span className="nav-icon">🎓</span>
             <span className="nav-label">FIND TUTORS</span>
           </button>
-          <button 
+          <button
             className={currentView === 'dashboard' ? 'nav-item active' : 'nav-item'}
             onClick={() => {
               if (!isAuthenticated) {
@@ -252,16 +273,18 @@ function AppContent() {
                 navigation.navigate({ view: 'dashboard' });
               }
             }}
+            title="Dashboard"
           >
             <span className="nav-icon">█</span>
             <span className="nav-label">DASHBOARD</span>
           </button>
-          
+
           {/* Admin menu for owner and admin roles only */}
           {isAuthenticated && (userRole === 'owner' || userRole === 'admin') && (
-            <button 
+            <button
               className={currentView === 'admin' ? 'nav-item active' : 'nav-item'}
               onClick={() => navigation.navigate({ view: 'admin' })}
+              title="Admin Panel"
             >
               <span className="nav-icon">⚙️</span>
               <span className="nav-label">ADMIN</span>
@@ -273,23 +296,23 @@ function AppContent() {
           {isAuthenticated ? (
             <>
               <div className="user-info">
-                <div className="user-avatar">{userRole.toUpperCase()}</div>
+                <div className="user-avatar" title={`Logged in as ${userRole}`}>{userRole.toUpperCase()}</div>
                 <div className="user-status">ONLINE</div>
               </div>
-              <button 
+              <button
                 className="logout-btn"
                 onClick={handleLogout}
-                title="Sign Out"
+                title="Logout"
               >
                 <span className="nav-icon">⎋</span>
                 <span className="nav-label">LOGOUT</span>
               </button>
             </>
           ) : (
-            <button 
+            <button
               className="logout-btn"
               onClick={() => navigation.navigate({ view: 'login' })}
-              title="Sign In"
+              title="Login"
             >
               <span className="nav-icon">→</span>
               <span className="nav-label">LOGIN</span>

@@ -10,7 +10,7 @@ INSERT INTO grade_levels (id, name, subject, grade_range, description, display_o
   ('bible-general', 'Introduction', 'bible', 'Beginner', 'Overview of Biblical texts for all ages', 5),
   ('bible-youth', 'Youth Study', 'bible', 'Ages 12-18', 'Age-appropriate Biblical content and themes', 6),
   ('bible-adult', 'Adult Study', 'bible', 'Adult', 'In-depth exploration for adult learners', 7),
-  ('bible-academic', 'Academic Study', 'bible', 'University+', 'Scholarly research and critical analysis', 8)
+  ('bible-academic', 'Advanced Study', 'bible', 'University+', 'Advanced exploration and critical analysis', 8)
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert Bible Studies topics distributed across audience levels
@@ -27,7 +27,7 @@ INSERT INTO topics (id, grade_level_id, name, icon, description, display_order) 
   ('bible-history', 'bible-adult', 'Biblical History', '🏛️', 'Ancient Israel, Biblical Archaeology, Historical Context', 1),
   ('bible-geography', 'bible-adult', 'Biblical Geography', '🗺️', 'Holy Land, Ancient Cities, Biblical Locations', 2),
 
-  -- Academic Study (scholarly analysis)
+  -- Advanced Study (critical analysis)
   ('bible-culture', 'bible-academic', 'Biblical Culture', '🏺', 'Ancient Customs, Traditions, Daily Life', 1),
   ('bible-literacy', 'bible-academic', 'Biblical Literacy', '📖', 'Common References, Literary Influence, Cultural Impact', 2)
 ON CONFLICT (id) DO NOTHING;

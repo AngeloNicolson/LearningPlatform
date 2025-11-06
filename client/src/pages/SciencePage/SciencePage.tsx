@@ -3,56 +3,148 @@
  * @author Angelo Nicolson
  * @brief Science resources page with subject-based organization
  * @description Science learning page providing access to resources across Physics, Chemistry, Biology, and Earth Science.
- * Implements topic-based filtering, displays simulations, experiments, videos, and worksheets organized by subject and grade level.
- * Uses ResourcePageLayout for consistent presentation and includes mock data for various science topics with educational materials
- * suitable for elementary through high school students.
+ * Fetches topics and resources from backend API, implements topic-based filtering with navigation state persistence, displays resources
+ * in categorized layout, and integrates with ResourcePageLayout for consistent UI. Supports worksheets, videos, simulations, and experiments
+ * across multiple grade levels.
  */
 
+import { authFetch } from '../../utils/authFetch';
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '../../contexts/NavigationContext';
 import { ResourcePageLayout, Resource, Topic } from '../../components/common/ResourcePageLayout/ResourcePageLayout';
 
-const scienceTopics: Topic[] = [
-  { id: 'physics', name: 'Physics', icon: '⚛️' },
-  { id: 'chemistry', name: 'Chemistry', icon: '🧪' },
-  { id: 'biology', name: 'Biology', icon: '🧬' },
-  { id: 'earth-science', name: 'Earth Science', icon: '🌍' }
-];
+interface SubjectLevel {
+  id: string;
+  name: string;
+  grade_range: string;
+  description: string;
+  display_order: number;
+}
 
-const scienceResources: Resource[] = [
-  // Physics
-  { id: 'phys-1', title: 'Newton\'s Laws of Motion', description: 'Interactive simulation exploring the three laws of motion', url: '#', type: 'simulation', gradeLevel: 'High School', topicName: 'Physics', topicIcon: '⚛️' },
-  { id: 'phys-2', title: 'Electricity and Magnetism Lab', description: 'Virtual lab experiments with circuits and magnetic fields', url: '#', type: 'experiment', gradeLevel: 'High School', topicName: 'Physics', topicIcon: '⚛️' },
-  { id: 'phys-3', title: 'Introduction to Waves', description: 'Video series on wave properties and behavior', url: '#', type: 'video', gradeLevel: 'Middle School', topicName: 'Physics', topicIcon: '⚛️' },
-  // Chemistry
-  { id: 'chem-1', title: 'Periodic Table Interactive', description: 'Explore elements with detailed properties and uses', url: '#', type: 'simulation', gradeLevel: 'High School', topicName: 'Chemistry', topicIcon: '🧪' },
-  { id: 'chem-2', title: 'Chemical Reactions Lab', description: 'Virtual experiments with safe chemical reactions', url: '#', type: 'experiment', gradeLevel: 'High School', topicName: 'Chemistry', topicIcon: '🧪' },
-  { id: 'chem-3', title: 'States of Matter', description: 'Worksheet on solids, liquids, gases, and plasma', url: '#', type: 'worksheet', gradeLevel: 'Elementary', topicName: 'Chemistry', topicIcon: '🧪' },
-  // Biology
-  { id: 'bio-1', title: 'Cell Structure and Function', description: '3D interactive model of plant and animal cells', url: '#', type: 'simulation', gradeLevel: 'Middle School', topicName: 'Biology', topicIcon: '🧬' },
-  { id: 'bio-2', title: 'Genetics and Heredity', description: 'Video lessons on DNA, genes, and inheritance', url: '#', type: 'video', gradeLevel: 'High School', topicName: 'Biology', topicIcon: '🧬' },
-  { id: 'bio-3', title: 'Ecosystem Dynamics', description: 'Explore food chains and ecological relationships', url: '#', type: 'experiment', gradeLevel: 'Middle School', topicName: 'Biology', topicIcon: '🧬' },
-  // Earth Science
-  { id: 'earth-1', title: 'Weather Patterns', description: 'Interactive weather map and prediction tools', url: '#', type: 'simulation', gradeLevel: 'Elementary', topicName: 'Earth Science', topicIcon: '🌍' },
-  { id: 'earth-2', title: 'Rock Cycle', description: 'Worksheet on igneous, sedimentary, and metamorphic rocks', url: '#', type: 'worksheet', gradeLevel: 'Middle School', topicName: 'Earth Science', topicIcon: '🌍' },
-  { id: 'earth-3', title: 'Solar System Explorer', description: '3D tour of planets, moons, and other celestial bodies', url: '#', type: 'simulation', gradeLevel: 'Elementary', topicName: 'Earth Science', topicIcon: '🌍' }
-];
+interface Subject {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  description: string;
+  filter_label: string;
+  display_order: number;
+}
 
 export const SciencePage: React.FC = () => {
-  const [selectedTopic, setSelectedTopic] = useState<string>('all');
+  const navigation = useNavigation();
+  const [selectedTopic, setSelectedTopic] = useState<string>(navigation.currentState.scienceTab || 'all');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [apiResources, setApiResources] = useState<Resource[]>([]);
+  const [apiTopics, setApiTopics] = useState<Topic[]>([]);
+  const [subject, setSubject] = useState<Subject | null>(null);
+  const [subjectLevels, setSubjectLevels] = useState<SubjectLevel[]>([]);
 
-  // Simulate initial load
+  // Fetch subject info and levels
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    const fetchSubjectData = async () => {
+      try {
+        // Fetch subject metadata
+        const subjectResponse = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/subjects/science`, {
+          credentials: 'include'
+        });
+
+        if (subjectResponse.ok) {
+          const subjectData = await subjectResponse.json();
+          setSubject(subjectData);
+        }
+
+        // Fetch subject levels (for filters)
+        const levelsResponse = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/subjects/science/levels`, {
+          credentials: 'include'
+        });
+
+        if (levelsResponse.ok) {
+          const levelsData = await levelsResponse.json();
+          setSubjectLevels(levelsData);
+        }
+      } catch (error) {
+        console.error('Error fetching subject data:', error);
+      }
+    };
+
+    fetchSubjectData();
   }, []);
 
-  // Filter resources by topic
-  const filteredResources = selectedTopic === 'all'
-    ? scienceResources
-    : scienceResources.filter(r => r.topicName === scienceTopics.find(t => t.id === selectedTopic)?.name);
+  // Fetch topics from API
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/science/topics`, {
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setApiTopics(data);
+        }
+      } catch (error) {
+        console.error('Error fetching topics:', error);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
+  // Fetch resources from API
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams();
+        if (selectedTopic !== 'all') {
+          params.append('topic', selectedTopic);
+        }
+
+        const response = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/resources/science?${params.toString()}`, {
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Map API data to match Resource interface
+          const mappedResources = data.map((r: any) => ({
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            type: r.resource_type || r.type,
+            gradeLevel: r.grade_level || r.gradeLevel,
+            url: r.url,
+            topic_id: r.topic_id,
+            topicName: apiTopics.find(t => t.id === r.topic_id)?.name,
+            topicIcon: apiTopics.find(t => t.id === r.topic_id)?.icon,
+            document_id: r.document_id,
+            resource_type: r.resource_type
+          }));
+          setApiResources(mappedResources);
+        }
+      } catch (error) {
+        console.error('Error fetching resources:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchResources();
+  }, [selectedTopic, apiTopics]);
+
+  // Sync with navigation state
+  useEffect(() => {
+    if (navigation.currentState.scienceTab) {
+      setSelectedTopic(navigation.currentState.scienceTab);
+    }
+  }, [navigation.currentState.scienceTab]);
+
+  // Update navigation when topic changes
+  const handleTopicChange = (topic: string) => {
+    setSelectedTopic(topic);
+    navigation.navigate({ scienceTab: topic });
+  };
 
   const resourceTypes = [
     { id: 'all', label: 'All Resources', icon: '📚' },
@@ -62,13 +154,28 @@ export const SciencePage: React.FC = () => {
     { id: 'simulation', label: 'Simulations', icon: '💻' }
   ];
 
-  const gradeFilters = [
-    { id: 'all', label: 'All Grades' },
-    { id: 'elementary', label: 'Elementary' },
-    { id: 'middle', label: 'Middle School' },
-    { id: 'high', label: 'High School' },
-    { id: 'college', label: 'College' }
-  ];
+  // Generate grade filters dynamically from subject levels
+  const gradeFilters = React.useMemo(() => {
+    if (subjectLevels.length === 0 || !subject) {
+      // Fallback to default while loading
+      return [{ id: 'all', label: 'All Grades' }];
+    }
+
+    // Create "All" option with dynamic label
+    const allOption = {
+      id: 'all',
+      label: `All ${subject.filter_label}s`
+    };
+
+    // Map subject levels to filter options
+    // Extract the short ID (e.g., "science-elementary" → "elementary")
+    const levelOptions = subjectLevels.map(level => ({
+      id: level.id.split('-').slice(1).join('-'), // Remove subject prefix
+      label: level.name
+    }));
+
+    return [allOption, ...levelOptions];
+  }, [subjectLevels, subject]);
 
   const comingSoonFeatures = [
     { icon: '🔭', name: 'Astronomy Lab' },
@@ -91,8 +198,8 @@ export const SciencePage: React.FC = () => {
     <ResourcePageLayout
       title="Science Resources"
       tagline="Explore interactive science content across multiple disciplines"
-      topics={scienceTopics}
-      resources={filteredResources}
+      topics={apiTopics}
+      resources={apiResources}
       resourceTypes={resourceTypes}
       gradeFilters={gradeFilters}
       topicsPerPage={4}
@@ -102,7 +209,7 @@ export const SciencePage: React.FC = () => {
       getResourceButtonLabel={getResourceButtonLabel}
       isLoading={isLoading}
       selectedTopic={selectedTopic}
-      onTopicChange={setSelectedTopic}
+      onTopicChange={handleTopicChange}
     />
   );
 };

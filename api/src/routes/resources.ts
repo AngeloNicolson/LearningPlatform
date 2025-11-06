@@ -2,7 +2,7 @@
  * @file resources.ts
  * @author Angelo Nicolson
  * @brief Educational resource CRUD and hierarchy management endpoints
- * @description Comprehensive resource management API supporting the grade_levels > topics > subtopics > resources hierarchy.
+ * @description Comprehensive resource management API supporting the subject_levels > topics > subtopics > resources hierarchy.
  * Provides endpoints for fetching nested grade/topic/subtopic structures, retrieving math-specific topics and resources,
  * fetching resources by subtopic including quizzes with questions and practice problems with solutions, and admin endpoints
  * for creating, updating, and deleting resources. Supports multiple resource types (worksheets, videos, practice, quizzes)
@@ -20,7 +20,7 @@ router.get('/grades', async (_req: Request, res: Response) => {
     // Fetch all grade levels
     const gradesResult = await query(`
       SELECT id, name, grade_range, display_order
-      FROM grade_levels
+      FROM subject_levels
       ORDER BY display_order, id
     `);
 
@@ -69,13 +69,13 @@ router.get('/grades', async (_req: Request, res: Response) => {
   }
 });
 
-// Get math topics (using new grade_levels structure)
+// Get math topics (using new subject_levels structure)
 router.get('/math/topics', async (_req: Request, res: Response) => {
   try {
     const result = await query(`
       SELECT t.id, t.name, t.icon, gl.name as grade_level, gl.display_order as gl_order, t.display_order as t_order
       FROM topics t
-      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      JOIN subject_levels gl ON t.grade_level_id = gl.id
       WHERE gl.subject = 'math'
       ORDER BY gl.display_order, t.display_order
     `);
@@ -122,13 +122,13 @@ router.get('/math', async (req: Request, res: Response) => {
   }
 });
 
-// Get bible topics (using grade_levels structure like math/science)
+// Get bible topics (using subject_levels structure like math/science)
 router.get('/bible/topics', async (_req: Request, res: Response) => {
   try {
     const result = await query(`
       SELECT t.id, t.name, t.icon, gl.name as grade_level, gl.display_order as gl_order, t.display_order as t_order
       FROM topics t
-      JOIN grade_levels gl ON t.grade_level_id = gl.id
+      JOIN subject_levels gl ON t.grade_level_id = gl.id
       WHERE gl.subject = 'bible'
       ORDER BY gl.display_order, t.display_order
     `);
@@ -316,7 +316,7 @@ router.get('/all', async (_req: Request, res: Response) => {
       FROM resources r
       JOIN subtopics s ON r.subtopic_id = s.id
       JOIN topics t ON s.topic_id = t.id
-      JOIN grade_levels g ON t.grade_level_id = g.id
+      JOIN subject_levels g ON t.grade_level_id = g.id
       ORDER BY g.display_order, t.display_order, s.display_order, r.display_order
     `);
 

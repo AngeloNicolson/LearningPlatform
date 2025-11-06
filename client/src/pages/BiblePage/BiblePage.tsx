@@ -13,12 +13,63 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../contexts/NavigationContext';
 import { ResourcePageLayout, Resource, Topic } from '../../components/common/ResourcePageLayout/ResourcePageLayout';
 
+interface SubjectLevel {
+  id: string;
+  name: string;
+  grade_range: string;
+  description: string;
+  display_order: number;
+}
+
+interface Subject {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  description: string;
+  filter_label: string;
+  display_order: number;
+}
+
 export const BiblePage: React.FC = () => {
   const navigation = useNavigation();
   const [selectedTopic, setSelectedTopic] = useState<string>(navigation.currentState.bibleTab || 'all');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [apiResources, setApiResources] = useState<Resource[]>([]);
   const [apiTopics, setApiTopics] = useState<Topic[]>([]);
+  const [subject, setSubject] = useState<Subject | null>(null);
+  const [subjectLevels, setSubjectLevels] = useState<SubjectLevel[]>([]);
+
+  // Fetch subject info and levels
+  useEffect(() => {
+    const fetchSubjectData = async () => {
+      try {
+        // Fetch subject metadata
+        const subjectResponse = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/subjects/bible`, {
+          credentials: 'include'
+        });
+
+        if (subjectResponse.ok) {
+          const subjectData = await subjectResponse.json();
+          setSubject(subjectData);
+        }
+
+        // Fetch subject levels (for filters)
+        const levelsResponse = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/subjects/bible/levels`, {
+          credentials: 'include'
+        });
+
+        if (levelsResponse.ok) {
+          const levelsData = await levelsResponse.json();
+          setSubjectLevels(levelsData);
+        }
+      } catch (error) {
+        console.error('Error fetching subject data:', error);
+      }
+    };
+
+    fetchSubjectData();
+  }, []);
 
   // Fetch topics from API
   useEffect(() => {
@@ -103,13 +154,28 @@ export const BiblePage: React.FC = () => {
     { id: 'timeline', label: 'Timelines', icon: '📅' }
   ];
 
-  const gradeFilters = [
-    { id: 'all', label: 'All Levels' },
-    { id: 'general', label: 'Introduction' },
-    { id: 'youth', label: 'Youth Study' },
-    { id: 'adult', label: 'Adult Study' },
-    { id: 'academic', label: 'Academic Study' }
-  ];
+  // Generate grade filters dynamically from subject levels
+  const gradeFilters = React.useMemo(() => {
+    if (subjectLevels.length === 0 || !subject) {
+      // Fallback to default while loading
+      return [{ id: 'all', label: 'All Levels' }];
+    }
+
+    // Create "All" option with dynamic label
+    const allOption = {
+      id: 'all',
+      label: `All ${subject.filter_label}s`
+    };
+
+    // Map subject levels to filter options
+    // Extract the short ID (e.g., "bible-general" → "general")
+    const levelOptions = subjectLevels.map(level => ({
+      id: level.id.split('-').slice(1).join('-'), // Remove subject prefix
+      label: level.name
+    }));
+
+    return [allOption, ...levelOptions];
+  }, [subjectLevels, subject]);
 
   const comingSoonFeatures = [
     { icon: '🗺️', name: 'Interactive Maps' },

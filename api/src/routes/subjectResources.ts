@@ -167,22 +167,22 @@ router.get('/:subject/topics', async (req, res) => {
   try {
     const { subject } = req.params;
     
-    // For math, science, and bible, get from grade_levels -> topics structure
+    // For math, science, and bible, get from subject_levels -> topics structure
     if (subject === 'math' || subject === 'science' || subject === 'bible') {
       const query = `
         SELECT t.id, t.name, t.icon, gl.name as grade_level, gl.display_order as gl_order, t.display_order as t_order
         FROM topics t
-        JOIN grade_levels gl ON t.grade_level_id = gl.id
+        JOIN subject_levels gl ON t.grade_level_id = gl.id
         WHERE gl.subject = $1
         ORDER BY gl.display_order, t.display_order
       `;
       const result = await pool.query(query, [subject]);
       res.json(result.rows);
     } else if (subject === 'history') {
-      // For history, get from grade_levels (which represent eras)
+      // For history, get from subject_levels (which represent eras)
       const query = `
         SELECT id, name, grade_range as era
-        FROM grade_levels
+        FROM subject_levels
         WHERE subject = 'history'
         ORDER BY display_order
       `;

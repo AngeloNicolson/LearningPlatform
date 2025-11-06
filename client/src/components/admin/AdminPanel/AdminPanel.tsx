@@ -12,6 +12,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { authFetch } from '../../../utils/authFetch';
 import { MathResourceUpload } from '../MathResourceUpload/MathResourceUpload';
+import { SubjectsManager } from '../SubjectsManager/SubjectsManager';
 import './AdminPanel.css';
 
 interface AdminPanelProps {
@@ -21,11 +22,11 @@ interface AdminPanelProps {
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate }) => {
   const navigation = useNavigation();
-  const initialTab = (navigation.currentState.adminTab as 'overview' | 'tutors' | 'articles' | 'users' | 'upload') || 'overview';
-  const [activeTab, setActiveTab] = useState<'overview' | 'tutors' | 'articles' | 'users' | 'upload'>(initialTab);
+  const initialTab = (navigation.currentState.adminTab as 'overview' | 'subjects' | 'tutors' | 'articles' | 'users' | 'upload') || 'overview';
+  const [activeTab, setActiveTab] = useState<'overview' | 'subjects' | 'tutors' | 'articles' | 'users' | 'upload'>(initialTab);
 
   // Update navigation when tab changes
-  const handleTabChange = (tab: 'overview' | 'tutors' | 'articles' | 'users' | 'upload') => {
+  const handleTabChange = (tab: 'overview' | 'subjects' | 'tutors' | 'articles' | 'users' | 'upload') => {
     setActiveTab(tab);
     navigation.navigate({ adminTab: tab });
   };
@@ -311,13 +312,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
       </div>
 
       <div className="admin-tabs">
-        <button 
+        <button
           className={activeTab === 'overview' ? 'tab active' : 'tab'}
           onClick={() => handleTabChange('overview')}
         >
           Overview
         </button>
-        <button 
+        <button
+          className={activeTab === 'subjects' ? 'tab active' : 'tab'}
+          onClick={() => handleTabChange('subjects')}
+        >
+          Subjects
+        </button>
+        <button
           className={activeTab === 'tutors' ? 'tab active' : 'tab'}
           onClick={() => handleTabChange('tutors')}
         >
@@ -374,6 +381,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
               )}
             </div>
           </div>
+        )}
+
+        {activeTab === 'subjects' && (
+          <SubjectsManager />
         )}
 
         {activeTab === 'tutors' && (

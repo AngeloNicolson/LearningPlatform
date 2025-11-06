@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS site_data (
 -- Initialize with current counts
 INSERT INTO site_data (key, value) VALUES
   ('total_resources', (SELECT COUNT(*) FROM subject_resources WHERE visible = true)),
-  ('total_tutors', (SELECT COUNT(*) FROM tutors WHERE status = 'approved')),
+  ('total_tutors', (SELECT COUNT(*) FROM tutors WHERE approval_status = 'approved')),
   ('total_downloads', (SELECT COUNT(*) FROM user_downloads)),
   ('total_users', (SELECT COUNT(*) FROM users))
 ON CONFLICT (key) DO NOTHING;
