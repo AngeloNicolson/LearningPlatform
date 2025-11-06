@@ -1,335 +1,238 @@
-# Debating Platform - Mathematical Tutoring & Education
+# Learning Platform
 
-A modern platform for mathematical tutoring and debating with secure authentication, payment processing, and enterprise-grade security.
+My project for building an online tutoring platform for math, science, and other subjects. Started as a debating platform but pivoted to focus on education resources.
 
-## 🏗️ Architecture
+## What it does
 
-- **Client**: React + TypeScript + Vite (HTTPS enabled)
-- **API**: Express.js REST API with JWT authentication
-- **Database**: PostgreSQL with automated migrations
-- **Shared**: Common TypeScript types and interfaces
-- **Security**: HTTPS, JWT tokens, secure cookies, rate limiting
+This is a web app where students can find tutors and learning materials for different subjects. Right now it has math worksheets, science resources, and Bible studies organized by grade level.
 
-## 🚀 Quick Start (Recommended: Docker)
+Built with React for the frontend and Express/Node.js for the backend. Uses PostgreSQL for the database.
 
-### Prerequisites
+## Tech Stack
 
-- Docker and Docker Compose
-- mkcert (for HTTPS certificates)
+- Frontend: React with TypeScript
+- Backend: Express.js API
+- Database: PostgreSQL
+- Authentication: JWT tokens with secure cookies
+- Running it all in Docker containers for easier setup
+
+## Getting Started
+
+### You'll need:
+- Docker and Docker Compose installed
+- mkcert for HTTPS certificates
 - Git
 
-### Setup with Docker (Easiest)
+### Setup Instructions
 
-1. **Clone and navigate to project**:
+1. Clone the repo and cd into it
    ```bash
    git clone <repository-url>
    cd Debating-platform
    ```
 
-2. **Install mkcert** (one-time setup):
+2. Install mkcert (first time only)
    ```bash
-   # macOS
+   # On Mac
    brew install mkcert
 
-   # Linux (Ubuntu/Debian)
+   # On Linux
    sudo apt install libnss3-tools
    wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64
    chmod +x mkcert-v1.4.4-linux-amd64
    sudo mv mkcert-v1.4.4-linux-amd64 /usr/local/bin/mkcert
    ```
 
-3. **Generate HTTPS certificates** (Required for secure authentication):
+3. Generate HTTPS certs (needed for secure cookies)
    ```bash
    npm run setup:https
    ```
-   This creates certificates in the `certs/` directory.
 
-4. **Start all services with Docker**:
+4. Start everything with Docker
    ```bash
    docker compose up
    ```
 
-   This will:
-   - Build the client and API containers
-   - Start PostgreSQL database
-   - **Automatically run all database migrations**
-   - Start Redis for session management
-   - Mount HTTPS certificates
+   This starts:
+   - React frontend
+   - Express API
+   - PostgreSQL database (runs migrations automatically on first startup)
+   - Redis for sessions
 
-5. **Access the application**:
-   - Frontend: https://localhost:5777
-   - API: https://localhost:3777
-   - Database: PostgreSQL on localhost:5432
+   **Important:** Migrations only run automatically the FIRST time when the database is empty. If you've already started Docker before, you'll need to run migrations manually with `docker-compose exec api npm run migrate` or reset everything with `docker compose down -v && docker compose up`.
 
-   **Test Accounts**:
+5. Open https://localhost:5777 in your browser
+
+   Login with test accounts:
    - Owner: owner@example.com / Owner123!
    - Admin: admin@example.com / Admin123!
    - Teacher: teacher@example.com / Teacher123!
    - Student: student@example.com / Student123!
 
-### Docker Commands
+### Useful Docker commands
 
 ```bash
-# Start services (builds if needed)
-npm run docker:up
-# or
+# Start everything
 docker compose up
 
-# Start in detached mode
+# Run in background
 docker compose up -d
 
-# View logs
+# See logs
 docker compose logs -f
-docker compose logs -f api      # API logs only
-docker compose logs -f client   # Client logs only
 
-# Stop services (keeps data)
+# Stop everything
 docker compose down
 
-# Stop and remove all data
+# Reset database (deletes all data!)
 docker compose down -v
 
-# Rebuild from scratch
-npm run docker:rebuild
-# or
+# Rebuild from scratch if something breaks
 docker compose down -v && docker compose build --no-cache && docker compose up
-
-# Check status
-npm run docker:status
 ```
 
-## 🛠️ Local Development (Without Docker)
+## Running locally without Docker
 
-### Prerequisites
+If you want to run it directly on your machine:
 
-- Node.js 18+ and npm 9+
-- PostgreSQL 15+
-- mkcert (for HTTPS setup)
+1. Install Node.js 18+ and PostgreSQL 15+
 
-### Setup
-
-1. **Install dependencies**:
+2. Install dependencies
    ```bash
    npm install
    ```
 
-2. **Generate HTTPS certificates**:
+3. Create a postgres database called `tutoring_platform`
+
+4. Run migrations
    ```bash
-   npm run setup:https
+   cd api
+   npm run migrate
+   cd ..
    ```
 
-3. **Set up PostgreSQL database**:
-   - Create a database named `tutoring_platform`
-   - Run migrations from `api/src/database/migrations/` in order (001_schema.sql, 002_seed_tutors.sql, etc.)
-
-4. **Start development servers**:
+5. Start the dev servers
    ```bash
    npm run dev
    ```
-   This runs both the client and API concurrently.
 
-5. **Access the application**:
-   - Frontend: https://localhost:5777
-   - API: https://localhost:3777
+6. Go to http://localhost:5777 (or https if you fix the cert paths)
 
-## 📁 Project Structure
+**Note:** HTTPS won't work in local dev without modifying `api/src/index.ts` to use relative cert paths instead of `/app/certs/`. For now, just use HTTP locally or run with Docker.
+
+## Project Structure
 
 ```
-├── client/                  # React frontend (HTTPS)
+├── client/          # React frontend
 │   ├── src/
-│   │   ├── components/     # UI components
-│   │   ├── contexts/       # React contexts
-│   │   ├── pages/          # Page components
-│   │   └── services/       # API client
-│   └── Dockerfile
-├── api/                     # Express REST API
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── services/
+├── api/             # Express backend
 │   ├── src/
-│   │   ├── routes/         # API endpoints
-│   │   ├── middleware/     # Auth & security
-│   │   └── database/
-│   │       └── migrations/ # SQL migration files (auto-run in Docker)
-│   └── Dockerfile
-├── shared/                  # Shared TypeScript types
-│   └── src/types/
-├── certs/                   # HTTPS certificates (generated by setup script)
-│   ├── localhost.pem
-│   └── localhost-key.pem
-├── scripts/                 # Setup and utility scripts
-│   └── setup-https.sh      # Certificate generation script
-├── package.json            # Root workspace config
-└── docker-compose.yml      # Service orchestration
+│   │   ├── routes/
+│   │   └── database/migrations/
+├── shared/          # Shared TypeScript types
+└── certs/           # HTTPS certificates
 ```
 
-## 🔧 Features
+## Features
 
-### ✅ Current Implementation
-- **HTTPS enabled** for secure connections
-- **JWT authentication** with refresh token rotation
-- **Secure HTTP-only cookies** for token storage
-- **Mathematical tutoring** system with booking
-- **Grade-based resources** (Elementary to College)
-- **Stripe payment** integration ready
-- **Light tofu theme** with burgundy accents
-- **Docker deployment** with hot reloading
+- User authentication with JWT tokens
+- Math worksheets organized by grade level
+- Science resources
+- Bible study materials
+- Admin panel for managing content
+- Secure HTTPS connections
+- Video embedding (YouTube/Vimeo)
+- File upload for worksheets
+- Topics filtering and search
 
-### 🔒 Security Features
-- Rate limiting on all endpoints
-- Password hashing with bcrypt
-- CSRF protection
-- Security headers via Helmet.js
-- Input validation and sanitization
-- SQL injection prevention
-- Audit logging for security events
-- Account lockout after failed attempts
+## API Routes
 
-## 📊 API Endpoints
+Main endpoints:
+- `/api/auth/*` - Authentication (register, login, logout, refresh)
+- `/api/tutors` - Tutors list and details
+- `/api/bookings` - Create and manage tutoring bookings
+- `/api/teachers` - Teacher info
+- `/api/users` - User management
+- `/api/subjects` - Subjects and subject levels
+- `/api/resources` - Learning resources by subject
+- `/api/topics` - Topics filtering
+- `/api/uploads` - File uploads (worksheets, videos)
+- `/api/downloads` - Download tracking
+- `/api/site-data` - Site statistics
+- `/api/admin/subjects` - Admin panel for managing subjects/topics
 
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/refresh` - Refresh tokens
-- `POST /api/auth/logout` - Logout
+## Dev Commands
 
-### Tutors
-- `GET /api/tutors` - List tutors
-- `GET /api/tutors/:id` - Get tutor details
-- `GET /api/tutors/:id/availability` - Get availability
-
-### Bookings
-- `POST /api/bookings` - Create booking
-- `GET /api/bookings/my-bookings` - User's bookings
-- `DELETE /api/bookings/:id` - Cancel booking
-- `POST /api/bookings/:id/confirm` - Confirm payment
-
-### Individual Services (Local Development)
 ```bash
-npm run dev          # Both client and API
-npm run dev:client   # Frontend only (https://localhost:5777)
-npm run dev:api      # API only (https://localhost:3777)
+# Run both frontend and backend
+npm run dev
+
+# Run just frontend
+npm run dev:client
+
+# Run just backend
+npm run dev:api
+
+# Build for production
+npm run build
 ```
 
-### Build for Production
-```bash
-npm run build        # Build all workspaces
-npm run build:client # Build client only
-npm run build:api    # Build API only
+## Common Issues
+
+**Certificate warnings in browser:**
+Run `mkcert -install` then regenerate certs with `npm run setup:https`
+
+**Permission errors:**
+Try `sudo rm -rf client/node_modules/.vite` then restart
+
+**Port already in use:**
+Kill the process: `lsof -ti:3777 | xargs kill -9` or `lsof -ti:5777 | xargs kill -9`
+
+**Database connection errors:**
+Make sure PostgreSQL is running and the database exists. For Docker, check `docker-compose logs postgres`. For local dev, check if postgres service is running.
+
+**Missing database tables:**
+Run migrations: `docker-compose exec api npm run migrate` (Docker) or `cd api && npm run migrate` (local)
+
+**Docker not working:**
+Reset everything: `docker compose down -v && docker compose up`
+
+## Environment Setup
+
+**For local development (without Docker):**
+
+Create a `.env` file in the `api/` directory with:
 ```
-
-## 🔒 Environment Variables
-
-### API (.env in `api/` directory)
-```env
-NODE_ENV=development
 PORT=3777
-USE_HTTPS=true
-CLIENT_URL=https://localhost:5777
-
-# JWT Secrets (change in production!)
-JWT_SECRET=your-jwt-secret-key-here
-JWT_EXPIRES_IN=7d
-
-# Session
-SESSION_SECRET=your-session-secret-key-here
-
-# Database (for Docker)
-DB_HOST=postgres
-DB_PORT=5432
+USE_HTTPS=false
+JWT_ACCESS_SECRET=your-access-secret-here
+JWT_REFRESH_SECRET=your-refresh-secret-here
+DB_HOST=localhost
 DB_NAME=tutoring_platform
 DB_USER=postgres
-DB_PASSWORD=development
+DB_PASSWORD=your-postgres-password
+CLIENT_URL=http://localhost:5777
 ```
 
-### Client (.env in `client/` directory - if needed)
-```env
-VITE_API_URL=https://localhost:3777/api
-VITE_STRIPE_PUBLIC_KEY=pk_test_...
-```
+**For Docker:**
+Environment variables are set in docker-compose.yml, so you don't need a .env file. Docker uses `DB_HOST=postgres` (container name) and `USE_HTTPS=true`.
 
-## 🐳 Docker Services
+## Notes
 
-The `docker-compose.yml` includes:
+**Database Migrations:**
+- Migrations run automatically on FIRST Docker startup (when postgres_data volume is empty)
+- If you restart Docker with existing data, migrations won't re-run
+- To run migrations manually: `docker-compose exec api npm run migrate`
+- To reset and re-run all migrations: `docker compose down -v && docker compose up`
 
-- **postgres**: PostgreSQL 15 database with automatic migration execution
-- **api**: Express REST API with HTTPS and JWT authentication
-- **client**: React frontend with Vite and HTTPS support
-- **redis**: Redis for session management (optional)
+**HTTPS Setup:**
+- Docker: Works out of the box, certs are mounted from `./certs` to `/app/certs`
+- Local dev (without Docker): The API code uses hardcoded `/app/certs/` paths, so it will fall back to HTTP even if you have certs. You'd need to change the cert paths in `api/src/index.ts` to use relative paths like `./certs/` for local dev to work with HTTPS.
 
-### Key Features:
-- ✅ Automatic database migrations on first startup
-- ✅ HTTPS certificates mounted from `certs/` directory
-- ✅ Hot reloading enabled for development
-- ✅ Persistent database volumes
-- ✅ Health checks for PostgreSQL
-
-## 🔐 Authentication Flow
-
-1. User registers/logs in via HTTPS
-2. Server validates credentials
-3. JWT tokens stored in secure cookies
-4. Access token (15min) for API requests
-5. Refresh token (7days) for renewal
-6. Automatic token rotation
-
-## 🐛 Troubleshooting
-
-### Certificate Issues
-If you see certificate warnings in the browser:
-```bash
-# Install the local CA (one-time)
-mkcert -install
-
-# Regenerate certificates
-npm run setup:https
-```
-
-### Vite Cache Permission Issues (Local Dev)
-If you get `EACCES: permission denied` errors when starting the client:
-```bash
-# Remove Vite cache owned by root
-sudo rm -rf client/node_modules/.vite
-npm run dev
-```
-
-### Port Already in Use
-If ports 3777 or 5777 are already in use:
-```bash
-# Kill processes on those ports
-lsof -ti:3777 | xargs kill -9
-lsof -ti:5777 | xargs kill -9
-```
-
-### Docker Permission Issues
-If you encounter permission errors with Docker:
-```bash
-# Reset and rebuild
-docker compose down -v
-docker compose build --no-cache
-docker compose up
-```
-
-### Database Migration Issues
-Migrations run automatically on first Docker startup. To reset:
-```bash
-# Remove all volumes (deletes data!)
-docker compose down -v
-docker compose up
-```
-
----
-
-## 🎯 Ready to Start?
-
-**With Docker (Recommended):**
-```bash
-npm run setup:https
-docker compose up
-```
-
-**Local Development:**
-```bash
-npm run setup:https
-npm install
-npm run dev
-```
-
-Then visit **https://localhost:5777** 🚀
+**Other:**
+- The default theme is a light beige/burgundy color scheme
+- Test accounts are seeded in the database (owner, admin, teacher, student)
+- Secure cookies require HTTPS to work properly
