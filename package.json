@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:client\"",
+    "dev:full": "bash scripts/dev.sh",
     "dev:client": "npm run dev --workspace=client",
     "dev:api": "npm run dev --workspace=api",
     "build": "npm run build:shared && npm run build:api && npm run build:client",

@@ -65,11 +65,41 @@ async function runMigrations() {
         'utf8'
       );
 
-      // Split by semicolon and run each statement separately
-      const statements = migrationSQL
-        .split(';')
-        .map(stmt => stmt.trim())
-        .filter(stmt => stmt.length > 0);
+      // Split by semicolon but preserve dollar-quoted strings ($$...$$ blocks)
+      const statements: string[] = [];
+      let currentStatement = '';
+      let inDollarQuote = false;
+
+      for (let i = 0; i < migrationSQL.length; i++) {
+        const char = migrationSQL[i];
+        const nextChar = migrationSQL[i + 1];
+
+        // Check for $$ delimiter
+        if (char === '$' && nextChar === '$') {
+          inDollarQuote = !inDollarQuote;
+          currentStatement += '$$';
+          i++; // Skip next $
+          continue;
+        }
+
+        // If we hit a semicolon outside of dollar quotes, split here
+        if (char === ';' && !inDollarQuote) {
+          const stmt = currentStatement.trim();
+          if (stmt.length > 0) {
+            statements.push(stmt);
+          }
+          currentStatement = '';
+          continue;
+        }
+
+        currentStatement += char;
+      }
+
+      // Add any remaining statement
+      const finalStmt = currentStatement.trim();
+      if (finalStmt.length > 0) {
+        statements.push(finalStmt);
+      }
 
       for (const statement of statements) {
         await query(statement);

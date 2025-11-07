@@ -11,7 +11,6 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-development}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./api/src/database/migrations:/docker-entrypoint-initdb.d:ro
     networks:
       - app-network
     healthcheck:
