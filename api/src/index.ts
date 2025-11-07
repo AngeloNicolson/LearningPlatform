@@ -130,22 +130,30 @@ app.use((_req, res) => {
 
 // Start server with HTTPS support in production-like mode
 if (USE_HTTPS) {
-  // Check for certificates - use absolute path in container
-  const keyPath = '/app/certs/localhost-key.pem';
-  const certPath = '/app/certs/localhost.pem';
-  
+  // Check for certificates - configurable via environment variables
+  // Defaults to Docker path (/app/certs/), but can be overridden for local dev
+  const keyPath = process.env.CERT_KEY_PATH || '/app/certs/localhost-key.pem';
+  const certPath = process.env.CERT_PATH || '/app/certs/localhost.pem';
+
+  console.log(`🔍 Checking for HTTPS certificates...`);
+  console.log(`   Key:  ${keyPath}`);
+  console.log(`   Cert: ${certPath}`);
+
   if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
     const httpsOptions = {
       key: fs.readFileSync(keyPath),
       cert: fs.readFileSync(certPath)
     };
-    
+
     https.createServer(httpsOptions, app).listen(PORT, () => {
       console.log(`🔒 API server running on https://localhost:${PORT} (HTTPS)`);
       console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`   ✅ Using certificates from ${certPath}`);
     });
   } else {
-    console.warn('⚠️  HTTPS certificates not found, falling back to HTTP');
+    console.warn('⚠️  HTTPS certificates not found at specified paths');
+    console.warn(`   Missing: ${!fs.existsSync(keyPath) ? keyPath : ''} ${!fs.existsSync(certPath) ? certPath : ''}`);
+    console.warn('⚠️  Falling back to HTTP');
     app.listen(PORT, () => {
       console.log(`API server running on http://localhost:${PORT} (HTTP)`);
       console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);

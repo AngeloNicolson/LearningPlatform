@@ -52,6 +52,8 @@ services:
       - NODE_ENV=production
       - PORT=3777
       - USE_HTTPS=true
+      - CERT_KEY_PATH=/app/certs/localhost-key.pem  # Path to SSL key
+      - CERT_PATH=/app/certs/localhost.pem          # Path to SSL certificate
       - CLIENT_URL=https://localhost:5777
       - JWT_ACCESS_SECRET=prod-access-secret-${JWT_ACCESS_SECRET:-change-in-production}
       - JWT_REFRESH_SECRET=prod-refresh-secret-${JWT_REFRESH_SECRET:-change-in-production}
@@ -65,7 +67,7 @@ services:
     volumes:
       - ./api:/app
       - /app/node_modules
-      - ./certs:/app/certs:ro  # Mount certificates read-only
+      - ./certs:/app/certs  # Mount certificates (writable for auto-generation)
       - uploads_data:/app/uploads  # Persistent uploads storage
     depends_on:
       postgres:

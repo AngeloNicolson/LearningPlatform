@@ -20,8 +20,8 @@ Built with React for the frontend and Express/Node.js for the backend. Uses Post
 
 ### You'll need:
 - Docker and Docker Compose installed
-- mkcert for HTTPS certificates
 - Git
+- (Optional) mkcert for browser-trusted HTTPS certificates
 
 ### Setup Instructions
 
@@ -31,7 +31,9 @@ Built with React for the frontend and Express/Node.js for the backend. Uses Post
    cd Debating-platform
    ```
 
-2. Install mkcert (first time only)
+2. **(Optional)** Generate HTTPS certificates with mkcert for trusted local HTTPS
+
+   If you want browser-trusted certificates, install mkcert first:
    ```bash
    # On Mac
    brew install mkcert
@@ -43,25 +45,30 @@ Built with React for the frontend and Express/Node.js for the backend. Uses Post
    sudo mv mkcert-v1.4.4-linux-amd64 /usr/local/bin/mkcert
    ```
 
-3. Generate HTTPS certs (needed for secure cookies)
+   Then generate certificates:
    ```bash
    npm run setup:https
    ```
 
-4. Start everything with Docker
+   **Note:** If you skip this step, Docker will automatically generate self-signed certificates when it starts. Self-signed certs work fine but your browser will show a security warning.
+
+3. Start everything with Docker
    ```bash
    docker compose up
    ```
 
    This starts:
-   - React frontend
-   - Express API
+   - React frontend (https://localhost:5777)
+   - Express API (https://localhost:3777)
    - PostgreSQL database (runs migrations automatically on first startup)
    - Redis for sessions
+   - **HTTPS certificates are auto-generated** if not found
 
    **Important:** Migrations only run automatically the FIRST time when the database is empty. If you've already started Docker before, you'll need to run migrations manually with `docker-compose exec api npm run migrate` or reset everything with `docker compose down -v && docker compose up`.
 
-5. Open https://localhost:5777 in your browser
+4. Open https://localhost:5777 in your browser
+
+   If using self-signed certificates, you'll need to accept the browser security warning.
 
    Login with test accounts:
    - Owner: owner@example.com / Owner123!
@@ -116,9 +123,11 @@ If you want to run it directly on your machine:
    npm run dev
    ```
 
-6. Go to http://localhost:5777 (or https if you fix the cert paths)
+6. Go to http://localhost:5777 (or https://localhost:5777 if you configured certificates)
 
-**Note:** HTTPS won't work in local dev without modifying `api/src/index.ts` to use relative cert paths instead of `/app/certs/`. For now, just use HTTP locally or run with Docker.
+**Note:** For HTTPS in local dev, you can either:
+   - Run `npm run setup:https` to generate mkcert certificates, then set `USE_HTTPS=true` and `CERT_KEY_PATH=./certs/localhost-key.pem` and `CERT_PATH=./certs/localhost.pem` in `api/.env`
+   - Or just use HTTP for local development (recommended for simplicity)
 
 ## Project Structure
 
@@ -183,7 +192,13 @@ npm run build
 ## Common Issues
 
 **Certificate warnings in browser:**
-Run `mkcert -install` then regenerate certs with `npm run setup:https`
+- For Docker: This is normal with auto-generated self-signed certificates. To remove the warning, run `npm run setup:https` before starting Docker to use mkcert-trusted certificates.
+- For local dev: Run `mkcert -install` then `npm run setup:https`
+
+**API falls back to HTTP even with USE_HTTPS=true:**
+- Check the API logs for certificate path errors
+- For Docker: Certificates auto-generate, check `docker-compose logs api` for details
+- For local dev: Make sure you've set `CERT_KEY_PATH` and `CERT_PATH` in `api/.env` to relative paths (e.g., `./certs/localhost-key.pem`)
 
 **Permission errors:**
 Try `sudo rm -rf client/node_modules/.vite` then restart
@@ -229,8 +244,13 @@ Environment variables are set in docker-compose.yml, so you don't need a .env fi
 - To reset and re-run all migrations: `docker compose down -v && docker compose up`
 
 **HTTPS Setup:**
-- Docker: Works out of the box, certs are mounted from `./certs` to `/app/certs`
-- Local dev (without Docker): The API code uses hardcoded `/app/certs/` paths, so it will fall back to HTTP even if you have certs. You'd need to change the cert paths in `api/src/index.ts` to use relative paths like `./certs/` for local dev to work with HTTPS.
+- **Docker:** HTTPS works automatically! Certificates are auto-generated on first startup if not found. For browser-trusted certificates (no security warnings), run `npm run setup:https` before starting Docker.
+- **Local dev (without Docker):** Set environment variables in `api/.env`:
+  - `USE_HTTPS=true`
+  - `CERT_KEY_PATH=./certs/localhost-key.pem`
+  - `CERT_PATH=./certs/localhost.pem`
+  - Then run `npm run setup:https` to generate certificates
+- **Certificate paths are now configurable** via environment variables (`CERT_KEY_PATH` and `CERT_PATH`), making it easy to switch between Docker and local development
 
 **Other:**
 - The default theme is a light beige/burgundy color scheme
