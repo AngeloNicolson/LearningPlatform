@@ -31,6 +31,22 @@ interface SessionType {
   description: string;
 }
 
+interface TutorContent {
+  id: string;
+  title: string;
+  description: string;
+  contentType: string;
+  metadata: any;
+  viewCount: number;
+  purchaseCount: number;
+  pricing: {
+    model: string;
+    price: number;
+    currency: string;
+    billingInterval?: string;
+  };
+}
+
 // Mock data - in real app, this would come from API
 const tutorProfiles: Record<string, any> = {
   'sarah-elementary': {
@@ -150,13 +166,16 @@ const mockReviews: Record<string, Review[]> = {
 export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTutors, onBookSession }) => {
   const [selectedSessionType, setSelectedSessionType] = useState<string>('');
   const [tutor, setTutor] = useState<any>(null);
+  const [content, setContent] = useState<TutorContent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [contentLoading, setContentLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const reviews = mockReviews[tutorId] || [];
-  
+
   useEffect(() => {
     fetchTutor();
+    fetchTutorContent();
   }, [tutorId]);
   
   const fetchTutor = async () => {
@@ -183,12 +202,12 @@ export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTut
         reviewCount: data.reviews_count || 0,
         totalHours: 850,
         responseTime: '< 2 hours',
-        education: mockProfile?.education || [],
-        certifications: mockProfile?.certifications || [],
+        education: data.education || mockProfile?.education || [],
+        certifications: data.certifications || mockProfile?.certifications || [],
         experience: `${data.experience_years || 1}+ years of teaching experience`,
         bio: data.description || 'Experienced tutor dedicated to helping students excel in mathematics.',
-        specialties: data.subjects || [],
-        languages: ['English'],
+        specialties: data.specialties || [], // Use specialties array from API, not subjects object
+        languages: data.languages || ['English'],
         availability: data.is_active ? 'available' : 'unavailable',
         sessionTypes: [
           {
@@ -215,7 +234,28 @@ export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTut
       setLoading(false);
     }
   };
-  
+
+  const fetchTutorContent = async () => {
+    try {
+      setContentLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors/${tutorId}/content`
+      );
+
+      if (!response.ok) {
+        console.error('Failed to fetch tutor content');
+        return;
+      }
+
+      const data = await response.json();
+      setContent(data);
+    } catch (err) {
+      console.error('Error fetching tutor content:', err);
+    } finally {
+      setContentLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="tutor-profile">
@@ -306,6 +346,48 @@ export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTut
                 <span key={index} className="specialty-tag">{specialty}</span>
               ))}
             </div>
+          </section>
+
+          <section className="content-library-section">
+            <h3>Content Library</h3>
+            {contentLoading ? (
+              <p className="loading-text">Loading content...</p>
+            ) : content.length === 0 ? (
+              <p className="no-content">This tutor hasn't published any content yet.</p>
+            ) : (
+              <div className="content-grid">
+                {content.map((item) => (
+                  <div key={item.id} className="content-card">
+                    <div className="content-header">
+                      <span className="content-type-badge">{item.contentType}</span>
+                      {item.pricing.model === 'free' && (
+                        <span className="free-badge">FREE</span>
+                      )}
+                    </div>
+                    <h4 className="content-title">{item.title}</h4>
+                    <p className="content-description">{item.description}</p>
+                    <div className="content-stats">
+                      <span>👁️ {item.viewCount} views</span>
+                      <span>📦 {item.purchaseCount} purchases</span>
+                    </div>
+                    <div className="content-footer">
+                      <div className="content-price">
+                        {item.pricing.model === 'free' ? (
+                          <span className="price-free">Free</span>
+                        ) : item.pricing.model === 'subscription' ? (
+                          <span className="price">${item.pricing.price}/{item.pricing.billingInterval}</span>
+                        ) : (
+                          <span className="price">${item.pricing.price}</span>
+                        )}
+                      </div>
+                      <button className="btn-view-content">
+                        {item.pricing.model === 'free' ? 'View' : 'Purchase'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           <section className="education-section">

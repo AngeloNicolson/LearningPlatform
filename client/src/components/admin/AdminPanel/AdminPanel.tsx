@@ -88,36 +88,78 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
         // Fall back to public endpoint if not authorized
         const publicResponse = await authFetch(`${import.meta.env.VITE_API_URL || 'https://localhost:3777/api'}/tutors`);
         const data = await publicResponse.json();
-        setTutors(data);
+
+        // Helper to extract subjects
+        const getSubjects = (subj: any) => {
+          if (!subj) return [];
+          if (Array.isArray(subj)) return subj;
+          if (typeof subj === 'object') {
+            return Object.values(subj).flat();
+          }
+          return [];
+        };
+
+        const mappedData = data.map((t: any) => ({
+          ...t,
+          name: t.display_name || t.name,
+          subjects: getSubjects(t.subjects),
+          status: 'active',
+          grade: Array.isArray(t.grades) ? t.grades.join(', ') : t.grade,
+          price_per_hour: t.hourly_rate || t.price_per_hour,
+          rating: parseFloat(t.rating) || 0,
+        }));
+
+        setTutors(mappedData);
         setPendingTutors([]);
       } else if (response.ok) {
         const data = await response.json();
         console.log('Fetched tutors data:', data);
         // Map database fields to admin panel format
-        const mappedData = data.map((t: any) => ({
-          ...t,
-          name: t.display_name || t.name,
-          status: t.approval_status === 'pending' ? 'pending' : 
-                  (t.is_active ? 'active' : 'suspended'),
-          grade: Array.isArray(t.grades) ? t.grades.join(', ') : t.grade,
-          price_per_hour: t.hourly_rate || t.price_per_hour,
-          subjects: t.subjects ? (
-            t.subjects.math_topics ? 
-              [...(t.subjects.math_topics || []), ...(t.subjects.science_subjects || [])] :
-              t.subjects
-          ) : [],
-          rating: t.rating || 0,
-          reviews_count: t.total_sessions || t.reviews_count || 0,
-          description: t.bio || t.description
-        }));
+        const mappedData = data.map((t: any) => {
+          // Helper to extract subjects
+          const getSubjects = (subj: any) => {
+            if (!subj) return [];
+            if (Array.isArray(subj)) return subj;
+            if (typeof subj === 'string') {
+              try {
+                const parsed = JSON.parse(subj);
+                if (Array.isArray(parsed)) return parsed;
+                if (parsed.math_topics) return parsed.math_topics;
+                if (parsed.science_topics) return parsed.science_topics;
+                return Object.values(parsed).flat();
+              } catch {
+                return [subj];
+              }
+            }
+            if (typeof subj === 'object') {
+              // Extract all topic arrays from the object
+              return Object.values(subj).flat();
+            }
+            return [];
+          };
+
+          return {
+            ...t,
+            name: t.display_name || t.name,
+            subjects: getSubjects(t.subjects),
+            status: t.approval_status === 'pending' ? 'pending' :
+                    (t.is_active ? 'active' : 'suspended'),
+            grade: Array.isArray(t.grades) ? t.grades.join(', ') : t.grade,
+            price_per_hour: t.hourly_rate || t.price_per_hour,
+            rating: parseFloat(t.rating) || 0,
+            reviews_count: t.total_sessions || t.reviews_count || 0,
+            description: t.bio || t.description
+          };
+        });
         
         // Separate tutors by status
         const pending = mappedData.filter((t: any) => t.status === 'pending');
         const active = mappedData.filter((t: any) => t.status === 'active');
         const suspended = mappedData.filter((t: any) => t.status === 'suspended');
-        console.log('Pending tutors:', pending);
-        console.log('Active tutors:', active);
-        console.log('Suspended tutors:', suspended);
+        console.log('[AdminPanel] Pending tutors:', pending);
+        console.log('[AdminPanel] Active tutors:', active);
+        console.log('[AdminPanel] Suspended tutors:', suspended);
+        console.log('[AdminPanel] Setting tutors state to:', [...active, ...suspended]);
         setPendingTutors(pending);
         setTutors([...active, ...suspended]); // Show both active and suspended in main list
       }
@@ -389,6 +431,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
 
         {activeTab === 'tutors' && (
           <div className="tutors-section">
+            {console.log('[AdminPanel] Tutors tab is active')}
             <div className="section-header">
               <h2>Tutor Management</h2>
               <div className="stats-badges">
@@ -417,7 +460,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                     <h4>{selectedTutor.name}</h4>
                     <p><strong>Grade:</strong> {selectedTutor.grade}</p>
                     <p><strong>Rate:</strong> ${selectedTutor.price_per_hour}/hour</p>
-                    <p><strong>Subjects:</strong> {Array.isArray(selectedTutor.subjects) ? selectedTutor.subjects.join(', ') : JSON.parse(selectedTutor.subjects || '[]').join(', ')}</p>
+                    <p><strong>Subjects:</strong> {Array.isArray(selectedTutor.subjects) ? selectedTutor.subjects.join(', ') : 'N/A'}</p>
                     <p><strong>Status:</strong> <span className={`badge badge-${selectedTutor.status === 'active' ? 'success' : selectedTutor.status === 'pending' ? 'warning' : 'danger'}`}>{selectedTutor.status}</span></p>
                     {selectedTutor.description && (
                       <>
@@ -429,7 +472,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                       <p><strong>Experience:</strong> {selectedTutor.experience_years} years</p>
                     )}
                     {selectedTutor.qualifications && (
-                      <p><strong>Qualifications:</strong> {JSON.parse(selectedTutor.qualifications || '[]').join(', ')}</p>
+                      <p><strong>Qualifications:</strong> {Array.isArray(selectedTutor.qualifications) ? selectedTutor.qualifications.join(', ') : selectedTutor.qualifications}</p>
                     )}
                     <p><strong>Rating:</strong> {selectedTutor.rating ? `${selectedTutor.rating.toFixed(1)} ⭐` : 'No ratings yet'}</p>
                     <p><strong>Reviews:</strong> {selectedTutor.reviews_count || 0}</p>
@@ -452,7 +495,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                       <div className="tutor-info">
                         <h4>{tutor.name}</h4>
                         <p>{tutor.grade} • ${tutor.price_per_hour}/hour</p>
-                        <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : JSON.parse(tutor.subjects || '[]').join(', ')}</p>
+                        <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : 'N/A'}</p>
                         {tutor.description && <p className="description">{tutor.description}</p>}
                         {tutor.experience_years && <p>Experience: {tutor.experience_years} years</p>}
                       </div>
@@ -482,9 +525,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
             )}
             
             {/* All Tutors List */}
-            <h3>All Tutors</h3>
+            <h3>All Tutors ({tutors.length})</h3>
+            {console.log('[AdminPanel] Rendering tutors section. loadingTutors:', loadingTutors, 'tutors.length:', tutors.length)}
             {loadingTutors ? (
               <div className="loading">Loading tutors...</div>
+            ) : tutors.length === 0 ? (
+              <div className="no-tutors">No tutors found</div>
             ) : (
               <div className="tutors-list">
                 {tutors.map(tutor => (
@@ -492,7 +538,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                     <div className="tutor-info">
                       <h3>{tutor.name}</h3>
                       <p>{tutor.grade} • ${tutor.price_per_hour}/hour</p>
-                      <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : tutor.subjects}</p>
+                      <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : 'N/A'}</p>
                       <p>Rating: {tutor.rating ? `${tutor.rating.toFixed(1)} ⭐` : 'No ratings'} ({tutor.reviews_count || 0} reviews)</p>
                       <p className="status">
                         <span className={`badge badge-${tutor.status === 'active' ? 'success' : tutor.status === 'suspended' ? 'danger' : 'warning'}`}>

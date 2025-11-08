@@ -81,10 +81,13 @@ export const SciencePage: React.FC = () => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('[SciencePage] Fetched topics:', data);
           setApiTopics(data);
+        } else {
+          console.error('[SciencePage] Failed to fetch topics, status:', response.status);
         }
       } catch (error) {
-        console.error('Error fetching topics:', error);
+        console.error('[SciencePage] Error fetching topics:', error);
       }
     };
 

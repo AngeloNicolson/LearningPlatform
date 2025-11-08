@@ -1,17 +1,17 @@
 .math-resource-upload-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: var(--theme-background-main);
   padding: 40px 20px;
 }
 
 .math-resource-upload {
   max-width: 800px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid #00ff9d;
+  background: var(--theme-background-paper);
+  border: 1px solid var(--theme-border-light);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 8px 32px rgba(0, 255, 157, 0.1);
+  box-shadow: 0 2px 8px var(--theme-shadow-medium);
 }
 
 .upload-header {
@@ -19,29 +19,37 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--theme-border-light);
 }
 
 .upload-header h1 {
-  color: #00ff9d;
+  color: var(--theme-primary);
+  font-family: 'Orbitron', monospace;
   font-size: 32px;
+  font-weight: 900;
   margin: 0;
-  text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.close-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid #ff006e;
-  color: #ff006e;
+.math-resource-upload .close-btn {
+  background: none;
+  border: none;
+  color: var(--theme-primary);
   width: 40px;
   height: 40px;
   border-radius: 50%;
   font-size: 24px;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.close-btn:hover {
-  background: rgba(255, 0, 110, 0.2);
+.math-resource-upload .close-btn:hover {
+  background: var(--theme-border-light);
   transform: rotate(90deg);
 }
 
@@ -54,27 +62,32 @@
 .type-btn {
   flex: 1;
   padding: 15px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--theme-background-main);
+  border: 1px solid var(--theme-border-medium);
   border-radius: 8px;
-  color: #ffffff;
-  font-size: 16px;
+  color: var(--theme-text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .type-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #00ff9d;
+  background: var(--theme-highlight);
+  border-color: var(--theme-border-dark);
+  color: var(--theme-primary);
   transform: translateY(-2px);
 }
 
 .type-btn.active {
-  background: linear-gradient(135deg, #00ff9d 0%, #00d4ff 100%);
-  border-color: #00ff9d;
-  color: #1a1a2e;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
+  border-color: var(--theme-primary-light);
+  color: var(--theme-text-inverse);
+  font-weight: 700;
+  box-shadow: 0 4px 12px var(--theme-border-medium);
 }
 
 .message {
@@ -82,18 +95,19 @@
   border-radius: 8px;
   margin-bottom: 20px;
   font-weight: 500;
+  font-family: 'Share Tech Mono', monospace;
 }
 
 .message.success {
-  background: rgba(0, 255, 157, 0.1);
-  border: 2px solid #00ff9d;
-  color: #00ff9d;
+  background: var(--theme-success-light);
+  border: 1px solid var(--theme-success);
+  color: var(--theme-success-dark);
 }
 
 .message.error {
-  background: rgba(255, 0, 110, 0.1);
-  border: 2px solid #ff006e;
-  color: #ff006e;
+  background: var(--theme-error-light);
+  border: 1px solid var(--theme-error);
+  color: var(--theme-error-dark);
 }
 
 .resource-form {
@@ -109,23 +123,24 @@
 }
 
 .form-group label {
-  color: #00ff9d;
+  color: var(--theme-primary);
+  font-family: 'Share Tech Mono', monospace;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
-  padding: 12px 15px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  background: var(--theme-background-main);
+  border: 1px solid var(--theme-border-medium);
   border-radius: 8px;
-  color: #ffffff;
-  font-size: 16px;
-  font-family: inherit;
+  color: var(--theme-text-primary);
+  font-size: 14px;
+  font-family: 'Share Tech Mono', monospace;
   transition: all 0.3s ease;
 }
 
@@ -133,9 +148,9 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #00ff9d;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(0, 255, 157, 0.1);
+  border-color: var(--theme-primary);
+  background: var(--theme-background-paper);
+  box-shadow: 0 0 0 3px var(--theme-border-light);
 }
 
 .form-group textarea {
@@ -150,39 +165,43 @@
 }
 
 .field-hint {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
+  color: var(--theme-secondary);
+  font-size: 11px;
   font-style: italic;
+  margin-top: 4px;
 }
 
 .uploaded-file-info {
-  padding: 10px 15px;
-  background: rgba(0, 255, 157, 0.1);
-  border: 2px solid #00ff9d;
+  padding: 12px 16px;
+  background: var(--theme-success-light);
+  border: 1px solid var(--theme-success);
   border-radius: 8px;
-  color: #00ff9d;
-  font-size: 14px;
+  color: var(--theme-success-dark);
+  font-size: 13px;
+  font-family: 'Share Tech Mono', monospace;
   margin-top: 10px;
 }
 
 .submit-btn {
-  padding: 15px 30px;
-  background: linear-gradient(135deg, #00ff9d 0%, #00d4ff 100%);
-  border: none;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
+  border: 1px solid var(--theme-primary-light);
   border-radius: 8px;
-  color: #1a1a2e;
-  font-size: 18px;
+  color: var(--theme-text-inverse);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   margin-top: 10px;
 }
 
 .submit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--theme-primary-light) 0%, var(--theme-primary-dark) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
+  box-shadow: 0 4px 12px var(--theme-border-medium);
 }
 
 .submit-btn:disabled {

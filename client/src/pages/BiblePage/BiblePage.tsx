@@ -81,10 +81,13 @@ export const BiblePage: React.FC = () => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('[BiblePage] Fetched topics:', data);
           setApiTopics(data);
+        } else {
+          console.error('[BiblePage] Failed to fetch topics, status:', response.status);
         }
       } catch (error) {
-        console.error('Error fetching topics:', error);
+        console.error('[BiblePage] Error fetching topics:', error);
       }
     };
 

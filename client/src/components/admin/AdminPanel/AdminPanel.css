@@ -107,6 +107,7 @@
   right: 0;
   bottom: 0;
   background: var(--theme-background-overlay);
+  z-index: 1;
 }
 
 .modal-content {
@@ -119,6 +120,7 @@
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 10px 30px var(--theme-shadow-dark);
+  z-index: 10;
 }
 
 .modal-header {

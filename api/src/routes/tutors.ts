@@ -195,7 +195,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
     
     const result = await query(`
-      SELECT 
+      SELECT
         t.id,
         t.display_name,
         t.bio,
@@ -208,7 +208,6 @@ router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
         t.group_pricing,
         t.rating,
         t.total_sessions,
-        t.total_hours,
         u.first_name,
         u.last_name,
         u.email,
@@ -223,7 +222,18 @@ router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
     }
 
     const tutor = result.rows[0];
-    
+
+    // Extract specialties from subjects object
+    let specialties: string[] = [];
+    if (tutor.subjects) {
+      if (tutor.subjects.math_topics) {
+        specialties = [...specialties, ...tutor.subjects.math_topics];
+      }
+      if (tutor.subjects.science_subjects) {
+        specialties = [...specialties, ...tutor.subjects.science_subjects];
+      }
+    }
+
     // Format the response to match what the frontend expects
     const response = {
       id: tutor.id,
@@ -231,7 +241,8 @@ router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
       display_name: tutor.display_name,
       description: tutor.bio,
       bio: tutor.bio,
-      subjects: tutor.subjects || [],
+      subjects: tutor.subjects || {},
+      specialties: specialties, // Frontend expects array of strings
       grade: tutor.grades ? tutor.grades.join(', ') : '',
       grades: tutor.grades || [],
       price_per_hour: tutor.hourly_rate,
@@ -243,10 +254,11 @@ router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
       rating: tutor.rating,
       reviews_count: tutor.total_sessions,
       total_sessions: tutor.total_sessions,
-      total_hours: tutor.total_hours,
-      experience_years: Math.floor(tutor.total_hours / 1000) || 1,
+      total_hours: tutor.total_sessions || 0, // Estimate: 1 session ≈ 1 hour
+      experience_years: Math.floor((tutor.total_sessions || 0) / 100) || 1, // Estimate: 100 sessions ≈ 1 year
       languages: ['English'],
       certifications: [],
+      education: [], // Placeholder - can be added to tutors table later
       avatar: tutor.avatar,
       is_active: true,
       first_name: tutor.first_name,
@@ -490,6 +502,68 @@ router.post('/:tutorId/availability/override', requireAuth, async (req: Request,
   } catch (error) {
     console.error('Error adding availability override:', error);
     return res.status(500).json({ error: 'Failed to add override' });
+  }
+});
+
+// Get tutor content catalog (public endpoint - no auth required)
+router.get('/:id/content', async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { id } = req.params;
+
+    // Verify tutor exists and is approved
+    const tutorResult = await query(
+      'SELECT id FROM tutors WHERE id = $1 AND approval_status = \'approved\'',
+      [id]
+    );
+
+    if (tutorResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Tutor not found' });
+    }
+
+    // Fetch tutor's content with pricing
+    const result = await query(`
+      SELECT
+        tc.id,
+        tc.title,
+        tc.description,
+        tc.content_type,
+        tc.status,
+        tc.metadata,
+        tc.view_count,
+        tc.purchase_count,
+        tc.created_at,
+        cp.pricing_model,
+        cp.price_amount,
+        cp.currency,
+        cp.billing_interval
+      FROM tutor_content tc
+      LEFT JOIN content_pricing cp ON tc.id = cp.content_id AND cp.is_active = true
+      WHERE tc.tutor_id = $1 AND tc.status = 'published'
+      ORDER BY tc.created_at DESC
+    `, [id]);
+
+    const content = result.rows.map(row => ({
+      id: row.id,
+      title: row.title,
+      description: row.description,
+      contentType: row.content_type,
+      status: row.status,
+      metadata: row.metadata,
+      viewCount: row.view_count,
+      purchaseCount: row.purchase_count,
+      createdAt: row.created_at,
+      pricing: {
+        model: row.pricing_model,
+        price: row.price_amount,
+        currency: row.currency,
+        billingInterval: row.billing_interval
+      }
+    }));
+
+    return res.json(content);
+  } catch (error) {
+    console.error('Error fetching tutor content:', error);
+    return res.status(500).json({ error: 'Failed to fetch tutor content' });
   }
 });
 

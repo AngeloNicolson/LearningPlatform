@@ -81,10 +81,13 @@ export const MathPage: React.FC = () => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('[MathPage] Fetched topics:', data);
           setApiTopics(data);
+        } else {
+          console.error('[MathPage] Failed to fetch topics, status:', response.status);
         }
       } catch (error) {
-        console.error('Error fetching topics:', error);
+        console.error('[MathPage] Error fetching topics:', error);
       }
     };
 
