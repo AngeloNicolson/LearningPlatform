@@ -28,6 +28,8 @@ import topicsRoutes from './routes/topics';
 import uploadsRoutes from './routes/uploads';
 import downloadsRoutes from './routes/downloads';
 import siteDataRoutes from './routes/siteData';
+import reviewsRoutes from './routes/reviews';
+import sessionTypesRoutes from './routes/sessionTypes';
 
 dotenv.config();
 
@@ -86,11 +88,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Global rate limiter
+// Global rate limiter - more permissive in development
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // 1000 in dev, 100 in prod
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 app.use('/api/', limiter);
@@ -113,6 +117,8 @@ app.use('/api/resources', subjectResourcesRoutes); // Use new subject resources 
 app.use('/api/topics', topicsRoutes);
 app.use('/api/uploads', uploadsRoutes);
 app.use('/api/site-data', siteDataRoutes);
+app.use('/api/reviews', reviewsRoutes);
+app.use('/api/session-types', sessionTypesRoutes);
 
 // Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

@@ -331,6 +331,7 @@
   background: linear-gradient(180deg, #1776D2 0%, #0D47A1 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
+  z-index: 0;
 }
 
 .resource-card:hover {

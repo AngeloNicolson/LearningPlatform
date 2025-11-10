@@ -10,9 +10,10 @@ import './ScienceSubjectSelector.css';
 
 interface ScienceSubjectSelectorProps {
   onSubjectSelect: (subjectId: string) => void;
+  onBack?: () => void;
 }
 
-export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ onSubjectSelect }) => {
+export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ onSubjectSelect, onBack }) => {
   const scienceSubjects = [
     {
       id: 'physics',
@@ -50,6 +51,11 @@ export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ 
 
   return (
     <div className="grade-selector-container">
+      {onBack && (
+        <button className="back-button" onClick={onBack}>
+          ← Back to Categories
+        </button>
+      )}
       <div className="grade-selector-header">
         <h2>Select Your Science Subject</h2>
         <p>Choose a subject to find specialized science tutors</p>

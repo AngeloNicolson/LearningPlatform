@@ -12,13 +12,46 @@ import { query } from '../database/connection';
 const router = Router();
 
 /**
+ * GET /api/subjects/grouped
+ * Get subjects grouped by category (core and electives)
+ * Note: This must come BEFORE /:slug to avoid "grouped" being treated as a slug
+ */
+router.get('/grouped', async (_req: Request, res: Response) => {
+  try {
+    const result = await query(`
+      SELECT id, name, slug, icon, description, filter_label, category, category_display_order
+      FROM subjects
+      ORDER BY category, category_display_order
+    `);
+
+    // Group by category
+    const grouped: Record<string, any[]> = {
+      core: [],
+      electives: []
+    };
+
+    result.rows.forEach((subject: any) => {
+      const category = subject.category || 'core';
+      if (grouped[category]) {
+        grouped[category].push(subject);
+      }
+    });
+
+    return res.json(grouped);
+  } catch (error) {
+    console.error('Error fetching grouped subjects:', error);
+    return res.status(500).json({ error: 'Failed to fetch grouped subjects' });
+  }
+});
+
+/**
  * GET /api/subjects
  * Get all subjects ordered by display_order
  */
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const result = await query(`
-      SELECT id, name, slug, icon, description, filter_label, display_order
+      SELECT id, name, slug, icon, description, filter_label, display_order, category, category_display_order
       FROM subjects
       ORDER BY display_order
     `);

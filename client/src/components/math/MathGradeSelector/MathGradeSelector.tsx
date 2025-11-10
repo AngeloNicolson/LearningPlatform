@@ -20,6 +20,7 @@ interface MathGrade {
 
 interface MathGradeSelectorProps {
   onGradeSelect: (gradeId: string) => void;
+  onBack?: () => void;
 }
 
 const mathGrades: MathGrade[] = [
@@ -61,9 +62,14 @@ const mathGrades: MathGrade[] = [
   }
 ];
 
-export const MathGradeSelector: React.FC<MathGradeSelectorProps> = ({ onGradeSelect }) => {
+export const MathGradeSelector: React.FC<MathGradeSelectorProps> = ({ onGradeSelect, onBack }) => {
   return (
     <div className="math-grade-selector">
+      {onBack && (
+        <button className="back-button" onClick={onBack}>
+          ← Back to Categories
+        </button>
+      )}
       <div className="grade-selector-header">
         <h2>Find a Math Tutor</h2>
         <p>Select the grade level you need tutoring for</p>

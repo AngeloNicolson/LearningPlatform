@@ -43,33 +43,21 @@ export const Home: React.FC = () => {
       <div className="home-main">
         <div className="subjects-section">
           <div className="section-header">
-            <h2>📚 Core Subjects</h2>
-            <p>Explore our collection of educational materials</p>
+            <h2>📚 Browse Subjects</h2>
+            <p>Choose between core academic subjects and faith-integrated electives</p>
           </div>
 
-          <div className="subjects-grid">
-            <div className="subject-card" onClick={() => navigation.navigate({ view: 'math' })}>
-              <div className="subject-icon">🔢</div>
-              <h3>Mathematics</h3>
-              <p>Worksheets, Videos & Practice Problems</p>
+          <div className="subjects-grid category-grid">
+            <div className="subject-card category-card" onClick={() => navigation.navigate({ view: 'core-subjects' })}>
+              <div className="subject-icon">📐</div>
+              <h3>Core Subjects</h3>
+              <p>Math, Science & History - Essential academic foundations</p>
             </div>
 
-            <div className="subject-card" onClick={() => navigation.navigate({ view: 'science' })}>
-              <div className="subject-icon">🔬</div>
-              <h3>Science</h3>
-              <p>Experiments, Simulations & Lessons</p>
-            </div>
-
-            <div className="subject-card" onClick={() => navigation.navigate({ view: 'history' })}>
-              <div className="subject-icon">📜</div>
-              <h3>History</h3>
-              <p>Primary Sources & Historical Content</p>
-            </div>
-
-            <div className="subject-card" onClick={() => navigation.navigate({ view: 'bible' })}>
+            <div className="subject-card category-card" onClick={() => navigation.navigate({ view: 'electives' })}>
               <div className="subject-icon">📖</div>
-              <h3>Biblical Studies</h3>
-              <p>Ancient Texts, History & Cultural Impact</p>
+              <h3>Electives</h3>
+              <p>Biblical Studies, Biblical History & Science & the Bible</p>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 /* Find Tutors Hub Styles */
 .find-tutors-hub {
-  padding: 16px 32px 32px;
-  max-width: 1400px;
+  padding: 32px;
+  max-width: 1200px;
   margin: 0 auto;
   font-family: 'Share Tech Mono', monospace;
 }
@@ -32,8 +32,8 @@
 /* Category Cards */
 .tutor-categories {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
   margin-bottom: 64px;
 }
 
@@ -114,7 +114,7 @@
   width: 100%;
   padding: 12px 24px;
   background: var(--theme-primary);
-  color: #F5F5DC;
+  color: var(--theme-background-paper);
   border: 2px solid var(--theme-primary);
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
@@ -163,7 +163,7 @@
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
+  gap: 24px;
 }
 
 .feature {
@@ -204,7 +204,7 @@
 /* All Tutors View */
 .find-tutors-all {
   padding: 32px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   font-family: 'Share Tech Mono', monospace;
 }
@@ -217,28 +217,32 @@
 }
 
 .back-button {
-  background: var(--theme-background-paper);
-  border: 2px solid var(--theme-border-dark);
-  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--theme-border-light);
+  color: var(--theme-text-muted);
+  padding: 8px 16px;
   border-radius: 8px;
-  color: var(--theme-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.85rem;
-  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .back-button:hover {
-  background: #ffffff;
+  background: var(--theme-background-hover);
+  color: var(--theme-text-primary);
   border-color: var(--theme-border-medium);
 }
 
 .all-header h1 {
   font-family: 'Orbitron', monospace;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--theme-primary);
   margin: 0;
   font-weight: 900;
@@ -277,13 +281,13 @@
 }
 
 .filter-btn:hover {
-  background: #ffffff;
+  background: var(--theme-background-paper);
   border-color: var(--theme-border-medium);
 }
 
 .filter-btn.active {
   background: var(--theme-primary);
-  color: #F5F5DC;
+  color: var(--theme-background-paper);
   border-color: var(--theme-primary);
 }
 
@@ -356,8 +360,8 @@
 /* Tutors Grid */
 .tutors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
 }
 
 /* Loading */
@@ -408,7 +412,7 @@
 .no-results button {
   padding: 10px 20px;
   background: var(--theme-primary);
-  color: #F5F5DC;
+  color: var(--theme-background-paper);
   border: 2px solid var(--theme-primary);
   border-radius: 8px;
   cursor: pointer;

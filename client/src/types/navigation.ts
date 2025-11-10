@@ -16,7 +16,22 @@ export type MainView =
   | 'dashboard'
   | 'login'
   | 'admin'
-  | 'onboarding';
+  | 'onboarding'
+  | 'core-subjects'
+  | 'electives'
+  | 'math-hub'
+  | 'science-hub'
+  | 'history-hub'
+  | 'bible-hub'
+  | 'biblical-history-hub'
+  | 'science-bible-hub'
+  | 'math-resources'
+  | 'science-resources'
+  | 'history-resources'
+  | 'bible-resources'
+  | 'biblical-history-resources'
+  | 'science-bible-resources'
+  | 'courses-coming-soon';
 
 export type TutorView = 
   | 'hub' 
@@ -45,6 +60,10 @@ export interface NavigationState {
   historyCountry?: string;
   bibleTab?: string;
   workspaceTab?: string;
+  biblicalHistoryTab?: string;
+  scienceBibleTab?: string;
+  // Subject for courses coming soon page
+  courseSubject?: string;
 }
 
 export interface NavigationHistoryEntry {

@@ -17,8 +17,17 @@ import { MathPage } from './pages/MathPage/MathPage';
 import { SciencePage } from './pages/SciencePage/SciencePage';
 import { HistoryPage } from './pages/HistoryPage/HistoryPage';
 import { BiblePage } from './pages/BiblePage/BiblePage';
-import { MathHub } from './components/math/MathHub/MathHub';
-import { ScienceHub } from './components/science/ScienceHub/ScienceHub';
+import { CoreSubjectsPage } from './pages/CoreSubjectsPage/CoreSubjectsPage';
+import { ElectivesPage } from './pages/ElectivesPage/ElectivesPage';
+import { BiblicalHistoryPage } from './pages/BiblicalHistoryPage/BiblicalHistoryPage';
+import { ScienceBiblePage } from './pages/ScienceBiblePage/ScienceBiblePage';
+import { MathHubPage } from './pages/MathHubPage/MathHubPage';
+import { ScienceHubPage } from './pages/ScienceHubPage/ScienceHubPage';
+import { HistoryHubPage } from './pages/HistoryHubPage/HistoryHubPage';
+import { BibleHubPage } from './pages/BibleHubPage/BibleHubPage';
+import { BiblicalHistoryHubPage } from './pages/BiblicalHistoryHubPage/BiblicalHistoryHubPage';
+import { ScienceBibleHubPage } from './pages/ScienceBibleHubPage/ScienceBibleHubPage';
+import { CoursesComingSoon } from './pages/CoursesComingSoon/CoursesComingSoon';
 // import { DebatePage } from './components/debate/DebatePage/DebatePage'; // Moved to debating branch
 import { TopicWorkspace } from './components/resources/TopicWorkspace/TopicWorkspace';
 import { MathGradeSelector } from './components/math/MathGradeSelector/MathGradeSelector';
@@ -34,6 +43,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeSwitcher } from './components/common/ThemeSwitcher/ThemeSwitcher';
 import { Topic } from './types/wasm';
+import { MainView } from './types/navigation';
 import { TopicMetadata } from './types/storage';
 import { MathTemplate } from './utils/mathTemplates';
 import { useTopics } from './hooks/useTopics';
@@ -215,36 +225,20 @@ function AppContent() {
           </button>
           */}
           <button
-            className={currentView === 'math' ? 'nav-item active' : 'nav-item'}
-            onClick={() => navigation.navigate({ view: 'math' })}
-            title="Math"
+            className={currentView === 'core-subjects' ? 'nav-item active' : 'nav-item'}
+            onClick={() => navigation.navigate({ view: 'core-subjects' })}
+            title="Core Subjects"
           >
-            <span className="nav-icon">📐</span>
-            <span className="nav-label">MATH</span>
+            <span className="nav-icon">📚</span>
+            <span className="nav-label">CORE SUBJECTS</span>
           </button>
           <button
-            className={currentView === 'science' ? 'nav-item active' : 'nav-item'}
-            onClick={() => navigation.navigate({ view: 'science' })}
-            title="Science"
-          >
-            <span className="nav-icon">🔬</span>
-            <span className="nav-label">SCIENCE</span>
-          </button>
-          <button
-            className={currentView === 'history' ? 'nav-item active' : 'nav-item'}
-            onClick={() => navigation.navigate({ view: 'history' })}
-            title="History"
-          >
-            <span className="nav-icon">📜</span>
-            <span className="nav-label">HISTORY</span>
-          </button>
-          <button
-            className={currentView === 'bible' ? 'nav-item active' : 'nav-item'}
-            onClick={() => navigation.navigate({ view: 'bible' })}
-            title="Bible Studies"
+            className={currentView === 'electives' ? 'nav-item active' : 'nav-item'}
+            onClick={() => navigation.navigate({ view: 'electives' })}
+            title="Electives"
           >
             <span className="nav-icon">📖</span>
-            <span className="nav-label">BIBLE</span>
+            <span className="nav-label">ELECTIVES</span>
           </button>
           <button
             className={currentView === 'tutors' ? 'nav-item active' : 'nav-item'}
@@ -378,41 +372,102 @@ function AppContent() {
         )}
         */}
         
-        {currentView === 'math' && (
-          <MathHub 
-            onNavigateToResources={() => navigation.navigate({ view: 'math' })}
-            onNavigateToTutors={() => {
-              navigation.navigate({ 
-                view: 'tutors',
-                tutorType: 'math',
-                tutorView: 'grades',
-                selectedGrade: ''
-              });
-            }}
+        {currentView === 'math-hub' && (
+          <MathHubPage
+            onNavigateToResources={() => navigation.navigate({ view: 'math-resources' })}
+            onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'math' })}
           />
         )}
-        
-        {currentView === 'science' && (
-          <ScienceHub 
-            onNavigateToResources={() => navigation.navigate({ view: 'science' })}
-            onNavigateToTutors={() => {
-              navigation.navigate({ 
-                view: 'tutors',
-                tutorType: 'science',
-                tutorView: 'science-subjects',
-                selectedGrade: '',
-                selectedScienceSubject: ''
-              });
-            }}
+
+        {currentView === 'math-resources' && (
+          <MathPage />
+        )}
+
+        {currentView === 'science-hub' && (
+          <ScienceHubPage
+            onNavigateToResources={() => navigation.navigate({ view: 'science-resources' })}
+            onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'science' })}
           />
         )}
-        
-        {currentView === 'history' && (
+
+        {currentView === 'science-resources' && (
+          <SciencePage />
+        )}
+
+        {currentView === 'history-hub' && (
+          <HistoryHubPage
+            onNavigateToResources={() => navigation.navigate({ view: 'history-resources' })}
+            onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'history' })}
+          />
+        )}
+
+        {currentView === 'history-resources' && (
           <HistoryPage />
         )}
 
-        {currentView === 'bible' && (
+        {currentView === 'bible-hub' && (
+          <BibleHubPage
+            onNavigateToResources={() => navigation.navigate({ view: 'bible-resources' })}
+            onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'bible' })}
+          />
+        )}
+
+        {currentView === 'bible-resources' && (
           <BiblePage />
+        )}
+
+        {currentView === 'core-subjects' && (
+          <CoreSubjectsPage onNavigate={(slug) => navigation.navigate({ view: slug as MainView })} />
+        )}
+
+        {currentView === 'electives' && (
+          <ElectivesPage onNavigate={(slug) => navigation.navigate({ view: slug as MainView })} />
+        )}
+
+        {currentView === 'biblical-history-hub' && (
+          <BiblicalHistoryHubPage
+            onNavigateToResources={() => navigation.navigate({ view: 'biblical-history-resources' })}
+            onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'biblical-history' })}
+          />
+        )}
+
+        {currentView === 'biblical-history-resources' && (
+          <BiblicalHistoryPage />
+        )}
+
+        {currentView === 'science-bible-hub' && (
+          <ScienceBibleHubPage
+            onNavigateToResources={() => navigation.navigate({ view: 'science-bible-resources' })}
+            onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'science-bible' })}
+          />
+        )}
+
+        {currentView === 'science-bible-resources' && (
+          <ScienceBiblePage />
+        )}
+
+        {currentView === 'courses-coming-soon' && (
+          <CoursesComingSoon
+            subjectName={
+              currentState.courseSubject === 'math' ? 'Mathematics' :
+              currentState.courseSubject === 'science' ? 'Science' :
+              currentState.courseSubject === 'history' ? 'History' :
+              currentState.courseSubject === 'bible' ? 'Biblical Studies' :
+              currentState.courseSubject === 'biblical-history' ? 'Biblical History' :
+              currentState.courseSubject === 'science-bible' ? 'Science & the Bible' :
+              'This Subject'
+            }
+            subjectIcon={
+              currentState.courseSubject === 'math' ? '🔢' :
+              currentState.courseSubject === 'science' ? '🔬' :
+              currentState.courseSubject === 'history' ? '📜' :
+              currentState.courseSubject === 'bible' ? '📖' :
+              currentState.courseSubject === 'biblical-history' ? '⛪' :
+              currentState.courseSubject === 'science-bible' ? '🧬' :
+              '📚'
+            }
+            onGoBack={() => navigation.navigate({ view: `${currentState.courseSubject}-hub` as MainView })}
+          />
         )}
 
         {currentView === 'admin' && isAuthenticated && (
@@ -460,17 +515,21 @@ function AppContent() {
             )}
             
             {tutorView === 'grades' && tutorType === 'math' && (
-              <MathGradeSelector onGradeSelect={handleGradeSelect} />
+              <MathGradeSelector
+                onGradeSelect={handleGradeSelect}
+                onBack={() => navigation.navigate({ tutorView: 'hub' })}
+              />
             )}
             
             {tutorView === 'science-subjects' && (
-              <ScienceSubjectSelector 
+              <ScienceSubjectSelector
                 onSubjectSelect={(subject) => {
-                  navigation.navigate({ 
+                  navigation.navigate({
                     selectedScienceSubject: subject,
                     tutorView: 'science-tutors'
                   });
                 }}
+                onBack={() => navigation.navigate({ tutorView: 'hub' })}
               />
             )}
             

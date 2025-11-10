@@ -2,9 +2,9 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  background: white;
+  background: var(--theme-background-paper);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--theme-shadow-light);
 }
 
 .availability-header {
@@ -13,12 +13,12 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid var(--theme-border-light);
 }
 
 .availability-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--theme-text-primary);
   font-size: 24px;
 }
 
@@ -27,7 +27,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: #4CAF50;
+  background: var(--theme-success);
   color: white;
   border: none;
   border-radius: 6px;
@@ -43,7 +43,7 @@
 }
 
 .save-button:disabled {
-  background: #ccc;
+  background: var(--theme-border-medium);
   cursor: not-allowed;
   transform: none;
 }
@@ -53,7 +53,7 @@
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--theme-border-light);
 }
 
 .tab {
@@ -64,15 +64,15 @@
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
-  color: #666;
+  color: var(--theme-text-muted);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .tab:hover {
-  color: #333;
-  background: #f5f5f5;
+  color: var(--theme-text-primary);
+  background: var(--theme-background-hover);
 }
 
 .tab.active {
@@ -87,7 +87,7 @@
 
 .schedule-description {
   margin: 0 0 20px 0;
-  color: #666;
+  color: var(--theme-text-muted);
   font-size: 14px;
 }
 
@@ -101,14 +101,14 @@
   display: flex;
   align-items: center;
   padding: 15px;
-  background: #f9f9f9;
+  background: var(--theme-background-hover);
   border-radius: 8px;
   transition: all 0.2s;
 }
 
 .day-row.unavailable {
   opacity: 0.6;
-  background: #f5f5f5;
+  background: var(--theme-background-hover);
 }
 
 .day-toggle {
@@ -126,7 +126,7 @@
 
 .day-toggle label {
   font-weight: 500;
-  color: #333;
+  color: var(--theme-text-primary);
   cursor: pointer;
   user-select: none;
 }
@@ -145,15 +145,15 @@
 }
 
 .time-input label {
-  color: #666;
+  color: var(--theme-text-muted);
   font-size: 14px;
 }
 
 .time-input select {
   padding: 6px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--theme-border-light);
   border-radius: 4px;
-  background: white;
+  background: var(--theme-background-paper);
   font-size: 14px;
   cursor: pointer;
 }
@@ -179,7 +179,7 @@
 .overrides-description {
   flex: 1;
   margin: 0;
-  color: #666;
+  color: var(--theme-text-muted);
   font-size: 14px;
 }
 
@@ -212,16 +212,16 @@
 .no-overrides {
   padding: 40px;
   text-align: center;
-  color: #999;
-  background: #f9f9f9;
+  color: var(--theme-text-muted);
+  background: var(--theme-background-hover);
   border-radius: 8px;
   font-style: italic;
 }
 
 .override-item {
   padding: 20px;
-  background: #f9f9f9;
-  border: 1px solid #e0e0e0;
+  background: var(--theme-background-hover);
+  border: 1px solid var(--theme-border-light);
   border-radius: 8px;
   position: relative;
 }
@@ -244,7 +244,7 @@
 }
 
 .form-group label {
-  color: #666;
+  color: var(--theme-text-muted);
   font-size: 13px;
   font-weight: 500;
 }
@@ -253,9 +253,9 @@
 .form-group input[type="text"],
 .form-group select {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--theme-border-light);
   border-radius: 4px;
-  background: white;
+  background: var(--theme-background-paper);
   font-size: 14px;
 }
 
@@ -299,7 +299,7 @@
 .availability-tips ul {
   margin: 0;
   padding-left: 20px;
-  color: #555;
+  color: var(--theme-text-primary);
   font-size: 14px;
 }
 
@@ -312,7 +312,7 @@
 .loading {
   padding: 60px;
   text-align: center;
-  color: #666;
+  color: var(--theme-text-muted);
   font-size: 16px;
 }
 

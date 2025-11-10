@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Learning Pathways (Courses) Infrastructure (2025-11-10)
+
+**Feature Overview:**
+- Added subject hub pages for all 6 subjects (Math, Science, History, Biblical Studies, Biblical History, Science & the Bible)
+- Each subject now has a hub with two main options:
+  - "Browse Resources" - Access to existing worksheets, videos, and materials
+  - "Learning Pathways (Coming Soon)" - Placeholder for future structured courses feature
+
+**New Components:**
+- `SubjectHub` - Generic reusable hub component with two-card layout (fully theme-aware)
+- `CoursesComingSoon` - Placeholder page explaining the upcoming Learning Pathways feature (fully theme-aware)
+- Subject-specific hub pages: `MathHubPage`, `ScienceHubPage`, `HistoryHubPage`, `BibleHubPage`, `BiblicalHistoryHubPage`, `ScienceBibleHubPage`
+
+**Styling:**
+- All new components use CSS variables from the theme system
+- Responsive design with mobile-first approach
+- Tofu Famicom retro aesthetic with Orbitron font
+- Smooth hover effects and transitions
+- Gradient overlays and shadow effects using theme colors
+
+**Navigation Updates:**
+- Core Subjects and Electives pages now navigate to subject hubs instead of directly to resources
+- Added navigation state properties: `courseSubject`, `biblicalHistoryTab`, `scienceBibleTab`
+- New views: `*-hub`, `*-resources`, `courses-coming-soon` for all subjects
+
+**Coming Soon Feature:**
+- Structured learning pathways with sequential lessons (like Khan Academy grade pathways)
+- Progress tracking through courses
+- Certificates upon completion
+- Practice problems and assessments
+- Personalized learning adapted to grade level
+
 ### Added - Tutor Content Marketplace System (2025-11-08)
 
 #### Phase 0: Security & Compliance Foundation
@@ -240,6 +272,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Promotional codes and discounts
 - Affiliate program
 - Content recommendations
+
+### Technical Debt & Improvements
+
+**UI/CSS Refactoring (Planned)**
+- **Containerization:** Implement Docker containerization for consistent development and deployment environments
+  - Separate containers for frontend, backend, and database
+  - Docker Compose for local development
+  - Production-ready container orchestration
+
+- **CSS Architecture:** Refactor CSS to use inheritance and component-based styling
+  - Create base component styles with inheritance hierarchy
+  - Establish shared style classes for common UI patterns (buttons, cards, headers)
+  - Reduce CSS duplication across components
+  - Implement CSS modules or styled-components for better encapsulation
+  - Extract common theme variables and mixins
+  - Create reusable utility classes following DRY principles
 
 ---
 

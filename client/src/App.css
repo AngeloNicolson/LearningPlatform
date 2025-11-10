@@ -164,6 +164,7 @@
     linear-gradient(180deg, rgba(0,0,0,0.02) 0%, transparent 100%);
   pointer-events: none;
   border-radius: 12px;
+  z-index: -1;
 }
 
 .sidebar.collapsed::before {
@@ -426,9 +427,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
+  background:
     radial-gradient(ellipse at top right, var(--theme-background-paper) 0%, transparent 50%);
   pointer-events: none;
+  z-index: -1;
 }
 
 /* Impersonation Banner */
@@ -544,6 +546,7 @@
     rgba(212, 175, 55, 0.02) 8px
   );
   pointer-events: none;
+  z-index: -1;
 }
 
 .topic-header {
@@ -628,6 +631,7 @@
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.05), transparent);
   transition: left 0.6s ease;
+  z-index: 0;
 }
 
 .action-card:hover::before {

@@ -1,8 +1,8 @@
 /* Unified Tutor Card Styles */
 .unified-tutor-card {
-  background: white;
+  background: var(--theme-background-paper);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--theme-shadow-medium);
   transition: all 0.3s ease;
   overflow: hidden;
   cursor: pointer;
@@ -10,20 +10,20 @@
 
 .unified-tutor-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px var(--theme-shadow-dark);
 }
 
 /* Subject Type Themes */
 .unified-tutor-card.math {
-  border-top: 3px solid #667eea;
+  border-top: 3px solid var(--theme-primary);
 }
 
 .unified-tutor-card.science {
-  border-top: 3px solid #48bb78;
+  border-top: 3px solid var(--theme-success);
 }
 
 .unified-tutor-card.general {
-  border-top: 3px solid #ed8936;
+  border-top: 3px solid var(--theme-warning);
 }
 
 /* Avatar Styles */
@@ -42,8 +42,8 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  color: var(--theme-text-inverse);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,22 +65,22 @@
 }
 
 .star.filled {
-  color: #fbbf24;
+  color: var(--theme-warning);
 }
 
 .star.empty {
-  color: #e5e7eb;
+  color: var(--theme-border-light);
 }
 
 .star.half {
   position: relative;
-  color: #e5e7eb;
+  color: var(--theme-border-light);
 }
 
 .star.half::before {
   content: '★';
   position: absolute;
-  color: #fbbf24;
+  color: var(--theme-warning);
   overflow: hidden;
   width: 50%;
 }
@@ -88,13 +88,14 @@
 .rating-value {
   margin-left: 0.25rem;
   font-weight: 600;
-  color: #4b5563;
+  color: var(--theme-text-muted);
 }
 
 .sessions {
-  color: #9ca3af;
+  color: var(--theme-text-muted);
   font-size: 0.875rem;
   margin-left: 0.25rem;
+  opacity: 0.7;
 }
 
 /* Full Variant */
@@ -116,7 +117,7 @@
 
 .unified-tutor-card.full .tutor-basic h3 {
   margin: 0;
-  color: #1f2937;
+  color: var(--theme-text-primary);
   font-size: 1.25rem;
 }
 
@@ -124,8 +125,8 @@
   position: absolute;
   top: 0;
   right: 0;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  color: var(--theme-text-inverse);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-weight: 600;
@@ -137,7 +138,7 @@
 }
 
 .unified-tutor-card.full .tutor-bio {
-  color: #4b5563;
+  color: var(--theme-text-muted);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
@@ -148,7 +149,7 @@
 
 .unified-tutor-card.full .subjects-section h4 {
   margin: 0 0 0.5rem 0;
-  color: #374151;
+  color: var(--theme-text-primary);
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -162,8 +163,8 @@
 }
 
 .unified-tutor-card.full .subject-tag {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--theme-background-hover);
+  color: var(--theme-text-muted);
   padding: 0.25rem 0.75rem;
   border-radius: 16px;
   font-size: 0.875rem;
@@ -171,13 +172,13 @@
 }
 
 .unified-tutor-card.math .subject-tag {
-  background: #eef2ff;
-  color: #667eea;
+  background: var(--theme-primary-alpha-10);
+  color: var(--theme-primary);
 }
 
 .unified-tutor-card.science .subject-tag {
-  background: #f0fdf4;
-  color: #48bb78;
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--theme-success-dark);
 }
 
 .unified-tutor-card.full .grades-section {
@@ -186,17 +187,17 @@
   gap: 0.5rem;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--theme-border-light);
 }
 
 .unified-tutor-card.full .grades-section .label {
   font-weight: 600;
-  color: #6b7280;
+  color: var(--theme-text-muted);
   font-size: 0.875rem;
 }
 
 .unified-tutor-card.full .grades-section .value {
-  color: #374151;
+  color: var(--theme-text-primary);
   font-size: 0.875rem;
 }
 
@@ -207,18 +208,20 @@
 .unified-tutor-card.full .book-session-btn {
   width: 100%;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  color: var(--theme-text-inverse);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
 }
 
 .unified-tutor-card.full .book-session-btn:hover {
-  opacity: 0.9;
+  background: linear-gradient(135deg, var(--theme-primary-light) 0%, var(--theme-primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--theme-shadow-dark);
 }
 
 /* Compact Variant */
@@ -247,12 +250,12 @@
 .unified-tutor-card.compact .tutor-info h4 {
   margin: 0;
   font-size: 1rem;
-  color: #1f2937;
+  color: var(--theme-text-primary);
 }
 
 .unified-tutor-card.compact .tutor-subjects {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--theme-text-muted);
   margin-bottom: 0.75rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -267,14 +270,14 @@
 
 .unified-tutor-card.compact .tutor-price {
   font-weight: 600;
-  color: #374151;
+  color: var(--theme-text-primary);
   font-size: 1rem;
 }
 
 .unified-tutor-card.compact .view-btn {
   background: transparent;
-  color: #667eea;
-  border: 1px solid #667eea;
+  color: var(--theme-primary);
+  border: 1px solid var(--theme-primary);
   padding: 0.25rem 0.75rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -283,8 +286,8 @@
 }
 
 .unified-tutor-card.compact .view-btn:hover {
-  background: #667eea;
-  color: white;
+  background: var(--theme-primary);
+  color: var(--theme-text-inverse);
 }
 
 /* List Variant */
@@ -309,19 +312,19 @@
 .unified-tutor-card.list .tutor-header h3 {
   margin: 0;
   font-size: 1.125rem;
-  color: #1f2937;
+  color: var(--theme-text-primary);
 }
 
 .unified-tutor-card.list .tutor-price {
-  background: #f3f4f6;
+  background: var(--theme-background-hover);
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
   font-weight: 600;
-  color: #374151;
+  color: var(--theme-text-primary);
 }
 
 .unified-tutor-card.list .tutor-bio {
-  color: #6b7280;
+  color: var(--theme-text-muted);
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0.5rem 0;
@@ -331,7 +334,7 @@
   display: flex;
   gap: 1rem;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--theme-text-muted);
 }
 
 .unified-tutor-card.list .grades {
@@ -344,18 +347,20 @@
 
 .unified-tutor-card.list .book-btn {
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
+  color: var(--theme-text-inverse);
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
   white-space: nowrap;
 }
 
 .unified-tutor-card.list .book-btn:hover {
-  opacity: 0.9;
+  background: linear-gradient(135deg, var(--theme-primary-light) 0%, var(--theme-primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--theme-shadow-dark);
 }
 
 /* Responsive Design */
@@ -364,16 +369,16 @@
     flex-direction: column;
     text-align: center;
   }
-  
+
   .unified-tutor-card.list .tutor-header {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .unified-tutor-card.list .book-btn {
     width: 100%;
   }
-  
+
   .unified-tutor-card.full .tutor-price-badge {
     position: static;
     display: inline-block;

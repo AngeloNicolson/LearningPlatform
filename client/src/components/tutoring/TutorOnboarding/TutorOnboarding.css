@@ -1,24 +1,24 @@
 /* Tutor Onboarding Styles */
 .tutor-onboarding {
   min-height: 100vh;
-  background: #faf8f3;
+  background: var(--theme-background-main);
   padding: 20px;
 }
 
 .onboarding-container {
   max-width: 800px;
   margin: 0 auto;
-  background: white;
+  background: var(--theme-background-paper);
   border-radius: 16px;
-  border: 1px solid rgba(102, 11, 5, 0.08);
-  box-shadow: 0 2px 8px rgba(102, 11, 5, 0.04);
+  border: 1px solid var(--theme-border-light);
+  box-shadow: var(--theme-shadow-light);
   overflow: hidden;
 }
 
 .onboarding-header {
   text-align: center;
   padding: 32px;
-  background: linear-gradient(135deg, #660B05 0%, #8b7355 100%);
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-dark) 100%);
   color: white;
 }
 
@@ -35,20 +35,20 @@
 
 .progress-bar {
   height: 4px;
-  background: #e5d4b1;
+  background: var(--theme-border-light);
   position: relative;
 }
 
 .progress-fill {
   height: 100%;
-  background: #660B05;
+  background: var(--theme-primary);
   transition: width 0.3s ease;
 }
 
 .steps-indicator {
   display: flex;
   padding: 24px;
-  border-bottom: 1px solid #e5d4b1;
+  border-bottom: 1px solid var(--theme-border-light);
   overflow-x: auto;
 }
 
@@ -70,8 +70,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #e5d4b1;
-  color: #660B05;
+  background: var(--theme-border-light);
+  color: var(--theme-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,12 +81,12 @@
 }
 
 .step.active .step-number {
-  background: #660B05;
+  background: var(--theme-primary);
   color: white;
 }
 
 .step.completed .step-number {
-  background: #4ade80;
+  background: var(--theme-success);
   color: white;
 }
 
@@ -96,13 +96,13 @@
 
 .step-title {
   font-weight: 600;
-  color: #660B05;
+  color: var(--theme-primary);
   font-size: 0.9rem;
 }
 
 .step-desc {
   font-size: 0.75rem;
-  color: #8b7355;
+  color: var(--theme-text-muted);
   margin-top: 2px;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .step-content h2 {
-  color: #660B05;
+  color: var(--theme-primary);
   margin: 0 0 24px 0;
   font-size: 1.5rem;
 }
@@ -123,7 +123,7 @@
 .form-group label {
   display: block;
   font-weight: 600;
-  color: #660B05;
+  color: var(--theme-primary);
   margin-bottom: 8px;
   font-size: 0.9rem;
 }
@@ -134,7 +134,7 @@
 .form-group textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #e5d4b1;
+  border: 1px solid var(--theme-border-light);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -144,13 +144,13 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #660B05;
+  border-color: var(--theme-primary);
 }
 
 .form-group small {
   display: block;
   margin-top: 4px;
-  color: #8b7355;
+  color: var(--theme-text-muted);
   font-size: 0.85rem;
 }
 
@@ -162,8 +162,8 @@
 }
 
 .tag {
-  background: #e5d4b1;
-  color: #660B05;
+  background: var(--theme-border-light);
+  color: var(--theme-primary);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -175,7 +175,7 @@
 .tag button {
   background: none;
   border: none;
-  color: #660B05;
+  color: var(--theme-primary);
   cursor: pointer;
   font-size: 1.2rem;
   padding: 0;
@@ -197,14 +197,14 @@
   display: flex;
   align-items: center;
   padding: 8px;
-  border: 1px solid #e5d4b1;
+  border: 1px solid var(--theme-border-light);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .checkbox-label:hover {
-  background: #faf8f3;
+  background: var(--theme-background-hover);
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -213,7 +213,7 @@
 
 .checkbox-label input[type="checkbox"]:checked + span {
   font-weight: 600;
-  color: #660B05;
+  color: var(--theme-primary);
 }
 
 .availability-grid {
@@ -225,7 +225,7 @@
 
 .day-column h4 {
   font-size: 0.85rem;
-  color: #660B05;
+  color: var(--theme-primary);
   margin: 0 0 8px 0;
   text-align: center;
 }
@@ -238,42 +238,42 @@
 
 .time-slot {
   padding: 4px;
-  border: 1px solid #e5d4b1;
+  border: 1px solid var(--theme-border-light);
   border-radius: 4px;
-  background: white;
+  background: var(--theme-background-paper);
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .time-slot:hover {
-  background: #faf8f3;
+  background: var(--theme-background-hover);
 }
 
 .time-slot.selected {
-  background: #660B05;
+  background: var(--theme-primary);
   color: white;
-  border-color: #660B05;
+  border-color: var(--theme-primary);
 }
 
 .profile-preview {
   margin-top: 24px;
   padding: 20px;
-  background: #faf8f3;
+  background: var(--theme-background-hover);
   border-radius: 12px;
 }
 
 .profile-preview h3 {
   margin: 0 0 16px 0;
-  color: #660B05;
+  color: var(--theme-primary);
   font-size: 1.1rem;
 }
 
 .preview-card {
-  background: white;
+  background: var(--theme-background-paper);
   padding: 20px;
   border-radius: 8px;
-  border: 1px solid #e5d4b1;
+  border: 1px solid var(--theme-border-light);
 }
 
 .preview-header {
@@ -287,7 +287,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #660B05;
+  background: var(--theme-primary);
   color: white;
   display: flex;
   align-items: center;
@@ -298,23 +298,23 @@
 
 .preview-header h4 {
   margin: 0;
-  color: #660B05;
+  color: var(--theme-primary);
 }
 
 .preview-header p {
   margin: 4px 0 0 0;
-  color: #8b7355;
+  color: var(--theme-text-muted);
   font-size: 0.9rem;
 }
 
 .preview-subjects {
   margin: 12px 0;
-  color: #8b7355;
+  color: var(--theme-text-muted);
   font-size: 0.9rem;
 }
 
 .preview-description {
-  color: #333;
+  color: var(--theme-text-primary);
   line-height: 1.5;
 }
 
@@ -322,8 +322,8 @@
   display: flex;
   justify-content: space-between;
   padding: 24px 32px;
-  border-top: 1px solid #e5d4b1;
-  background: #faf8f3;
+  border-top: 1px solid var(--theme-border-light);
+  background: var(--theme-background-hover);
 }
 
 .form-actions .btn {
@@ -336,22 +336,22 @@
 }
 
 .btn-primary {
-  background: #660B05;
+  background: var(--theme-primary);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #4a0803;
+  background: var(--theme-primary-dark);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background: #e5d4b1;
-  color: #660B05;
+  background: var(--theme-border-light);
+  color: var(--theme-primary);
 }
 
 .btn-secondary:hover {
-  background: #d4c3a0;
+  background: var(--theme-border-medium);
 }
 
 .btn:disabled {

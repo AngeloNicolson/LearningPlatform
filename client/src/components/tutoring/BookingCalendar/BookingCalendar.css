@@ -192,7 +192,7 @@
 
 .calendar-day.selected {
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
-  color: #f8f6f0;
+  color: var(--theme-background-paper);
   border-color: var(--theme-primary-light);
   box-shadow: 0 2px 6px var(--theme-border-medium);
 }
@@ -248,7 +248,7 @@
 
 .time-slot.selected {
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
-  color: #f8f6f0;
+  color: var(--theme-background-paper);
   border-color: var(--theme-primary-light);
   box-shadow: 0 2px 6px var(--theme-border-medium);
 }
@@ -538,7 +538,7 @@
 .confirm-booking-btn {
   width: 100%;
   background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
-  color: #f8f6f0;
+  color: var(--theme-background-paper);
   border: 1px solid var(--theme-primary-light);
   padding: 14px 24px;
   border-radius: 8px;
