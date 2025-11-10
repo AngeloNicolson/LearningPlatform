@@ -49,6 +49,9 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
 }
 
 .subject-card::before {
@@ -121,9 +124,9 @@
   color: var(--theme-text-muted);
   line-height: 1.6;
   margin-bottom: 20px;
-  min-height: 50px;
   position: relative;
   z-index: 2;
+  flex: 1;
 }
 
 .explore-btn {
@@ -141,6 +144,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 12px var(--theme-shadow-medium);
+  margin-top: auto;
 }
 
 .explore-btn:hover {
