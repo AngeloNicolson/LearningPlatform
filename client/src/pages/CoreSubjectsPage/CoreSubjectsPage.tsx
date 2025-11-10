@@ -86,7 +86,7 @@ export const CoreSubjectsPage: React.FC<CoreSubjectsPageProps> = ({ onNavigate }
             <div className="subject-icon">{subject.icon}</div>
             <h2 className="subject-name">{subject.name}</h2>
             <p className="subject-description">{subject.description}</p>
-            <button className="explore-btn">Explore {subject.name}</button>
+            <button className="explore-btn">Explore</button>
           </div>
         ))}
       </div>
