@@ -2,34 +2,34 @@
 .subject-hub {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 30px 20px;
   background: var(--theme-background-main);
 }
 
 .subject-hub-header {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .subject-hub-icon {
-  font-size: 5rem;
-  margin-bottom: 20px;
+  font-size: 4rem;
+  margin-bottom: 15px;
   filter: drop-shadow(0 2px 4px var(--theme-shadow-medium));
 }
 
 .subject-hub h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-weight: 900;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-shadow: 0 0 15px var(--theme-primary-alpha-20);
 }
 
 .subject-hub-description {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: var(--theme-text-muted);
   max-width: 700px;
   margin: 0 auto;
@@ -37,16 +37,16 @@
 
 .subject-hub-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 30px;
-  margin-bottom: 60px;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+  margin-bottom: 50px;
 }
 
 .hub-card {
   background: var(--theme-background-paper);
-  border-radius: 16px;
+  border-radius: 12px;
   border: 2px solid var(--theme-border-light);
-  padding: 40px;
+  padding: 30px;
   box-shadow: 0 4px 12px var(--theme-shadow-medium);
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -100,19 +100,19 @@
 }
 
 .hub-card-icon {
-  font-size: 4rem;
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  margin-bottom: 15px;
   position: relative;
   z-index: 2;
   filter: drop-shadow(0 2px 4px var(--theme-shadow-medium));
 }
 
 .hub-card h2 {
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
   position: relative;
@@ -121,11 +121,11 @@
 }
 
 .hub-card p {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--theme-text-muted);
   line-height: 1.6;
-  margin-bottom: 25px;
-  min-height: 60px;
+  margin-bottom: 20px;
+  min-height: 50px;
   position: relative;
   z-index: 2;
 }
@@ -134,9 +134,9 @@
   background: var(--theme-primary);
   color: var(--theme-text-inverse);
   border: none;
-  padding: 15px 35px;
-  border-radius: 30px;
-  font-size: 1.1rem;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -166,11 +166,11 @@
   display: inline-block;
   background: var(--theme-warning);
   color: var(--theme-text-inverse);
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 6px 16px;
+  border-radius: 18px;
+  font-size: 0.8rem;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
   position: relative;
@@ -181,26 +181,26 @@
 .subject-hub-preview {
   background: var(--theme-background-paper);
   border: 1px solid var(--theme-border-light);
-  border-radius: 16px;
-  padding: 40px;
+  border-radius: 12px;
+  padding: 30px;
   text-align: center;
   box-shadow: 0 2px 8px var(--theme-shadow-light);
 }
 
 .subject-hub-preview h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .pathway-features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -208,25 +208,25 @@
 .pathway-feature {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 1.1rem;
+  gap: 10px;
+  font-size: 0.95rem;
   color: var(--theme-text-primary);
   text-align: left;
 }
 
 .feature-icon {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   flex-shrink: 0;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .subject-hub-icon {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 
   .subject-hub h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .subject-hub-options {
@@ -234,7 +234,7 @@
   }
 
   .hub-card {
-    padding: 30px 20px;
+    padding: 25px 18px;
   }
 
   .pathway-features {

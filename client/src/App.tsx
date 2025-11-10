@@ -449,7 +449,7 @@ function AppContent() {
         {currentView === 'courses-coming-soon' && (
           <CoursesComingSoon
             subjectName={
-              currentState.courseSubject === 'math' ? 'Mathematics' :
+              currentState.courseSubject === 'math' ? 'Math' :
               currentState.courseSubject === 'science' ? 'Science' :
               currentState.courseSubject === 'history' ? 'History' :
               currentState.courseSubject === 'bible' ? 'Biblical Studies' :

@@ -2,7 +2,7 @@
  * @file MathHubPage.tsx
  * @author Angelo Nicolson
  * @brief Math subject hub with resources and learning pathways
- * @description Hub page for Mathematics showing options to browse resources or view learning pathways (courses).
+ * @description Hub page for Math showing options to browse resources or view learning pathways (courses).
  */
 
 import React, { useState, useEffect } from 'react';

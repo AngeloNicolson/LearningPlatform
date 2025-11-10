@@ -2,28 +2,28 @@
 .electives-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 30px 20px;
   background: var(--theme-background-main);
 }
 
 .electives-page .page-header {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .electives-page .page-header h1 {
-  font-size: 2.5rem;
+  font-size: 2.1rem;
   color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-weight: 900;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-shadow: 0 0 15px var(--theme-primary-alpha-20);
 }
 
 .electives-page .page-description {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--theme-text-muted);
   max-width: 700px;
   margin: 0 auto;
@@ -33,16 +33,16 @@
 
 .electives-page .subjects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 35px;
 }
 
 .electives-page .subject-card {
   background: var(--theme-background-paper);
   border: 2px solid var(--theme-border-light);
   border-radius: 12px;
-  padding: 40px 30px;
+  padding: 32px 25px;
   text-align: center;
   box-shadow: 0 2px 8px var(--theme-shadow-medium);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -96,19 +96,19 @@
 }
 
 .electives-page .subject-icon {
-  font-size: 4rem;
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  margin-bottom: 15px;
   position: relative;
   z-index: 2;
   filter: drop-shadow(0 2px 4px var(--theme-shadow-medium));
 }
 
 .electives-page .subject-name {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: var(--theme-primary);
   font-family: 'Orbitron', monospace;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
   position: relative;
@@ -117,11 +117,11 @@
 }
 
 .electives-page .subject-description {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--theme-text-muted);
   line-height: 1.6;
-  margin-bottom: 25px;
-  min-height: 60px;
+  margin-bottom: 20px;
+  min-height: 50px;
   position: relative;
   z-index: 2;
 }
@@ -130,9 +130,9 @@
   background: var(--theme-primary);
   color: var(--theme-text-inverse);
   border: none;
-  padding: 12px 30px;
+  padding: 10px 26px;
   border-radius: 25px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
@@ -164,15 +164,15 @@
 /* Responsive */
 @media (max-width: 768px) {
   .electives-page .page-header h1 {
-    font-size: 2rem;
+    font-size: 1.7rem;
   }
 
   .electives-page .subjects-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 18px;
   }
 
   .electives-page .subject-card {
-    padding: 30px 20px;
+    padding: 25px 18px;
   }
 }
