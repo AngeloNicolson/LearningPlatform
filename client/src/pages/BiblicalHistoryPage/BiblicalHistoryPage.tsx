@@ -31,7 +31,11 @@ interface Subject {
   display_order: number;
 }
 
-export const BiblicalHistoryPage: React.FC = () => {
+interface BiblicalHistoryPageProps {
+  onBack?: () => void;
+}
+
+export const BiblicalHistoryPage: React.FC<BiblicalHistoryPageProps> = ({ onBack }) => {
   const navigation = useNavigation();
   const [selectedTopic, setSelectedTopic] = useState<string>(navigation.currentState.biblicalHistoryTab || 'all');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -213,6 +217,7 @@ export const BiblicalHistoryPage: React.FC = () => {
       isLoading={isLoading}
       selectedTopic={selectedTopic}
       onTopicChange={handleTopicChange}
+      onBack={onBack}
     />
   );
 };

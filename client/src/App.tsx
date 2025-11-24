@@ -376,44 +376,48 @@ function AppContent() {
           <MathHubPage
             onNavigateToResources={() => navigation.navigate({ view: 'math-resources' })}
             onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'math' })}
+            onBack={() => navigation.navigate({ view: 'core-subjects' })}
           />
         )}
 
         {currentView === 'math-resources' && (
-          <MathPage />
+          <MathPage onBack={() => navigation.navigate({ view: 'math-hub' })} />
         )}
 
         {currentView === 'science-hub' && (
           <ScienceHubPage
             onNavigateToResources={() => navigation.navigate({ view: 'science-resources' })}
             onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'science' })}
+            onBack={() => navigation.navigate({ view: 'core-subjects' })}
           />
         )}
 
         {currentView === 'science-resources' && (
-          <SciencePage />
+          <SciencePage onBack={() => navigation.navigate({ view: 'science-hub' })} />
         )}
 
         {currentView === 'history-hub' && (
           <HistoryHubPage
             onNavigateToResources={() => navigation.navigate({ view: 'history-resources' })}
             onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'history' })}
+            onBack={() => navigation.navigate({ view: 'core-subjects' })}
           />
         )}
 
         {currentView === 'history-resources' && (
-          <HistoryPage />
+          <HistoryPage onBack={() => navigation.navigate({ view: 'history-hub' })} />
         )}
 
         {currentView === 'bible-hub' && (
           <BibleHubPage
             onNavigateToResources={() => navigation.navigate({ view: 'bible-resources' })}
             onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'bible' })}
+            onBack={() => navigation.navigate({ view: 'electives' })}
           />
         )}
 
         {currentView === 'bible-resources' && (
-          <BiblePage />
+          <BiblePage onBack={() => navigation.navigate({ view: 'bible-hub' })} />
         )}
 
         {currentView === 'core-subjects' && (
@@ -428,22 +432,24 @@ function AppContent() {
           <BiblicalHistoryHubPage
             onNavigateToResources={() => navigation.navigate({ view: 'biblical-history-resources' })}
             onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'biblical-history' })}
+            onBack={() => navigation.navigate({ view: 'electives' })}
           />
         )}
 
         {currentView === 'biblical-history-resources' && (
-          <BiblicalHistoryPage />
+          <BiblicalHistoryPage onBack={() => navigation.navigate({ view: 'biblical-history-hub' })} />
         )}
 
         {currentView === 'science-bible-hub' && (
           <ScienceBibleHubPage
             onNavigateToResources={() => navigation.navigate({ view: 'science-bible-resources' })}
             onNavigateToCourses={() => navigation.navigate({ view: 'courses-coming-soon', courseSubject: 'science-bible' })}
+            onBack={() => navigation.navigate({ view: 'electives' })}
           />
         )}
 
         {currentView === 'science-bible-resources' && (
-          <ScienceBiblePage />
+          <ScienceBiblePage onBack={() => navigation.navigate({ view: 'science-bible-hub' })} />
         )}
 
         {currentView === 'courses-coming-soon' && (

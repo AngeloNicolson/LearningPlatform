@@ -175,9 +175,9 @@ export const TutorCards: React.FC<TutorCardsProps> = ({
                   <div className="tutor-basic-info">
                     <h3>{tutor.display_name}</h3>
                     <div className="rating">
-                      <span className="stars">{'⭐'.repeat(Math.floor(Number(tutor.rating)))}</span>
-                      <span className="rating-number">{Number(tutor.rating).toFixed(1)}</span>
-                      <span className="review-count">({tutor.total_sessions} sessions)</span>
+                      <span className="stars">{'⭐'.repeat(Math.floor(Number(tutor.rating) || 0))}</span>
+                      <span className="rating-number">{(Number(tutor.rating) || 0).toFixed(1)}</span>
+                      <span className="review-count">({tutor.total_sessions || 0} sessions)</span>
                     </div>
                   </div>
                 </div>

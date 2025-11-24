@@ -14,6 +14,7 @@ interface SubjectHubProps {
   subjectDescription: string;
   onBrowseResources: () => void;
   onViewCourses: () => void;
+  onBack: () => void;
 }
 
 export const SubjectHub: React.FC<SubjectHubProps> = ({
@@ -21,11 +22,15 @@ export const SubjectHub: React.FC<SubjectHubProps> = ({
   subjectIcon,
   subjectDescription,
   onBrowseResources,
-  onViewCourses
+  onViewCourses,
+  onBack
 }) => {
   return (
     <div className="subject-hub">
       <div className="subject-hub-header">
+        <button className="back-button" onClick={onBack}>
+          ← Back
+        </button>
         <div className="subject-hub-icon">{subjectIcon}</div>
         <h1>{subjectName}</h1>
         <p className="subject-hub-description">{subjectDescription}</p>

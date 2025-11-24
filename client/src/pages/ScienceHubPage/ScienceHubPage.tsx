@@ -20,11 +20,13 @@ interface Subject {
 interface ScienceHubPageProps {
   onNavigateToResources: () => void;
   onNavigateToCourses: () => void;
+  onBack: () => void;
 }
 
 export const ScienceHubPage: React.FC<ScienceHubPageProps> = ({
   onNavigateToResources,
-  onNavigateToCourses
+  onNavigateToCourses,
+  onBack
 }) => {
   const [subject, setSubject] = useState<Subject | null>(null);
 
@@ -58,6 +60,7 @@ export const ScienceHubPage: React.FC<ScienceHubPageProps> = ({
       subjectDescription={subject.description}
       onBrowseResources={onNavigateToResources}
       onViewCourses={onNavigateToCourses}
+      onBack={onBack}
     />
   );
 };

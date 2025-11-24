@@ -1,172 +1,103 @@
-/* Math Grade Selector - Matching existing app styling */
-.math-grade-selector {
-  padding: 32px 24px;
+/* Math Grade Selector - Matching resource page layout */
+.grade-selector-page {
+  padding: 20px;
+  background: var(--theme-background-main);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.grade-selector-container {
   max-width: 1200px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-.math-grade-selector .back-button {
-  background: transparent;
-  border: 1px solid var(--theme-border-light);
-  color: var(--theme-text-muted);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  margin-bottom: 32px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.math-grade-selector .back-button:hover {
-  background: var(--theme-background-hover);
-  color: var(--theme-text-primary);
-  border-color: var(--theme-border-medium);
 }
 
 .grade-selector-header {
   text-align: center;
   margin-bottom: 48px;
+  position: relative;
 }
 
-.grade-selector-header h2 {
+.grade-selector-back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--theme-background-paper);
+  border: 2px solid var(--theme-border-light);
+  color: var(--theme-text-primary);
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Orbitron', monospace;
+  z-index: 10;
+}
+
+.grade-selector-back-button:hover {
+  background: var(--theme-background-main);
+  border-color: var(--theme-primary);
   color: var(--theme-primary);
-  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  transform: translateX(-3px);
+}
+
+.grade-selector-header h1 {
+  color: var(--theme-primary);
+  font-family: 'Orbitron', monospace;
   font-size: 2.5rem;
   font-weight: 900;
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   letter-spacing: 1px;
   text-shadow: 0 0 15px var(--theme-primary-alpha-20);
   text-transform: uppercase;
 }
 
-.grade-selector-header p {
+.grade-selector-header .tagline {
   color: var(--theme-secondary);
-  font-size: 0.9rem;
-  margin: 0;
-  font-weight: 500;
+  font-size: 0.95rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
 
 .grade-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
-  margin-top: 32px;
+  margin-bottom: 64px;
 }
 
 .grade-card {
-  position: relative;
-  background: white;
+  background: var(--theme-background-paper);
+  border: 2px solid var(--theme-border-dark);
   border-radius: 12px;
-  overflow: hidden;
+  padding: 32px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(102, 11, 5, 0.05);
-  border: 2px solid rgba(102, 11, 5, 0.1);
-}
-
-.grade-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(102, 11, 5, 0.03), transparent);
-  transition: left 0.6s ease;
-  z-index: 1;
-}
-
-.grade-card:hover::before {
-  left: 100%;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .grade-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px var(--theme-shadow-light);
-  border-color: var(--theme-primary);
-}
-
-.grade-card-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  opacity: 0.95;
-}
-
-/* Gradient classes */
-.bg-gradient-to-r {
-  background: linear-gradient(to right, var(--tw-gradient-stops));
-}
-
-.from-green-400 {
-  --tw-gradient-from: var(--theme-secondary);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
-}
-
-.to-blue-500 {
-  --tw-gradient-to: var(--theme-primary);
-}
-
-.from-purple-400 {
-  --tw-gradient-from: var(--theme-primary-dark);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
-}
-
-.to-pink-500 {
-  --tw-gradient-to: var(--theme-primary);
-}
-
-.from-blue-500 {
-  --tw-gradient-from: var(--theme-primary-light);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
-}
-
-.to-indigo-600 {
-  --tw-gradient-to: var(--theme-primary-dark);
-}
-
-.from-red-400 {
-  --tw-gradient-from: var(--theme-accent);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
-}
-
-.to-orange-500 {
-  --tw-gradient-to: var(--theme-secondary);
-}
-
-.grade-card-content {
-  position: relative;
-  z-index: 2;
-  padding: 24px;
-  padding-top: 140px;
+  box-shadow: 0 4px 12px var(--theme-border-light);
+  border-color: var(--theme-border-medium);
 }
 
 .grade-icon {
-  position: absolute;
-  top: -80px;
-  right: 24px;
-  font-size: 4rem;
-  opacity: 0.9;
+  font-size: 3rem;
+  margin-bottom: 16px;
+  filter: sepia(0.5) hue-rotate(340deg) saturate(2);
+  display: block;
 }
 
-.grade-info h3 {
-  color: var(--theme-primary);
+.grade-card h3 {
   font-family: 'Orbitron', monospace;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  color: var(--theme-primary);
+  margin-bottom: 8px;
   font-weight: 700;
-  margin: 0 0 8px 0;
-  letter-spacing: 1px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .grade-range {
@@ -176,104 +107,74 @@
   padding: 4px 12px;
   border: 1px solid var(--theme-border-light);
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.grade-description {
-  color: var(--theme-secondary);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  margin: 0 0 20px 0;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
-.grade-subjects {
+.grade-description {
+  color: var(--theme-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.grade-topics {
   margin-bottom: 24px;
 }
 
-.subjects-label {
-  color: var(--theme-secondary);
-  font-size: 0.7rem;
+.grade-topics h4 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--theme-primary);
+  margin-bottom: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
-  display: block;
+  letter-spacing: 0.3px;
 }
 
-.subjects-list {
+.grade-topics ul {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
-.subjects-list li {
+.grade-topics li {
   background: var(--theme-background-main);
-  color: var(--theme-primary);
-  padding: 4px 8px;
   border: 1px solid var(--theme-border-light);
+  padding: 4px 12px;
   border-radius: 6px;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
+  color: var(--theme-primary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
-.grade-card-footer {
-  padding: 0 24px 24px 24px;
-}
-
 .select-grade-btn {
   width: 100%;
-  background: var(--theme-primary);
-  color: var(--theme-background-paper);
-  border: 2px solid var(--theme-primary);
   padding: 12px 24px;
+  background: var(--theme-primary);
+  color: #F5F5DC;
+  border: 2px solid var(--theme-primary);
   border-radius: 8px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 3px 8px var(--theme-shadow-light);
-  position: relative;
-  overflow: hidden;
-}
-
-.select-grade-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, var(--theme-background-paper-alpha-10), transparent);
-  transition: left 0.6s ease;
-}
-
-.select-grade-btn:hover::before {
-  left: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .select-grade-btn:hover {
   background: var(--theme-primary-light);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px var(--theme-shadow-medium);
-}
-
-.select-grade-btn:active {
-  transform: translateY(0);
+  transform: scale(1.02);
 }
 
 /* Responsive design */

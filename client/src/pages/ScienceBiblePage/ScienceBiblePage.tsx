@@ -32,7 +32,11 @@ interface Subject {
   display_order: number;
 }
 
-export const ScienceBiblePage: React.FC = () => {
+interface ScienceBiblePageProps {
+  onBack?: () => void;
+}
+
+export const ScienceBiblePage: React.FC<ScienceBiblePageProps> = ({ onBack }) => {
   const navigation = useNavigation();
   const [selectedTopic, setSelectedTopic] = useState<string>(navigation.currentState.scienceBibleTab || 'all');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -214,6 +218,7 @@ export const ScienceBiblePage: React.FC = () => {
       isLoading={isLoading}
       selectedTopic={selectedTopic}
       onTopicChange={handleTopicChange}
+      onBack={onBack}
     />
   );
 };

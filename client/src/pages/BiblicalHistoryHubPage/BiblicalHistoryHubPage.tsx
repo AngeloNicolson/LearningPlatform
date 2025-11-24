@@ -20,11 +20,13 @@ interface Subject {
 interface BiblicalHistoryHubPageProps {
   onNavigateToResources: () => void;
   onNavigateToCourses: () => void;
+  onBack: () => void;
 }
 
 export const BiblicalHistoryHubPage: React.FC<BiblicalHistoryHubPageProps> = ({
   onNavigateToResources,
-  onNavigateToCourses
+  onNavigateToCourses,
+  onBack
 }) => {
   const [subject, setSubject] = useState<Subject | null>(null);
 
@@ -58,6 +60,7 @@ export const BiblicalHistoryHubPage: React.FC<BiblicalHistoryHubPageProps> = ({
       subjectDescription={subject.description}
       onBrowseResources={onNavigateToResources}
       onViewCourses={onNavigateToCourses}
+      onBack={onBack}
     />
   );
 };

@@ -208,8 +208,9 @@ export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTut
   }
 
   const renderStars = (rating: number) => {
+    const numRating = Number(rating) || 0;
     return Array.from({ length: 5 }, (_, i) => (
-      <span key={i} className={`star ${i < Math.floor(rating) ? 'filled' : 'empty'}`}>
+      <span key={i} className={`star ${i < Math.floor(numRating) ? 'filled' : 'empty'}`}>
         ⭐
       </span>
     ));
@@ -239,7 +240,7 @@ export const TutorProfile: React.FC<TutorProfileProps> = ({ tutorId, onBackToTut
                 <div className="stars">
                   {renderStars(tutor.rating)}
                 </div>
-                <span className="rating-text">{tutor.rating} ({tutor.reviewCount} reviews)</span>
+                <span className="rating-text">{typeof tutor.rating === 'number' ? tutor.rating.toFixed(1) : '0.0'} ({tutor.reviewCount || 0} reviews)</span>
               </div>
               <div className="stat">
                 <span className="stat-label">Total Hours:</span>

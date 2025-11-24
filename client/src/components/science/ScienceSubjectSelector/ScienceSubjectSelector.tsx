@@ -18,64 +18,64 @@ export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ 
     {
       id: 'physics',
       name: 'Physics',
-      description: 'Mechanics, Electromagnetism, Thermodynamics',
+      description: 'Mechanics, Electromagnetism, Thermodynamics, and Quantum Physics',
+      gradeRange: 'High School & College',
       icon: '⚛️',
-      color: '#4CAF50',
       topics: ['AP Physics', 'Mechanics', 'Electromagnetism', 'Quantum Physics']
     },
     {
       id: 'chemistry',
       name: 'Chemistry',
-      description: 'Organic, Inorganic, Analytical Chemistry',
+      description: 'Organic, Inorganic, Analytical, and Physical Chemistry',
+      gradeRange: 'High School & College',
       icon: '🧪',
-      color: '#FF9800',
       topics: ['AP Chemistry', 'Organic Chemistry', 'Biochemistry', 'Physical Chemistry']
     },
     {
       id: 'biology',
       name: 'Biology',
-      description: 'Molecular Biology, Genetics, Ecology',
+      description: 'Molecular Biology, Genetics, Ecology, and Anatomy',
+      gradeRange: 'High School & College',
       icon: '🧬',
-      color: '#9C27B0',
       topics: ['AP Biology', 'Genetics', 'Molecular Biology', 'Anatomy']
     },
     {
       id: 'earth-science',
       name: 'Earth Science',
-      description: 'Geology, Meteorology, Environmental Science',
+      description: 'Geology, Meteorology, Environmental Science, and Oceanography',
+      gradeRange: 'Middle & High School',
       icon: '🌍',
-      color: '#2196F3',
       topics: ['Geology', 'Environmental Science', 'Meteorology', 'Oceanography']
     }
   ];
 
   return (
-    <div className="grade-selector-container">
-      {onBack && (
-        <button className="back-button" onClick={onBack}>
-          ← Back to Categories
-        </button>
-      )}
-      <div className="grade-selector-header">
-        <h2>Select Your Science Subject</h2>
-        <p>Choose a subject to find specialized science tutors</p>
-      </div>
+    <div className="grade-selector-page">
+      <div className="grade-selector-container">
+        <div className="grade-selector-header">
+          {onBack && (
+            <button className="grade-selector-back-button" onClick={onBack}>
+              ← Back
+            </button>
+          )}
+          <h1>Find a Science Tutor</h1>
+          <p className="tagline">Choose a subject to find specialized science tutors</p>
+        </div>
       
-      <div className="grade-cards">
+      <div className="grade-cards-grid">
         {scienceSubjects.map((subject) => (
           <div
             key={subject.id}
             className="grade-card"
             onClick={() => onSubjectSelect(subject.id)}
           >
-            <div className="grade-icon">
-              {subject.icon}
-            </div>
+            <div className="grade-icon">{subject.icon}</div>
             <h3>{subject.name}</h3>
+            <span className="grade-range">{subject.gradeRange}</span>
             <p className="grade-description">{subject.description}</p>
 
             <div className="grade-topics">
-              <h4>Popular Topics:</h4>
+              <h4>Topics include:</h4>
               <ul>
                 {subject.topics.map((topic, index) => (
                   <li key={index}>{topic}</li>
@@ -84,7 +84,7 @@ export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ 
             </div>
 
             <button className="select-grade-btn">
-              Browse {subject.name} Tutors →
+              Find Tutors →
             </button>
           </div>
         ))}
@@ -124,6 +124,7 @@ export const ScienceSubjectSelector: React.FC<ScienceSubjectSelectorProps> = ({ 
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

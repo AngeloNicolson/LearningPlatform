@@ -138,7 +138,11 @@ const countries: Country[] = [
   }
 ];
 
-export const HistoryPage: React.FC = () => {
+interface HistoryPageProps {
+  onBack?: () => void;
+}
+
+export const HistoryPage: React.FC<HistoryPageProps> = ({ onBack }) => {
   const navigation = useNavigation();
   const [selectedCountry, setSelectedCountry] = useState<string | null>(navigation.currentState.historyCountry || null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -183,11 +187,17 @@ export const HistoryPage: React.FC = () => {
   });
 
   return (
-    <div className="history-main">
-      <div className="history-header">
-        <h1>World History</h1>
-        <p className="tagline">Explore the history of nations around the world</p>
-      </div>
+    <div className="history-page">
+      <div className="history-container">
+        <div className="history-header">
+          {onBack && (
+            <button className="history-back-button" onClick={onBack}>
+              ← Back
+            </button>
+          )}
+          <h1>World History</h1>
+          <p className="tagline">Explore the history of nations around the world</p>
+        </div>
 
       <div className="search-section">
         <div className="search-bar">
@@ -290,6 +300,7 @@ export const HistoryPage: React.FC = () => {
             <span className="feature-name">Medieval Europe</span>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

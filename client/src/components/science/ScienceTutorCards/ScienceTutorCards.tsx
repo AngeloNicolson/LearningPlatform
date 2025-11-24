@@ -192,8 +192,8 @@ export const ScienceTutorCards: React.FC<ScienceTutorCardsProps> = ({
                   <div className="tutor-basic-info">
                     <h3>{tutor.display_name}</h3>
                     <div className="rating-container">
-                      <span className="rating">⭐ {tutor.rating.toFixed(1)}</span>
-                      <span className="sessions">• {tutor.total_sessions} sessions</span>
+                      <span className="rating">⭐ {typeof tutor.rating === 'number' ? tutor.rating.toFixed(1) : '0.0'}</span>
+                      <span className="sessions">• {tutor.total_sessions || 0} sessions</span>
                     </div>
                   </div>
                 </div>

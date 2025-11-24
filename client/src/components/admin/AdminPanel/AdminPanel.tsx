@@ -474,7 +474,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                     {selectedTutor.qualifications && (
                       <p><strong>Qualifications:</strong> {Array.isArray(selectedTutor.qualifications) ? selectedTutor.qualifications.join(', ') : selectedTutor.qualifications}</p>
                     )}
-                    <p><strong>Rating:</strong> {selectedTutor.rating ? `${selectedTutor.rating.toFixed(1)} ⭐` : 'No ratings yet'}</p>
+                    <p><strong>Rating:</strong> {typeof selectedTutor.rating === 'number' ? `${selectedTutor.rating.toFixed(1)} ⭐` : 'No ratings yet'}</p>
                     <p><strong>Reviews:</strong> {selectedTutor.reviews_count || 0}</p>
                     <p><strong>Active:</strong> {selectedTutor.is_active ? 'Yes' : 'No'}</p>
                   </div>
@@ -539,7 +539,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, onImpersonate 
                       <h3>{tutor.name}</h3>
                       <p>{tutor.grade} • ${tutor.price_per_hour}/hour</p>
                       <p>Subjects: {Array.isArray(tutor.subjects) ? tutor.subjects.join(', ') : 'N/A'}</p>
-                      <p>Rating: {tutor.rating ? `${tutor.rating.toFixed(1)} ⭐` : 'No ratings'} ({tutor.reviews_count || 0} reviews)</p>
+                      <p>Rating: {typeof tutor.rating === 'number' ? `${tutor.rating.toFixed(1)} ⭐` : 'No ratings'} ({tutor.reviews_count || 0} reviews)</p>
                       <p className="status">
                         <span className={`badge badge-${tutor.status === 'active' ? 'success' : tutor.status === 'suspended' ? 'danger' : 'warning'}`}>
                           {tutor.status === 'active' ? 'Active' : tutor.status === 'suspended' ? 'Suspended' : 'Pending'}

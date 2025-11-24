@@ -20,11 +20,13 @@ interface Subject {
 interface ScienceBibleHubPageProps {
   onNavigateToResources: () => void;
   onNavigateToCourses: () => void;
+  onBack: () => void;
 }
 
 export const ScienceBibleHubPage: React.FC<ScienceBibleHubPageProps> = ({
   onNavigateToResources,
-  onNavigateToCourses
+  onNavigateToCourses,
+  onBack
 }) => {
   const [subject, setSubject] = useState<Subject | null>(null);
 
@@ -58,6 +60,7 @@ export const ScienceBibleHubPage: React.FC<ScienceBibleHubPageProps> = ({
       subjectDescription={subject.description}
       onBrowseResources={onNavigateToResources}
       onViewCourses={onNavigateToCourses}
+      onBack={onBack}
     />
   );
 };

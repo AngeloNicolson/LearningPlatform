@@ -71,6 +71,9 @@ interface ResourcePageLayoutProps {
   selectedTopic?: string;
   onTopicChange?: (topicId: string) => void;
 
+  // Navigation
+  onBack?: () => void;
+
   // Optional CSS class
   className?: string;
 }
@@ -90,6 +93,7 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
   isLoading = false,
   selectedTopic: externalSelectedTopic,
   onTopicChange,
+  onBack,
   className = ''
 }) => {
   const [selectedTopic, setSelectedTopic] = useState<string>(externalSelectedTopic || 'all');
@@ -221,10 +225,16 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
 
   return (
     <div className={`resource-page-layout ${className}`}>
-      <div className="resources-header">
-        <h1>{title}</h1>
-        <p className="tagline">{tagline}</p>
-      </div>
+      <div className="resource-page-container">
+        <div className="resources-header">
+          {onBack && (
+            <button className="resources-back-button" onClick={onBack}>
+              ← Back
+            </button>
+          )}
+          <h1>{title}</h1>
+          <p className="tagline">{tagline}</p>
+        </div>
 
       <div className="search-section">
         <div className="search-bar">
@@ -388,6 +398,7 @@ export const ResourcePageLayout: React.FC<ResourcePageLayoutProps> = ({
           onClose={() => setActiveVideo(null)}
         />
       )}
+      </div>
     </div>
   );
 };

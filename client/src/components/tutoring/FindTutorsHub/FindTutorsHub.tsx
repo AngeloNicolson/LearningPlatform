@@ -115,11 +115,12 @@ export const FindTutorsHub: React.FC<FindTutorsHubProps> = ({
 
   if (activeView === 'hub') {
     return (
-      <div className="find-tutors-hub">
-        <div className="hub-header">
-          <h1>Find the Perfect Tutor</h1>
-          <p>Choose how you want to browse our expert tutors</p>
-        </div>
+      <div className="find-tutors-hub-page">
+        <div className="find-tutors-hub-container">
+          <div className="hub-header">
+            <h1>Find the Perfect Tutor</h1>
+            <p>Choose how you want to browse our expert tutors</p>
+          </div>
 
         <div className="tutor-categories">
           <div className="category-card all" onClick={() => setActiveView('all')}>
@@ -184,75 +185,84 @@ export const FindTutorsHub: React.FC<FindTutorsHubProps> = ({
             </div>
           </div>
         </div>
+        </div>
       </div>
     );
   }
 
   // All tutors view
   return (
-    <div className="find-tutors-all">
-      <div className="all-header">
-        <button className="back-button" onClick={() => setActiveView('hub')}>
-          ← Back to Categories
-        </button>
-        <h1>
-          {filter === 'all' ? 'All Tutors' : filter === 'math' ? 'Math Tutors' : 'Science Tutors'}
-        </h1>
-      </div>
-
-      <div className="tutors-controls">
-        <div className="filter-buttons">
-          <button 
-            className={filter === 'all' ? 'filter-btn active' : 'filter-btn'}
-            onClick={() => setFilter('all')}
-          >
-            All Subjects
+    <div className="find-tutors-all-page">
+      <div className="find-tutors-all-container">
+        <div className="tutors-header">
+          <button className="tutors-back-button" onClick={() => setActiveView('hub')}>
+            ← Back
           </button>
-          <button 
-            className={filter === 'math' ? 'filter-btn active math' : 'filter-btn'}
-            onClick={() => setFilter('math')}
-          >
-            Math Only
-          </button>
-          <button 
-            className={filter === 'science' ? 'filter-btn active science' : 'filter-btn'}
-            onClick={() => setFilter('science')}
-          >
-            Science Only
-          </button>
+          <h1>
+            {filter === 'all' ? 'All Tutors' : filter === 'math' ? 'Math Tutors' : 'Science Tutors'}
+          </h1>
+          <p className="tagline">Connect with expert tutors across all subjects</p>
         </div>
 
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Search by name or subject..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <span className="search-icon">🔍</span>
+        <div className="tutors-search-section">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search by name or subject..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <span className="search-icon">🔍</span>
+          </div>
         </div>
-      </div>
 
-      <div className="tutors-stats">
-        {(() => {
-          const stats = getTutorStats();
-          return (
-            <>
-              <span className="stat-item">
-                Showing {filteredTutors.length} of {stats.total} tutors
-              </span>
-              {filter === 'all' && (
-                <>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">{stats.math} Math</span>
-                  <span className="stat-divider">•</span>
-                  <span className="stat-item">{stats.science} Science</span>
-                </>
-              )}
-            </>
-          );
-        })()}
-      </div>
+        <div className="tutors-filters-section">
+          <div className="subject-filters">
+            <button
+              className={filter === 'all' ? 'subject-filter active' : 'subject-filter'}
+              onClick={() => setFilter('all')}
+            >
+              <span className="filter-icon">👥</span>
+              <span className="filter-name">All Subjects</span>
+            </button>
+            <button
+              className={filter === 'math' ? 'subject-filter active' : 'subject-filter'}
+              onClick={() => setFilter('math')}
+            >
+              <span className="filter-icon">📐</span>
+              <span className="filter-name">Math Only</span>
+            </button>
+            <button
+              className={filter === 'science' ? 'subject-filter active' : 'subject-filter'}
+              onClick={() => setFilter('science')}
+            >
+              <span className="filter-icon">🔬</span>
+              <span className="filter-name">Science Only</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="tutors-stats-bar">
+          {(() => {
+            const stats = getTutorStats();
+            return (
+              <>
+                <span className="stat-item">
+                  Showing {filteredTutors.length} of {stats.total} tutors
+                </span>
+                {filter === 'all' && (
+                  <>
+                    <span className="stat-divider">•</span>
+                    <span className="stat-item">{stats.math} Math</span>
+                    <span className="stat-divider">•</span>
+                    <span className="stat-item">{stats.science} Science</span>
+                  </>
+                )}
+              </>
+            );
+          })()}
+        </div>
 
       {loading ? (
         <div className="loading-container">
@@ -288,6 +298,7 @@ export const FindTutorsHub: React.FC<FindTutorsHubProps> = ({
           )}
         </div>
       )}
+      </div>
     </div>
   );
 };

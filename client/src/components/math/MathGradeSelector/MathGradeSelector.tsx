@@ -64,16 +64,17 @@ const mathGrades: MathGrade[] = [
 
 export const MathGradeSelector: React.FC<MathGradeSelectorProps> = ({ onGradeSelect, onBack }) => {
   return (
-    <div className="math-grade-selector">
-      {onBack && (
-        <button className="back-button" onClick={onBack}>
-          ← Back to Categories
-        </button>
-      )}
-      <div className="grade-selector-header">
-        <h2>Find a Math Tutor</h2>
-        <p>Select the grade level you need tutoring for</p>
-      </div>
+    <div className="grade-selector-page">
+      <div className="grade-selector-container">
+        <div className="grade-selector-header">
+          {onBack && (
+            <button className="grade-selector-back-button" onClick={onBack}>
+              ← Back
+            </button>
+          )}
+          <h1>Find a Math Tutor</h1>
+          <p className="tagline">Select the grade level you need tutoring for</p>
+        </div>
       
       <div className="grade-cards-grid">
         {mathGrades.map((grade) => (
@@ -82,33 +83,26 @@ export const MathGradeSelector: React.FC<MathGradeSelectorProps> = ({ onGradeSel
             className="grade-card"
             onClick={() => onGradeSelect(grade.id)}
           >
-            <div className={`grade-card-background bg-gradient-to-r ${grade.color}`}></div>
-            <div className="grade-card-content">
-              <div className="grade-icon">{grade.icon}</div>
-              <div className="grade-info">
-                <h3>{grade.title}</h3>
-                <span className="grade-range">{grade.gradeRange}</span>
-                <p className="grade-description">{grade.description}</p>
-                
-                <div className="grade-subjects">
-                  <span className="subjects-label">Topics include:</span>
-                  <ul className="subjects-list">
-                    {grade.subjects.slice(0, 3).map((subject, index) => (
-                      <li key={index}>{subject}</li>
-                    ))}
-                    {grade.subjects.length > 3 && <li>+ more</li>}
-                  </ul>
-                </div>
-              </div>
+            <div className="grade-icon">{grade.icon}</div>
+            <h3>{grade.title}</h3>
+            <span className="grade-range">{grade.gradeRange}</span>
+            <p className="grade-description">{grade.description}</p>
+
+            <div className="grade-topics">
+              <h4>Topics include:</h4>
+              <ul>
+                {grade.subjects.map((subject, index) => (
+                  <li key={index}>{subject}</li>
+                ))}
+              </ul>
             </div>
-            
-            <div className="grade-card-footer">
-              <button className="select-grade-btn">
-                Find Tutors →
-              </button>
-            </div>
+
+            <button className="select-grade-btn">
+              Find Tutors →
+            </button>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

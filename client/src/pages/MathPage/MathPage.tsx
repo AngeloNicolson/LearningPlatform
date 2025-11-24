@@ -31,7 +31,11 @@ interface Subject {
   display_order: number;
 }
 
-export const MathPage: React.FC = () => {
+interface MathPageProps {
+  onBack?: () => void;
+}
+
+export const MathPage: React.FC<MathPageProps> = ({ onBack }) => {
   const navigation = useNavigation();
   const [selectedTopic, setSelectedTopic] = useState<string>(navigation.currentState.mathTab || 'all');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -213,6 +217,7 @@ export const MathPage: React.FC = () => {
       isLoading={isLoading}
       selectedTopic={selectedTopic}
       onTopicChange={handleTopicChange}
+      onBack={onBack}
     />
   );
 };

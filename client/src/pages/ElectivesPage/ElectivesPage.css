@@ -145,6 +145,7 @@
   letter-spacing: 0.5px;
   box-shadow: 0 4px 12px var(--theme-shadow-medium);
   margin-top: auto;
+  align-self: center;
 }
 
 .electives-page .explore-btn:hover {
