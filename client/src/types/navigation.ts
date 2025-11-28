@@ -14,6 +14,7 @@ export type MainView =
   | 'bible'
   | 'tutors'
   | 'dashboard'
+  | 'tutor-dashboard'
   | 'login'
   | 'admin'
   | 'onboarding'

@@ -19,6 +19,8 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import tutorRoutes from './routes/tutors';
 import bookingRoutes from './routes/bookings';
+import bookingsSecureRoutes from './routes/bookings-secure';
+import paymentsRoutes from './routes/payments';
 import teacherRoutes from './routes/teachers';
 import userRoutes from './routes/users';
 import subjectResourcesRoutes from './routes/subjectResources';
@@ -30,6 +32,8 @@ import downloadsRoutes from './routes/downloads';
 import siteDataRoutes from './routes/siteData';
 import reviewsRoutes from './routes/reviews';
 import sessionTypesRoutes from './routes/sessionTypes';
+import availabilityRoutes from './routes/availability';
+import { securityHeaders, securityLogger } from './middleware/security';
 
 dotenv.config();
 
@@ -83,10 +87,17 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
+// Stripe webhook needs raw body - must come before json parser
+app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+
 // Body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Security middleware
+app.use(securityHeaders);
+app.use(securityLogger);
 
 // Global rate limiter - more permissive in development
 const limiter = rateLimit({
@@ -107,7 +118,9 @@ app.get('/api/health', (_req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tutors', tutorRoutes);
-app.use('/api/bookings', bookingRoutes);
+app.use('/api/bookings', bookingRoutes); // Legacy booking routes (deprecated)
+app.use('/api/bookings-secure', bookingsSecureRoutes); // New secure booking system
+app.use('/api/payments', paymentsRoutes); // Stripe payment processing
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/downloads', downloadsRoutes);
 app.use('/api/users', userRoutes);
@@ -119,6 +132,7 @@ app.use('/api/uploads', uploadsRoutes);
 app.use('/api/site-data', siteDataRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/session-types', sessionTypesRoutes);
+app.use('/api/availability', availabilityRoutes); // Tutor availability and slot management
 
 // Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

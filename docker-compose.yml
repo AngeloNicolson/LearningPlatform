@@ -28,7 +28,7 @@ services:
       - "5777:5777"
     environment:
       - VITE_API_URL=https://localhost:3777/api
-      - NODE_ENV=production
+      - NODE_ENV=development
       - NODE_TLS_REJECT_UNAUTHORIZED=0  # Required for self-signed certs
     volumes:
       - ./client:/app
@@ -48,7 +48,7 @@ services:
     ports:
       - "3777:3777"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=3777
       - USE_HTTPS=true
       - CERT_KEY_PATH=/app/certs/localhost-key.pem  # Path to SSL key

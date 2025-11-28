@@ -35,6 +35,7 @@ import { TutorCards } from './components/tutoring/TutorCards/TutorCards';
 import { TutorProfile } from './components/tutoring/TutorProfile/TutorProfile';
 import { BookingCalendar } from './components/tutoring/BookingCalendar/BookingCalendar';
 import { TutorOnboarding } from './components/tutoring/TutorOnboarding/TutorOnboarding';
+import TutorDashboardPage from './pages/TutorDashboardPage/TutorDashboardPage';
 import { ScienceSubjectSelector } from './components/science/ScienceSubjectSelector/ScienceSubjectSelector';
 import { ScienceTutorCards } from './components/science/ScienceTutorCards/ScienceTutorCards';
 import { FindTutorsHub } from './components/tutoring/FindTutorsHub/FindTutorsHub';
@@ -284,6 +285,18 @@ function AppContent() {
               <span className="nav-label">ADMIN</span>
             </button>
           )}
+
+          {/* Tutor Dashboard for teachers/tutors */}
+          {isAuthenticated && (userRole === 'teacher' || userRole === 'tutor') && (
+            <button
+              className={currentView === 'tutor-dashboard' ? 'nav-item active' : 'nav-item'}
+              onClick={() => navigation.navigate({ view: 'tutor-dashboard' })}
+              title="Tutor Dashboard"
+            >
+              <span className="nav-icon">👨‍🏫</span>
+              <span className="nav-label">MY TUTOR HUB</span>
+            </button>
+          )}
         </nav>
 
         <div className="sidebar-footer">
@@ -477,12 +490,16 @@ function AppContent() {
         )}
 
         {currentView === 'admin' && isAuthenticated && (
-          <AdminPanel 
+          <AdminPanel
             userRole={userRole}
             onImpersonate={handleImpersonate}
           />
         )}
-        
+
+        {currentView === 'tutor-dashboard' && isAuthenticated && (userRole === 'teacher' || userRole === 'tutor') && (
+          <TutorDashboardPage />
+        )}
+
         {currentView === 'onboarding' && isAuthenticated && userRole === 'tutor' && needsOnboarding && (
           <TutorOnboarding
             userId={userId || 0}

@@ -15,8 +15,10 @@ import {
 import { loadStripe, StripeCardElementOptions } from '@stripe/stripe-js';
 import './PaymentForm.css';
 
-// Initialize Stripe - you'll need to replace with your publishable key
-const stripePromise = loadStripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
+// Initialize Stripe - uses environment variable
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_YOUR_PUBLISHABLE_KEY_HERE'
+);
 
 interface PaymentFormProps {
   amount: number;
@@ -88,9 +90,16 @@ const PaymentFormContent: React.FC<PaymentFormProps> = ({
         return;
       }
 
-      // In a real app, you'd send this to your backend
-      // For demo purposes, we'll simulate a successful payment
-      const response = await fetch('/api/process-payment', {
+      // Note: The payment intent should be created by BookingCalendar
+      // before rendering this form. This is just for reference.
+      // The actual flow is:
+      // 1. BookingCalendar calls /api/payments/create-payment-intent
+      // 2. Gets back clientSecret
+      // 3. Passes clientSecret to this component
+      // 4. This component confirms the payment
+
+      // For now, we'll keep the old demo flow for backwards compatibility
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3777/api'}/process-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

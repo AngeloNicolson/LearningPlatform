@@ -189,6 +189,63 @@ router.get('/by-subject/:subject', async (req: Request, res: Response): Promise<
   }
 });
 
+// Get tutor profile by user ID (for dashboard)
+router.get('/user/:userId', requireAuth, async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { userId } = req.params;
+    const user = (req as any).user;
+
+    // Users can only access their own tutor profile (unless admin)
+    if (parseInt(userId) !== user.userId && !['admin', 'owner'].includes(user.role)) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
+    const result = await query(`
+      SELECT
+        t.id,
+        t.display_name,
+        t.bio,
+        t.subjects,
+        t.grades,
+        t.hourly_rate,
+        t.avatar_url,
+        t.approval_status,
+        t.is_active,
+        t.created_at,
+        u.email,
+        u.first_name,
+        u.last_name
+      FROM tutors t
+      JOIN users u ON t.user_id = u.id
+      WHERE t.user_id = $1
+    `, [userId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Tutor profile not found' });
+    }
+
+    const tutor = result.rows[0];
+    return res.json({
+      id: tutor.id,
+      displayName: tutor.display_name,
+      bio: tutor.bio,
+      subjects: tutor.subjects,
+      grades: tutor.grades,
+      hourlyRate: parseFloat(tutor.hourly_rate || 0),
+      avatarUrl: tutor.avatar_url,
+      approvalStatus: tutor.approval_status,
+      isActive: tutor.is_active,
+      email: tutor.email,
+      firstName: tutor.first_name,
+      lastName: tutor.last_name,
+      createdAt: tutor.created_at
+    });
+  } catch (error) {
+    console.error('Error fetching tutor by user ID:', error);
+    return res.status(500).json({ error: 'Failed to fetch tutor profile' });
+  }
+});
+
 // Get a specific tutor by ID
 router.get('/:id', async (req: Request, res: Response): Promise<Response> => {
   try {
